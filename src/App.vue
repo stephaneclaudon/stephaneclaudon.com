@@ -1,18 +1,24 @@
 <template>
   <div>
-    <div>
-      hello
+    <div class="main-name">
+      <div class="main-name__first">Stéphane</div>
+      <div class="main-name__last">CLAUDON</div>
     </div>
-    <div>
-      steph {{ initnumero + numero }}
-    </div>
+
+    <contact-box></contact-box> 
+
   </div>
 </template>
 
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
-  @Component({})
+  import ContactBox from './components/contact.vue'
 
+  @Component({
+    components: {
+      ContactBox
+    }
+  })
   export default class App extends Vue {
     @Prop({type: Number, default: 0}) initnumero: number
     numero: number = 0
