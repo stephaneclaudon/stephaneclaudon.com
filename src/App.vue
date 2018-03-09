@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <projects-slider></projects-slider>
+    <projects-slider :projects="this.data"></projects-slider>
 
     <div class="main-name">
       <div class="main-name__first">Stéphane</div>
@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Prop} from 'vue-property-decorator'
+  import {Vue, Component, Prop, Provide, Inject, Model} from 'vue-property-decorator'
+  import jsonData from './assets/data/data.json'
   import ContactBox from './components/contact.vue'
   import ProjectsSlider from './components/projects-slider.vue'
 
@@ -25,13 +26,9 @@
     }
   })
   export default class App extends Vue {
-    @Prop({type: Number, default: 0}) initnumero: number
-    numero: number = 0
+    data: Array<Object> = jsonData
 
     mounted () {
-      window.setInterval(() => {
-        this.numero++
-      }, 1000)
     }
 
   }

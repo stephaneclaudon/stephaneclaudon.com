@@ -1,0 +1,51 @@
+[
+    {
+        "id": "quattro2",
+        "title": "Quattro2",
+        "client": "AUDI",
+        "videoid": "10155038627933204",
+        "videoplateform": "facebook",
+        "mainloop": 1,
+        "detailloops": 1,
+        "credits": "Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
+        "date": "October 2016"
+    },
+    {
+        "id": "nautilus",
+        "title": "Nautilus",
+        "client": "Your Pride",
+        "videoid": 257029486,
+        "videoplateform": "vimeo",
+        "mainloop": 1,
+        "detailloops": 1
+    },
+    {
+        "id": "ootd3",
+        "title": "One of those days 3",
+        "client": "Candide Thovex",
+        "videoid": "R1NagZN2kjY",
+        "videoplateform": "youtube",
+        "mainloop": 1,
+        "detailloops": 1
+    },
+    {
+        "id": "quattro",
+        "title": "Quattro",
+        "client": "AUDI",
+        "videoid": "FMqADdsVmwQ",
+        "videoplateform": "youtube",
+        "mainloop": 1,
+        "detailloops": 1
+    },
+    {
+        "id": "ootd2",
+        "title": "One of those days 2",
+        "client": "Candide Thovex",
+        "mainloop": 1,
+        "detailloops": 1
+    },
+    {
+        "title": "vimeo",
+        "client": "MISC"
+    }
+]

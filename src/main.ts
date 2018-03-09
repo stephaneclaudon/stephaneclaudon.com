@@ -5,6 +5,6 @@ new Vue({
   el: document.querySelector('#app') as Element,
   components: {App},
   render (h) {
-    return h('App', {attrs: {initnumero: '100'}})
+    return h('App')
   }
 })

@@ -9,7 +9,7 @@ let config = {
     filename: 'main.js'
   },
   resolve: {
-    extensions: ['.js', '.ts', '.vue']
+    extensions: ['.js', '.ts', '.vue', '.json']
   },
   devServer: {
     noInfo: false
