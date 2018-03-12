@@ -1,12 +1,14 @@
 <template>
   <ul class="projects">
     <li v-for="project in projects" :key="project.id" class="projects--item">
-        <div class="projects--item__bg">
-            <img :src="getVideoPoster(project)" :alt="project.title">
-        </div>
-        <div class="projects--item__title">
-            <h1>{{ project.title }}</h1>
-        </div>
+        <a @click="viewProject(project)" href="#">
+            <div class="projects--item__bg">
+                <img :src="getVideoPoster(project)" :alt="project.title">
+            </div>
+            <div class="projects--item__title">
+                <h1>{{ project.title }}</h1>
+            </div>
+        </a>
     </li>
   </ul>
 </template>
@@ -18,7 +20,11 @@
   export default class ProjectsSlider extends Vue {
     @Prop({type: Array, default: [{}] }) projects: Array<Object>
 
-    @Emit()
+    @Emit('viewproject')
+    viewProject ( project: any) {
+        console.log('View project ' + project.title)
+    }
+
     getVideoPoster(project: any) : String{ 
       let posterUrl : String = ''
       switch(project.videoplateform) { 
@@ -39,7 +45,6 @@
             break;              
         } 
       }
-      console.log(posterUrl)
       
       return posterUrl
     }
