@@ -14,7 +14,7 @@
   
   @Component
   export default class OtherProjects extends Vue {
-    @Prop({type: Array, default: [{}] }) projects: Array<Object>
+    /*@Prop({type: Array, default: [{}] })*/ projects: Array<Object> = [{}]
 
   }
 </script>

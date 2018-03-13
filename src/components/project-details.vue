@@ -2,7 +2,7 @@
   <div>
       <div>{{ videoPlayer() }}</div>
       <div class="details-credits">{{ project.credits }}</div>
-      <other-projects :projects="this.projects"></other-projects>
+      <other-projects></other-projects>
   </div>
 </template>
 
@@ -16,7 +16,7 @@
     }
   })
   export default class ProjectDetails extends Vue {
-    @Prop({type: Array, default: [{}] }) projects: Array<Object>
+    /*@Prop({type: Array, default: [{}] })*/ projects: Array<Object> = [{}]
     @Prop({type: Object, default: {} }) project: Object
 
     videoPlayer () : String {
