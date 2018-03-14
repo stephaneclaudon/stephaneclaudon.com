@@ -14,16 +14,19 @@
 </template>
 
 <script lang="ts">
-    import { State } from 'vuex-class'
+    import { State, Mutation } from 'vuex-class'
     import {Vue, Component, Prop, Emit} from 'vue-property-decorator'
+    import * as MutationTypes from '../store/mutation-types'
   
     @Component
     export default class ProjectsSlider extends Vue {
         @State('projects') projects: Array<Object>
-        /*@Prop({type: Array, default: [{}] }) projects: Array<Object> = [{}]*/
+        
+        @Mutation(MutationTypes.SET_CURRENT_PROJECT)
+        setCurrentProject: (project: Object) => void
 
-        @Emit('viewproject')
-        viewProject ( project: any) {
+        viewProject ( project: any) : void {
+            this.setCurrentProject ( project )
             console.log('View project ' + project.title)
         }
 

@@ -1,5 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
+const copyWebpackPlugin = require('copy-webpack-plugin')
+const writeFilePlugin = require('write-file-webpack-plugin')
 
 let config = {
   entry: './src/main.ts',
@@ -25,8 +27,21 @@ let config = {
     {
         test: /\.vue$/,
         loader: 'vue-loader'
+    },
+    {
+      test: /\.(png|jpg|gif)$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {}
+        }
+      ]
     }]
-  }
+  },
+  plugins: [
+    new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
+    new writeFilePlugin()
+  ]
 }
 
 module.exports = config

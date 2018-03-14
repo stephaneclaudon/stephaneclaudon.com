@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <projects-slider v-on:viewproject="viewProject"></projects-slider>
+    <projects-slider></projects-slider>
     <project-details v-if="this.currentProject" :project="this.currentProject"></project-details>
 
     <div class="main-name">
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import { Mutation } from 'vuex-class'
+  import { State, Mutation } from 'vuex-class'
   import {Vue, Component, Prop, Provide, Inject, Model} from 'vue-property-decorator'
   import ContactBox from './components/contact.vue'
   import ProjectsSlider from './components/projects-slider.vue'
@@ -31,23 +31,10 @@
     }
   })
   export default class App extends Vue {
+    @State('currentProject') currentProject: Object
     
-    //@State('siteData') stateSiteData: Array<Object>
     @Mutation(MutationTypes.LOAD_PROJECTS)
     loadProject: (projects: Array<Object>) => void
-
-    
-
-    //siteData: Array<Object> = jsonData
-    currentProject: any = {}
-
-    viewProject( project: any ) {
-      this.currentProject = project
-      console.log('app view project', this.currentProject.title)
-    }
-
-    mounted () {
-    }
 
     created () {
       this.loadProject( jsonData )
