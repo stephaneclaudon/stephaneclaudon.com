@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="app">
 
     <projects-slider></projects-slider>
-    <project-details v-if="this.currentProject" :project="this.currentProject"></project-details>
+    <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
 
     <div class="main-name">
       <div class="main-name__first">Stéphane</div>
@@ -42,3 +42,26 @@
 
   }
 </script>
+
+<style lang="scss">
+  @import './style/main.scss';
+
+  .main {
+    &-name {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      text-transform: uppercase;
+      &__first {
+        @include roboto-light;
+        font-size: 41px;
+        letter-spacing: 0.72em;
+      }
+      &__last {
+        @include roboto-black;
+        font-size: 80px;
+        letter-spacing: 0.1em;
+      }
+    }
+  }
+</style>

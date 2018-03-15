@@ -27,6 +27,13 @@ let config = {
     {
         test: /\.vue$/,
         loader: 'vue-loader'
+    }, 
+    {
+        test: /\.s[a|c]ss$/,
+        loader: 'style!css!sass',
+        query: {
+          includePaths: [path.resolve(__dirname, 'node_modules')]
+        }
     },
     {
       test: /\.(png|jpg|gif)$/,

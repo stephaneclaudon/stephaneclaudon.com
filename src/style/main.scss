@@ -1,0 +1,29 @@
+@import 'reset.scss';
+@import 'variables.scss';
+@import 'fonts.scss';
+@import 'swipe.scss';
+@import '~foundation-sites/scss/foundation';
+
+@include foundation-xy-grid-classes(
+  /* options
+  $base-grid: true,
+  $margin-grid: true,
+  $padding-grid: true,
+  $block-grid: true,
+  $collapse: true,
+  $offset: true,
+  $vertical-grid: true,
+  $frame-grid: true
+  */
+);
+
+html, .app {
+  height: 100%;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: $black;
+    color: $white;
+    height: 100%;
+    font-size: 40px;
+}
