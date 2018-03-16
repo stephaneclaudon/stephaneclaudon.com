@@ -1,21 +1,13 @@
 @import 'reset.scss';
+@import 'mixins.scss';
 @import 'variables.scss';
 @import 'fonts.scss';
+@import 'icons.scss';
 @import 'swipe.scss';
 @import '~foundation-sites/scss/foundation';
 
-@include foundation-xy-grid-classes(
-  /* options
-  $base-grid: true,
-  $margin-grid: true,
-  $padding-grid: true,
-  $block-grid: true,
-  $collapse: true,
-  $offset: true,
-  $vertical-grid: true,
-  $frame-grid: true
-  */
-);
+@include foundation-xy-grid-classes;
+@include foundation-flex-classes;
 
 html, .app {
   height: 100%;
@@ -26,4 +18,9 @@ body {
     color: $white;
     height: 100%;
     font-size: 40px;
+}
+
+a, a:hover, a:visited {
+  color: inherit;
+  text-decoration: none;
 }

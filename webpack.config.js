@@ -36,6 +36,13 @@ let config = {
         }
     },
     {
+      test: /\.woff(2)?(\?[a-z0-9]+)?$/,
+      loader: "url-loader?limit=10000&mimetype=application/font-woff"
+    }, {
+      test: /\.(ttf|eot|svg)(\?[a-z0-9]+)?$/,
+      loader: "file-loader"
+    },
+    {
       test: /\.(png|jpg|gif)$/,
       use: [
         {
@@ -47,6 +54,7 @@ let config = {
   },
   plugins: [
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
+    new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new writeFilePlugin()
   ]
 }
