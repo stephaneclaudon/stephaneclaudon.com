@@ -30,8 +30,8 @@
   
   @Component
   export default class ContactBox extends Vue {
-    opened: boolean = true
-    hidden: boolean = false
+    opened: boolean = false
+    hidden: boolean = true
     
     @Emit()
     toggle(){

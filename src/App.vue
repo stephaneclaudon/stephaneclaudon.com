@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app grid-container full">
 
     <projects-slider></projects-slider>
     <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>

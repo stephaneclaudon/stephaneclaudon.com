@@ -6,8 +6,12 @@
                     <div class="projects--item__bg">
                         <img :src="getVideoPoster(project)" :alt="project.title">
                     </div>
-                    <div class="projects--item__title">
-                        <h1>{{ project.title }}</h1>
+                    <div class="projects--item__title grid-x align-middle">
+                        <div class="cell small-10 small-offset-1">
+                            <h1>
+                                <span>{{ project.title }}</span>
+                            </h1>
+                        </div>
                     </div>
                 </a>
             </div>
@@ -99,6 +103,62 @@ export default class ProjectsSlider extends Vue {
         overflow: hidden;
         img {
             height: 100%;
+        }
+    }
+    &__title {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        h1 {
+            position: relative;
+            display: inline-block;
+            z-index: 200;
+            padding: .5em;
+            vertical-align: middle;
+            text-transform: uppercase;
+            font-size: 2em;
+            span {
+                &::before {
+                    position: absolute;
+                    display: block;
+                    top: -1px;
+                    right: 100%;
+                    bottom: -1px;
+                    left: -1%;
+                    content: '';
+                    background: $white;
+                    @include transition(all .75s cubic-bezier(.55,0,.28,1) .5s);
+
+                    @keyframes blackBG {
+                        from {right: 100%;}
+                        to {right: 0%;}
+                    }
+                    animation: blackBG 1s;
+                    animation-delay: 2s;
+                }
+                &::after {
+                    /*position: absolute;
+                    display: block;
+                    top: -1px;
+                    right: 100%;
+                    bottom: -1px;
+                    left: -1%;
+                    content: '';
+                    @include horizontal-gradient($blue, $purple);
+                    @include transition(all .75s cubic-bezier(.55,0,.28,1) .5s);
+
+                    @keyframes gradientBG {
+                        from {right: 100%;}
+                        to {right: -1%;}
+                    }
+                    animation: gradientBG 5s infinite;
+                    animation-delay: 1s;
+                    animation-timing-function: ease-out;*/
+                }
+            }
+            
         }
     }
   }
