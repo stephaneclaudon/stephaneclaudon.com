@@ -1,15 +1,15 @@
 <template>
     <div id="slider" class="swipe">
         <div class="projects swipe-wrap" >
-            <div v-for="project in projects" :key="project.id" class="projects--item">
+            <div v-for="(project, index) in projects" :key="project.id" class="projects--item">
                 <a @click="viewProject(project)" href="#">
                     <div class="projects--item__bg">
                         <img :src="getVideoPoster(project)" :alt="project.title">
                     </div>
                     <div class="projects--item__title grid-x align-middle">
                         <div class="cell small-10 small-offset-1">
-                            <h1>
-                                <span>{{ project.title }}</span>
+                            <h1 v-if="!isCurrentIndex(index)">
+                                <span :ref="project.id">{{ project.title }}</span>
                             </h1>
                         </div>
                     </div>
@@ -34,7 +34,9 @@ export default class ProjectsSlider extends Vue {
   @Mutation(MutationTypes.SET_CURRENT_PROJECT)
   setCurrentProject: (project: Object) => void;
 
+  projectsArrayTitle: Array<Array<string>> = [];
   projectsSwipe: Object = {};
+  currentIndex: number = 0;
 
   viewProject(project: any): void {
     this.setCurrentProject(project);
@@ -70,7 +72,41 @@ export default class ProjectsSlider extends Vue {
     return posterUrl;
   }
 
+  checkTitlesLineBreak () {
+      console.log(this.$refs);
+    
+    this.projects.forEach(project => {
+        
+        let currentPorject: any = project
+        let elt: any = this.$refs[currentPorject.id];
+        
+        
+        if(elt !== undefined) {
+            console.log(elt);
+            let currentHtmlTitle: HTMLElement = elt[0] as HTMLElement;
+            var text = currentHtmlTitle.innerText;
+
+            var words = text.split(" ");
+
+            currentHtmlTitle.innerText = words[0];
+            var height = currentHtmlTitle.offsetHeight;
+
+            for (var i = 1; i < words.length; i++) {
+                currentHtmlTitle.innerText = currentHtmlTitle.innerText + " " + words[i];
+
+                if (currentHtmlTitle.offsetHeight > height) {
+                    height = currentHtmlTitle.offsetHeight;
+                    console.log(words[i - 1]);
+                }
+            }
+        }
+        
+    });
+  }
+
   mounted() {
+    this.checkTitlesLineBreak ()
+
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,
       {
@@ -80,12 +116,21 @@ export default class ProjectsSlider extends Vue {
         autoRestart: false,
         continuous: true,
         disableScroll: false,
-        stopPropagation: true
+        stopPropagation: true,
+        callback: this.onSliderInited,
+        transitionEnd: this.onSliderTransitionEnd
       }
     ) as Object;
   }
 
-  onSliderTransitionEnd(index: Object, elem: Object): void {}
+  onSliderInited(index: number, elem: HTMLElement, dir: number): void {}
+  onSliderTransitionEnd(index: number, elem: HTMLElement): void {
+    this.currentIndex = index;
+  }
+
+  isCurrentIndex(index: number): boolean {
+    return this.currentIndex === index;
+  }
 }
 </script>
 
@@ -99,74 +144,89 @@ export default class ProjectsSlider extends Vue {
   &--item {
     height: 100%;
     &__bg {
+      height: 100%;
+      overflow: hidden;
+      img {
         height: 100%;
-        overflow: hidden;
-        img {
-            height: 100%;
-        }
+      }
     }
     &__title {
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        text-align: center;
-        h1 {
-            position: relative;
-            display: inline-block;
-            z-index: 200;
-            padding: .5em;
-            vertical-align: middle;
-            text-transform: uppercase;
-            font-size: 2em;
-            span {
-                @include roboto-black;
-                visibility: hidden;
-                @keyframes textAnim {
-                    from {visibility: hidden;}
-                    to {visibility: visible;}
-                }
-                @include animation(.75s, 0.01s, textAnim);
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      h1 {
+        position: relative;
+        display: inline-block;
+        z-index: 200;
+        padding: 0.5em;
+        vertical-align: middle;
+        text-transform: uppercase;
+        font-size: 2em;
+        span {
+          @include roboto-black;
+          visibility: hidden;
+          @keyframes textAnim {
+            from {
+              visibility: hidden;
             }
-
-            &::after {
-                    position: absolute;
-                    display: block;
-                    top: -1px;
-                    right: 100%;
-                    bottom: -1px;
-                    left: -1%;
-                    content: '';
-                    background: $black;
-                    //@include transition(all .75s cubic-bezier(.55,0,.28,1) 1s);
-
-                    @keyframes blackBG {
-                        0% {right: 100%;}
-                        50% {right: 0%; left: -1%;}
-                        100% {right: 0%; left: 100%;}
-                    }
-                    @include animation(0s, 1.5s, blackBG);
-                    animation-timing-function: cubic-bezier(.55,0,.28,1);
-                }
-                &::before {
-                    position: absolute;
-                    visibility: hidden;
-                    z-index: -1;
-                    top: -1px;
-                    right: 0%;
-                    bottom: -1px;
-                    left: -1%;
-                    content: '';
-                    @include horizontal-gradient($blue, $purple);
-
-                    @keyframes gradientBG {
-                        from {visibility: hidden;}
-                        to {visibility: visible;}
-                    }
-                    @include animation(.75s, 0.01s, gradientBG);
-                }
-            
+            to {
+              visibility: visible;
+            }
+          }
+          @include animation(0.75s, 0.01s, textAnim);
         }
+
+        &::after {
+          position: absolute;
+          display: block;
+          top: -1px;
+          right: 100%;
+          bottom: -1px;
+          left: -1%;
+          content: "";
+          background: $black;
+          //@include transition(all .75s cubic-bezier(.55,0,.28,1) 1s);
+
+          @keyframes blackBG {
+            0% {
+              right: 100%;
+            }
+            50% {
+              right: 0%;
+              left: -1%;
+            }
+            100% {
+              right: 0%;
+              left: 100%;
+            }
+          }
+          @include animation(0s, 1.5s, blackBG);
+          animation-timing-function: cubic-bezier(0.55, 0, 0.28, 1);
+        }
+        &::before {
+          position: absolute;
+          visibility: hidden;
+          z-index: -1;
+          top: -1px;
+          right: 0%;
+          bottom: -1px;
+          left: -1%;
+          content: "";
+          @include horizontal-gradient($blue, $purple);
+
+          @keyframes gradientBG {
+            from {
+              visibility: hidden;
+            }
+            to {
+              visibility: visible;
+            }
+          }
+          @include animation(0.75s, 0.01s, gradientBG);
+        }
+      }
     }
   }
 }
