@@ -120,7 +120,16 @@ export default class ProjectsSlider extends Vue {
             text-transform: uppercase;
             font-size: 2em;
             span {
-                &::before {
+                @include roboto-black;
+                visibility: hidden;
+                @keyframes textAnim {
+                    from {visibility: hidden;}
+                    to {visibility: visible;}
+                }
+                @include animation(.75s, 0.01s, textAnim);
+            }
+
+            &::after {
                     position: absolute;
                     display: block;
                     top: -1px;
@@ -128,36 +137,34 @@ export default class ProjectsSlider extends Vue {
                     bottom: -1px;
                     left: -1%;
                     content: '';
-                    background: $white;
-                    @include transition(all .75s cubic-bezier(.55,0,.28,1) .5s);
+                    background: $black;
+                    //@include transition(all .75s cubic-bezier(.55,0,.28,1) 1s);
 
                     @keyframes blackBG {
-                        from {right: 100%;}
-                        to {right: 0%;}
+                        0% {right: 100%;}
+                        50% {right: 0%; left: -1%;}
+                        100% {right: 0%; left: 100%;}
                     }
-                    animation: blackBG 1s;
-                    animation-delay: 2s;
+                    @include animation(0s, 1.5s, blackBG);
+                    animation-timing-function: cubic-bezier(.55,0,.28,1);
                 }
-                &::after {
-                    /*position: absolute;
-                    display: block;
+                &::before {
+                    position: absolute;
+                    visibility: hidden;
+                    z-index: -1;
                     top: -1px;
-                    right: 100%;
+                    right: 0%;
                     bottom: -1px;
                     left: -1%;
                     content: '';
                     @include horizontal-gradient($blue, $purple);
-                    @include transition(all .75s cubic-bezier(.55,0,.28,1) .5s);
 
                     @keyframes gradientBG {
-                        from {right: 100%;}
-                        to {right: -1%;}
+                        from {visibility: hidden;}
+                        to {visibility: visible;}
                     }
-                    animation: gradientBG 5s infinite;
-                    animation-delay: 1s;
-                    animation-timing-function: ease-out;*/
+                    @include animation(.75s, 0.01s, gradientBG);
                 }
-            }
             
         }
     }
