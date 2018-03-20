@@ -43,7 +43,7 @@ let config = {
       loader: "file-loader"
     },
     {
-      test: /\.(png|jpg|gif)$/,
+      test: /\.(png|jpg|gif|mp4)$/,
       use: [
         {
           loader: 'file-loader',
@@ -53,6 +53,7 @@ let config = {
     }]
   },
   plugins: [
+    new copyWebpackPlugin([{ from: './src/assets/loops', to: 'assets/loops' }]),
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
     new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new writeFilePlugin()

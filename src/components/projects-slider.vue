@@ -3,14 +3,22 @@
         <div class="projects swipe-wrap" >
             <div v-for="(project, index) in projects" :key="project.id" class="projects--item">
                 <a @click="viewProject(project)" href="#">
-                    <div class="projects--item__bg">
-                        <img :src="getVideoPoster(project)" :alt="project.title">
+                    <div class="projects--item__bg grid-x align-middle align-center">
+                        <!--<img :src="getVideoPoster(project)" :alt="project.title">-->
+                        <div>
+                            <video autoplay loop>
+                                <source :src="getVideoPath(project)" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
                     </div>
                     <div class="projects--item__title grid-x align-middle">
                         <div class="cell small-10 small-offset-1">
-                            <h1 v-if="!isCurrentIndex(index)">
-                                <span :ref="project.id">{{ project.title }}</span>
+                            <h1 v-if="isCurrentIndex(index)">
+                                <span class="title--inner" v-for="(titleString, titleIndex) in projectsArrayTitle[index]" :key="titleIndex"><span>{{ titleString }}</span></span>
                             </h1>
+
+                            <div class="title--innerfake"><span :id="project.id" :class="index">{{ project.title }}</span></div>
                         </div>
                     </div>
                 </a>
@@ -43,6 +51,9 @@ export default class ProjectsSlider extends Vue {
     console.log("View project " + project.title);
   }
 
+    getVideoPath(project: any): String {
+        return '/dist/assets/loops/' + project.id + '.mp4';
+    }
   getVideoPoster(project: any): String {
     let posterUrl: String = "";
     switch (project.videoplateform) {
@@ -72,40 +83,46 @@ export default class ProjectsSlider extends Vue {
     return posterUrl;
   }
 
-  checkTitlesLineBreak () {
-      console.log(this.$refs);
-    
+  checkTitlesLineBreak() {
+    console.log(this.$refs);
+
     this.projects.forEach(project => {
-        
-        let currentPorject: any = project
-        let elt: any = this.$refs[currentPorject.id];
-        
-        
-        if(elt !== undefined) {
-            console.log(elt);
-            let currentHtmlTitle: HTMLElement = elt[0] as HTMLElement;
-            var text = currentHtmlTitle.innerText;
+      let currentPorject: any = project;
+      let currentHtmlTitle: Element = document.getElementById(
+        currentPorject.id
+      ) as Element;
 
-            var words = text.split(" ");
+      if (currentHtmlTitle !== null) {
+        let text: string = currentHtmlTitle.textContent as string;
+        let words = text.split(" ");
+        currentHtmlTitle.textContent = words[0];
+        let height = currentHtmlTitle.getBoundingClientRect().height;
+        let currentTitleArray: Array<string> = [];
+        let lastFoundWordIndex: number = 0;
 
-            currentHtmlTitle.innerText = words[0];
-            var height = currentHtmlTitle.offsetHeight;
+        for (let i = 1; i < words.length; i++) {
+          currentHtmlTitle.textContent =
+            currentHtmlTitle.textContent + " " + words[i];
 
-            for (var i = 1; i < words.length; i++) {
-                currentHtmlTitle.innerText = currentHtmlTitle.innerText + " " + words[i];
+          if (currentHtmlTitle.getBoundingClientRect().height > height) {
+            height = currentHtmlTitle.getBoundingClientRect().height;
 
-                if (currentHtmlTitle.offsetHeight > height) {
-                    height = currentHtmlTitle.offsetHeight;
-                    console.log(words[i - 1]);
-                }
-            }
+            currentTitleArray.push(
+              words.slice(lastFoundWordIndex, i).join(" ")
+            );
+            lastFoundWordIndex = i;
+          }
         }
-        
+        currentTitleArray.push(
+          words.slice(lastFoundWordIndex, words.length).join(" ")
+        );
+        this.projectsArrayTitle.push(currentTitleArray);
+      }
     });
   }
 
   mounted() {
-    this.checkTitlesLineBreak ()
+    this.checkTitlesLineBreak();
 
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,
@@ -136,6 +153,9 @@ export default class ProjectsSlider extends Vue {
 
 <style lang="scss">
 @import "../style/main.scss";
+$titleAnimationDuration: 0.75s;
+$titleAnimationMultilineDelay: 0.15s;
+
 #slider {
   height: 100%;
 }
@@ -153,10 +173,12 @@ export default class ProjectsSlider extends Vue {
     &__title {
       position: absolute;
       top: 0;
+      padding-top: 35%;
       height: 100%;
       width: 100%;
-      text-align: center;
-      h1 {
+      text-align: left;
+      .title--inner,
+      .title--innerfake {
         position: relative;
         display: inline-block;
         z-index: 200;
@@ -166,6 +188,15 @@ export default class ProjectsSlider extends Vue {
         font-size: 2em;
         span {
           @include roboto-black;
+          letter-spacing: 0.05em;
+        }
+      }
+      .title--innerfake {
+        visibility: hidden;
+      }
+      .title--inner {
+        overflow: hidden;
+        span {
           visibility: hidden;
           @keyframes textAnim {
             from {
@@ -175,9 +206,7 @@ export default class ProjectsSlider extends Vue {
               visibility: visible;
             }
           }
-          @include animation(0.75s, 0.01s, textAnim);
         }
-
         &::after {
           position: absolute;
           display: block;
@@ -187,7 +216,6 @@ export default class ProjectsSlider extends Vue {
           left: -1%;
           content: "";
           background: $black;
-          //@include transition(all .75s cubic-bezier(.55,0,.28,1) 1s);
 
           @keyframes blackBG {
             0% {
@@ -202,8 +230,7 @@ export default class ProjectsSlider extends Vue {
               left: 100%;
             }
           }
-          @include animation(0s, 1.5s, blackBG);
-          animation-timing-function: cubic-bezier(0.55, 0, 0.28, 1);
+          @include animation-timing-function(cubic-bezier(0.55, 0, 0.28, 1));
         }
         &::before {
           position: absolute;
@@ -211,7 +238,7 @@ export default class ProjectsSlider extends Vue {
           z-index: -1;
           top: -1px;
           right: 0%;
-          bottom: -1px;
+          bottom: 0px;
           left: -1%;
           content: "";
           @include horizontal-gradient($blue, $purple);
@@ -224,7 +251,23 @@ export default class ProjectsSlider extends Vue {
               visibility: visible;
             }
           }
-          @include animation(0.75s, 0.01s, gradientBG);
+          
+        }
+      }
+      .title--inner:not(:last-child)::before {
+        border-bottom: solid 1px $black;
+      }
+      @for $i from 0 through 4 {
+        .title--inner:nth-child(#{$i}) {
+            span {
+                @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
+            }
+            &::before {
+                @include animation(#{$i * $titleAnimationMultilineDelay+$titleAnimationDuration * 0.5}, 0.01s, gradientBG);
+            }
+            &::after {
+                @include animation(#{$i * $titleAnimationMultilineDelay}, $titleAnimationDuration, blackBG);
+            }
         }
       }
     }

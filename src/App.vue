@@ -4,10 +4,18 @@
     <projects-slider></projects-slider>
     <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
 
-    <div class="main-name">
-      <div class="main-name__first">Stéphane</div>
-      <div class="main-name__last">CLAUDON</div>
+    <div class="name-wrapper">
+      <div class="grid-x">
+        <div class="cell small-10 small-offset-1">
+          <div class="main-name">
+            <div class="main-name__first">Stéphane</div>
+            <div class="main-name__last">CLAUDON</div>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    
 
     <contact-box></contact-box>
 
@@ -46,21 +54,31 @@
 <style lang="scss">
   @import './style/main.scss';
 
+  .name-wrapper {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+  }
+
   .main {
     &-name {
-      position: absolute;
-      top: 100px;
-      left: 100px;
+      @include opacity(0);
+      @keyframes mainName {
+        from {@include opacity(0);}
+        to {@include opacity(1);}
+      }
+      @include animation(1s, 1s, mainName);
+      animation-timing-function: ease-out;
       text-transform: uppercase;
       &__first {
         @include roboto-light;
-        font-size: 41px;
+        font-size: 1em;
         letter-spacing: 0.72em;
       }
       &__last {
         @include roboto-black;
-        font-size: 80px;
-        letter-spacing: 0.1em;
+        font-size: 1.93em;
+        letter-spacing: 0.105em;
       }
     }
   }

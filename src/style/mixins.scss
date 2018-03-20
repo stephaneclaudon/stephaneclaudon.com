@@ -33,11 +33,11 @@
 }
 //transform origin
 @mixin transform-origin ($origin) {
- moz-transform-origin: $origin;
-      -o-transform-origin: $origin;
-     -ms-transform-origin: $origin;
- -webkit-transform-origin: $origin;
-       transform-origin: $origin;
+    moz-transform-origin: $origin;
+    -o-transform-origin: $origin;
+    -ms-transform-origin: $origin;
+    -webkit-transform-origin: $origin;
+    transform-origin: $origin;
 }
 
 @mixin horizontal-gradient($from, $to, $stop: 100%) {
@@ -84,4 +84,19 @@
     animation-name: $animation;
     animation-fill-mode: $fillmode;
     animation-direction: $direction;
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+//transform origin
+@mixin animation-timing-function ($animation-timing-function) {
+    moz-animation-timing-function: $animation-timing-function;
+    -o-animation-timing-function: $animation-timing-function;
+    -ms-animation-timing-function: $animation-timing-function;
+    -webkit-animation-timing-function: $animation-timing-function;
+    animation-timing-function: $animation-timing-function;
 }

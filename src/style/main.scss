@@ -9,15 +9,20 @@
 @include foundation-xy-grid-classes;
 @include foundation-flex-classes;
 
-html, .app {
+html, body, .app {
   height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-text-size-adjust: none;
 }
 body {
     font-family: 'Roboto', sans-serif;
     background-color: $black;
     color: $white;
     height: 100%;
-    font-size: 40px;
+    font-size: 12px;
 }
 
 a, a:hover, a:visited {
