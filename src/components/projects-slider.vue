@@ -5,20 +5,21 @@
                 <a @click="viewProject(project)" href="#">
                     <div class="projects--item__bg grid-x align-middle align-center">
                         <!--<img :src="getVideoPoster(project)" :alt="project.title">-->
+                        <!--<canvas-video :alive="isCurrentIndex(index)" :name="project.id" :title="project.title"></canvas-video>-->
                         <div>
-                            <video autoplay loop>
+                            <video playsinline loop muted autoplay>
                                 <source :src="getVideoPath(project)" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
                     </div>
                     <div class="projects--item__title grid-x align-middle">
-                        <div class="cell small-10 small-offset-1">
+                        <div class="cell small-9 small-offset-1">
                             <h1 v-if="isCurrentIndex(index)">
                                 <span class="title--inner" v-for="(titleString, titleIndex) in projectsArrayTitle[index]" :key="titleIndex"><span>{{ titleString }}</span></span>
                             </h1>
 
-                            <div class="title--innerfake"><span :id="project.id" :class="index">{{ project.title }}</span></div>
+                            <div v-if="!titlesComputed" class="title--innerfake"><span :id="project.id" :class="index">{{ project.title }}</span></div>
                         </div>
                     </div>
                 </a>
@@ -34,8 +35,13 @@ import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
 //@ts-ignore
 import * as SwipeJS from "swipejs";
+import CanvasVideo from './canvas-video.vue'
 
-@Component
+@Component({
+    components: {
+        CanvasVideo
+    }
+})
 export default class ProjectsSlider extends Vue {
   @State("projects") projects: Array<Object>;
 
@@ -45,47 +51,20 @@ export default class ProjectsSlider extends Vue {
   projectsArrayTitle: Array<Array<string>> = [];
   projectsSwipe: Object = {};
   currentIndex: number = 0;
+  titlesComputed: boolean = false;
 
   viewProject(project: any): void {
     this.setCurrentProject(project);
     console.log("View project " + project.title);
   }
 
-    getVideoPath(project: any): String {
-        return '/dist/assets/loops/' + project.id + '.mp4';
-    }
-  getVideoPoster(project: any): String {
-    let posterUrl: String = "";
-    switch (project.videoplateform) {
-      case "facebook": {
-        posterUrl =
-          "https://scontent-cdg2-1.xx.fbcdn.net/v/t15.0-10/p720x720/24594542_10155038687253204_6434570426336149504_n.jpg?oh=b451a3b459ddc1bb108b461318452c62&oe=5B3F841D";
-        break;
-      }
-      case "vimeo": {
-        posterUrl =
-          "https://i.vimeocdn.com/video/" +
-          project.videoid +
-          ".webp?mw=1300&mh=542";
-        break;
-      }
-      case "youtube": {
-        posterUrl =
-          "https://i.ytimg.com/vi/" + project.videoid + "/maxresdefault.jpg";
-        break;
-      }
-      default: {
-        console.log("Invalid choice");
-        break;
-      }
-    }
 
-    return posterUrl;
+
+  getVideoPath(project: any): String {
+    return "/dist/assets/loops/" + project.id + ".mp4";
   }
 
   checkTitlesLineBreak() {
-    console.log(this.$refs);
-
     this.projects.forEach(project => {
       let currentPorject: any = project;
       let currentHtmlTitle: Element = document.getElementById(
@@ -119,6 +98,7 @@ export default class ProjectsSlider extends Vue {
         this.projectsArrayTitle.push(currentTitleArray);
       }
     });
+    this.titlesComputed = true;
   }
 
   mounted() {
@@ -173,10 +153,12 @@ $titleAnimationMultilineDelay: 0.15s;
     &__title {
       position: absolute;
       top: 0;
-      padding-top: 35%;
       height: 100%;
       width: 100%;
       text-align: left;
+      .cell {
+        margin-top: 35%;
+      }
       .title--inner,
       .title--innerfake {
         position: relative;
@@ -251,7 +233,6 @@ $titleAnimationMultilineDelay: 0.15s;
               visibility: visible;
             }
           }
-          
         }
       }
       .title--inner:not(:last-child)::before {
@@ -259,15 +240,15 @@ $titleAnimationMultilineDelay: 0.15s;
       }
       @for $i from 0 through 4 {
         .title--inner:nth-child(#{$i}) {
-            span {
-                @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
-            }
-            &::before {
-                @include animation(#{$i * $titleAnimationMultilineDelay+$titleAnimationDuration * 0.5}, 0.01s, gradientBG);
-            }
-            &::after {
-                @include animation(#{$i * $titleAnimationMultilineDelay}, $titleAnimationDuration, blackBG);
-            }
+          span {
+            @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
+          }
+          &::before {
+            @include animation(#{$i * $titleAnimationMultilineDelay+$titleAnimationDuration * 0.5}, 0.01s, gradientBG);
+          }
+          &::after {
+            @include animation(#{$i * $titleAnimationMultilineDelay}, $titleAnimationDuration, blackBG);
+          }
         }
       }
     }

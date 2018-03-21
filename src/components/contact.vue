@@ -68,7 +68,7 @@ export default class ContactBox extends Vue {
     from {@include opacity(0);}
     to {@include opacity(1);}
   }
-  @include animation(1.5s, 1s, contactToggle);
+  @include animation(0.25s, 1s, contactToggle);
   animation-timing-function: ease-out;
 
   &::after {
