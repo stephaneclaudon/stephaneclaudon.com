@@ -41,45 +41,7 @@ export default class ProjectsSlider extends Vue {
     console.log("View project " + project.title);
   }
 
-  checkTitlesLineBreak() {
-    this.projects.forEach(project => {
-      let currentPorject: any = project;
-      let currentHtmlTitle: Element = document.getElementById(
-        currentPorject.id
-      ) as Element;
-
-      if (currentHtmlTitle !== null) {
-        let text: string = currentHtmlTitle.textContent as string;
-        let words = text.split(" ");
-        currentHtmlTitle.textContent = words[0];
-        let height = currentHtmlTitle.getBoundingClientRect().height;
-        let currentTitleArray: Array<string> = [];
-        let lastFoundWordIndex: number = 0;
-
-        for (let i = 1; i < words.length; i++) {
-          currentHtmlTitle.textContent =
-            currentHtmlTitle.textContent + " " + words[i];
-
-          if (currentHtmlTitle.getBoundingClientRect().height > height) {
-            height = currentHtmlTitle.getBoundingClientRect().height;
-
-            currentTitleArray.push(
-              words.slice(lastFoundWordIndex, i).join(" ")
-            );
-            lastFoundWordIndex = i;
-          }
-        }
-        currentTitleArray.push(
-          words.slice(lastFoundWordIndex, words.length).join(" ")
-        );
-        this.projectsArrayTitle.push(currentTitleArray);
-      }
-    });
-    this.titlesComputed = true;
-  }
-
   mounted() {
-    //this.checkTitlesLineBreak();
 
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,

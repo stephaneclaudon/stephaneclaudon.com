@@ -36,6 +36,8 @@ import ProjectDetails from "./components/project-details.vue";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
+import VideoSnapshooter from "./components-ts/VideoSnapshooter"
+
 @Component({
   components: {
     ContactBox,
@@ -51,6 +53,7 @@ export default class App extends Vue {
 
   created() {
     this.loadProject(jsonData);
+    VideoSnapshooter.getInstance().init();
   }
 }
 </script>

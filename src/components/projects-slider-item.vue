@@ -8,7 +8,6 @@
                     <source :src="getVideoPath()" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <canvas :id="'canvas-' + project.id" width="200" height="200"></canvas>
             </div>
         </div>
         <!--<div class="projects-slider-item__title grid-x align-middle">
@@ -25,6 +24,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import WebGLCompiler from "../components-ts/WebGLCompiler";
+import SliderVideoBG from "../components-ts/SliderVideoBG";
+import Utils from "../utils/Utils";
 //@ts-ignore
 import * as PIXI from "pixi.js";
 
@@ -35,9 +37,13 @@ export default class ProjectsSliderItem extends Vue {
   videoElement: HTMLVideoElement;
   canvasElement: HTMLCanvasElement;
   canvasContext: CanvasRenderingContext2D;
+  canvasGLContext: WebGLRenderingContext;
+  videoBG: SliderVideoBG;
   snapshot: string = "";
   snapshoted: boolean = false;
   inited: boolean = false;
+
+  testImg: string = '';
 
   loopsPath: string = "dist/assets/loops/";
   wrapperId: string = "canvas-video-wrapper_";
@@ -59,39 +65,6 @@ export default class ProjectsSliderItem extends Vue {
     return "/dist/assets/loops/" + this.project.id + ".mp4";
   }
 
-  checkTitlesLineBreak() {
-    let currentPorject: any = this.project;
-    let currentHtmlTitle: Element = document.getElementById(
-      currentPorject.id
-    ) as Element;
-
-    if (currentHtmlTitle !== null) {
-      let text: string = currentHtmlTitle.textContent as string;
-      let words = text.split(" ");
-      currentHtmlTitle.textContent = words[0];
-      let height = currentHtmlTitle.getBoundingClientRect().height;
-      let currentTitleArray: Array<string> = [];
-      let lastFoundWordIndex: number = 0;
-
-      for (let i = 1; i < words.length; i++) {
-        currentHtmlTitle.textContent =
-          currentHtmlTitle.textContent + " " + words[i];
-
-        if (currentHtmlTitle.getBoundingClientRect().height > height) {
-          height = currentHtmlTitle.getBoundingClientRect().height;
-
-          currentTitleArray.push(words.slice(lastFoundWordIndex, i).join(" "));
-          lastFoundWordIndex = i;
-        }
-      }
-      currentTitleArray.push(
-        words.slice(lastFoundWordIndex, words.length).join(" ")
-      );
-      this.projectArrayTitle = currentTitleArray;
-    }
-    this.titleComputed = true;
-  }
-
   toggleVideo() {
     if (this.alive) {
       this.videoTexture.baseTexture.source.play();
@@ -103,67 +76,38 @@ export default class ProjectsSliderItem extends Vue {
   }
 
   mounted() {
-    this.checkTitlesLineBreak();
-    this.videoElement = document.getElementById(
-      "video-" + this.project.id
-    ) as HTMLVideoElement;
+    this.projectArrayTitle = Utils.lineBreaksToArray(document.getElementById(
+      this.project.id
+    ) as Element);
+    this.titleComputed = true;
 
-    this.canvasElement = document.getElementById(
-      "canvas-" + this.project.id
-    ) as HTMLCanvasElement;
-    this.videoElement.addEventListener(
-      "playing",
-      this.onVideoStartPlaying,
-      false
+    this.videoElement = document.getElementById("video-" + this.project.id) as HTMLVideoElement;
+    this.videoBG = new SliderVideoBG(
+      this.videoElement,
+      this.alive
     );
-    this.canvasContext = this.canvasElement.getContext("2d") as CanvasRenderingContext2D;
-  }
-
-  onVideoStartPlaying() {
-    console.log('video playing -- ', this.project.title);
-      
-    if(!this.inited) {
-        if (!this.alive) {
-            this.videoElement.pause();
-            this.freezeVideo();
-        } 
-        this.inited = true;
-    }
   }
 
   freezeVideo() {
-      this.canvasElement.width = this.videoElement.videoWidth;
-      this.canvasElement.height = this.videoElement.videoHeight;
-      this.canvasContext!.drawImage(
-        this.videoElement,
-        0,
-        0,
-        this.canvasElement.width,
-        this.canvasElement.height
-      );
-      this.videoElement.pause();
-      this.snapshoted = true;
-
+    this.videoBG.freezeVideo();
+    this.snapshoted = true;
   }
 
   unfreezeVideo() {
-      this.videoElement.play();
-      this.snapshoted = false;
-      this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    this.videoBG.unfreezeVideo();
+    this.snapshoted = false;
   }
 
   @Watch("alive", { immediate: false, deep: false })
   onAliveChanged(val: boolean, oldVal: boolean) {
-    if(val)
-        this.unfreezeVideo();
+    //this.canvasBG.alive = val;
+    if (val) this.unfreezeVideo();
   }
 
   @Watch("moving", { immediate: false, deep: false })
   onMovingChanged(val: boolean, oldVal: boolean) {
-    if(val !== oldVal && val)
-        this.freezeVideo();
-    else if(this.alive)
-        this.unfreezeVideo();
+    if (val !== oldVal && val && this.alive) this.freezeVideo();
+    else if (this.alive) this.unfreezeVideo();
   }
 }
 </script>
