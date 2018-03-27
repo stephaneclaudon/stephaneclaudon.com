@@ -8,9 +8,10 @@
                     <source :src="getVideoPath()" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                <canvas :id="'canvas-' + project.id"></canvas>
             </div>
         </div>
-        <!--<div class="projects-slider-item__title grid-x align-middle">
+        <div class="projects-slider-item__title grid-x align-middle">
             <div class="cell small-9 small-offset-1">
                 <h1 v-if="alive">
                     <span class="title--inner" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex"><span>{{ titleString }}</span></span>
@@ -18,7 +19,7 @@
 
                 <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex">{{ project.title }}</span></div>
             </div>
-        </div>-->
+        </div>
     </div>
 </template>
 
@@ -58,7 +59,7 @@ export default class ProjectsSliderItem extends Vue {
   moving: boolean;
 
   created() {
-    this.wrapperId = this.wrapperId + this.project.name;
+    this.wrapperId = this.wrapperId + this.project.title;
   }
 
   getVideoPath(): String {
@@ -82,20 +83,29 @@ export default class ProjectsSliderItem extends Vue {
     this.titleComputed = true;
 
     this.videoElement = document.getElementById("video-" + this.project.id) as HTMLVideoElement;
+    this.canvasElement = document.getElementById("canvas-" + this.project.id) as HTMLCanvasElement;
     this.videoBG = new SliderVideoBG(
+      this.project.title,
+      this.canvasElement,
       this.videoElement,
-      this.alive
+      this.alive,
+      this.onVideoFreezed
     );
   }
 
   freezeVideo() {
-    this.videoBG.freezeVideo(() => {
-      this.snapshoted = true;
-    });
+    console.log('freezeVideo', this.project.title, this.snapshoted);
+    this.videoBG.freezeVideo();
+  }
+
+  onVideoFreezed() {
+    console.log('onfreeeeze');
     
+    this.snapshoted = true;
   }
 
   unfreezeVideo() {
+    console.log('unfreezeVideo', this.project.title, this.snapshoted);
     this.videoBG.unfreezeVideo();
     this.snapshoted = false;
   }
