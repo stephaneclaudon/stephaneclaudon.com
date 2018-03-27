@@ -1,8 +1,10 @@
 export default class VideoSnapshooter {
     private static instance: VideoSnapshooter;
+    private snapshotTechnique: string = 'dataurl';
 
     canvasElement: HTMLCanvasElement;
     canvasContext: CanvasRenderingContext2D;
+
 
     private constructor() {
         // do something construct...
@@ -18,10 +20,15 @@ export default class VideoSnapshooter {
 
     init(): void {
         this.canvasElement = document.createElement("canvas");
-        this.canvasContext = this.canvasElement.getContext("2d") as CanvasRenderingContext2D;
+        this.canvasContext = this.canvasElement.getContext("2d", {
+            antialias: false,
+            depth: false,
+            alpha: false
+          }) as CanvasRenderingContext2D;
     }
 
-    takeSnapshot(videoElement: HTMLVideoElement): string {
+    takeSnapshot(videoElement: HTMLVideoElement, callBack: (blobUrl: string) => void) {
+        
         this.canvasElement.width = videoElement.videoWidth;
         this.canvasElement.height = videoElement.videoHeight;
         this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
@@ -32,8 +39,14 @@ export default class VideoSnapshooter {
           this.canvasElement.width,
           this.canvasElement.height
         );
-        console.log('snaaap');
-        return this.canvasElement.toDataURL(/*'image/jpeg', 0.5*/);
+
+        if(this.snapshotTechnique === 'blob'){
+            this.canvasElement.toBlob((blob: Blob | null) => {
+                callBack(URL.createObjectURL(blob));
+            }, 'image/jpeg', 0.3);
+        } else {
+            callBack(this.canvasElement.toDataURL('image/jpeg', 0.1))
+        }
     }
 
 }

@@ -62,7 +62,7 @@ export default class ProjectsSliderItem extends Vue {
   }
 
   getVideoPath(): String {
-    return "/dist/assets/loops/" + this.project.id + ".mp4";
+    return "/dist/assets/loops/" + this.project.id + "-mobile.mp4";
   }
 
   toggleVideo() {
@@ -89,8 +89,10 @@ export default class ProjectsSliderItem extends Vue {
   }
 
   freezeVideo() {
-    this.videoBG.freezeVideo();
-    this.snapshoted = true;
+    this.videoBG.freezeVideo(() => {
+      this.snapshoted = true;
+    });
+    
   }
 
   unfreezeVideo() {
@@ -131,10 +133,10 @@ $titleAnimationMultilineDelay: 0.15s;
       height: 100%;
     }
     video {
-      visibility: block;
+      display: block;
     }
     canvas {
-      visibility: none;
+      display: none;
     }
     &.snapshoted {
       video {
