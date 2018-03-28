@@ -44,8 +44,7 @@ export default class SliderVideoBG {
         });
         this.pixiApp.renderer.autoResize = true;
         this.pixiApp.renderer.resize(window.innerWidth, window.innerHeight);
-        this.videoElement.parentElement!.appendChild(this.pixiApp.view);
-        
+        //this.videoElement.parentElement!.appendChild(this.pixiApp.view);
         
         this.snapshotTexture = PIXI.Texture.fromVideo(this.videoElement);
         this.snapshotTexture.autoPlay = false;
@@ -70,11 +69,7 @@ export default class SliderVideoBG {
         }
     }
 
-
     freezeVideo(): void {
-        console.log('freezeVideo', this.projectTitle);
-        
-        var t0 = performance.now();
         this.snapshotTexture.baseTexture.source.pause();
         //this.pixiTicker.start();
         this.onFreezedCallback();
@@ -82,7 +77,6 @@ export default class SliderVideoBG {
 
     unfreezeVideo(): void {
         this.videoElement.play();
-        console.log('playyyy');
         
         //this.pixiTicker.stop();
     }

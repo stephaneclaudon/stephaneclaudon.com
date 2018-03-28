@@ -94,18 +94,14 @@ export default class ProjectsSliderItem extends Vue {
   }
 
   freezeVideo() {
-    console.log('freezeVideo', this.project.title, this.snapshoted);
     this.videoBG.freezeVideo();
   }
 
   onVideoFreezed() {
-    console.log('onfreeeeze');
-    
     this.snapshoted = true;
   }
 
   unfreezeVideo() {
-    console.log('unfreezeVideo', this.project.title, this.snapshoted);
     this.videoBG.unfreezeVideo();
     this.snapshoted = false;
   }
@@ -139,6 +135,16 @@ $titleAnimationMultilineDelay: 0.15s;
   &__bg {
     height: 100%;
     overflow: hidden;
+    background: black;
+    &::after {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      background: radial-gradient(transparent, rgba(0,0,0,0.8));
+    }
     img {
       height: 100%;
     }
