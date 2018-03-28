@@ -53,7 +53,7 @@ export default class App extends Vue {
 
   created() {
     this.loadProject(jsonData);
-    VideoSnapshooter.getInstance().init();
+    //VideoSnapshooter.getInstance().init();
   }
 }
 </script>

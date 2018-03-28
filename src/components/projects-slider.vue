@@ -15,14 +15,14 @@
 import { State, Mutation } from "vuex-class";
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
-import ProjectsSliderItem from './projects-slider-item.vue';
+import ProjectsSliderItem from "./projects-slider-item.vue";
 //@ts-ignore
 import * as SwipeJS from "../lib/swipeJs/swipe.js";
 
 @Component({
-    components: {
-        ProjectsSliderItem
-    }
+  components: {
+    ProjectsSliderItem
+  }
 })
 export default class ProjectsSlider extends Vue {
   @State("projects") projects: Array<Object>;
@@ -42,7 +42,6 @@ export default class ProjectsSlider extends Vue {
   }
 
   mounted() {
-
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,
       {
@@ -75,12 +74,18 @@ export default class ProjectsSlider extends Vue {
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
 #slider {
   height: 100%;
 }
 .projects {
   height: 100%;
+  &--item {
+    height: 100%;
+    a {
+      display: block;
+      height: 100%;
+    }
+  }
 }
 </style>

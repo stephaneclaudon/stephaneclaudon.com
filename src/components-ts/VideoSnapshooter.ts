@@ -33,28 +33,6 @@ export default class VideoSnapshooter {
         return this.canvasElement;
     }
 
-    /*takeSnapshot(videoElement: HTMLVideoElement, callBack: (blobUrl: string) => void) {
-        
-        this.canvasElement.width = videoElement.videoWidth;
-        this.canvasElement.height = videoElement.videoHeight;
-        this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-        this.canvasContext!.drawImage(
-          videoElement,
-          0,
-          0,
-          this.canvasElement.width,
-          this.canvasElement.height
-        );
-
-        if(this.snapshotTechnique === 'blob'){
-            this.canvasElement.toBlob((blob: Blob | null) => {
-                callBack(URL.createObjectURL(blob));
-            }, 'image/jpeg', 0.3);
-        } else {
-            callBack(this.canvasElement.toDataURL('image/jpeg', 0.1))
-        }
-    }*/
-
     takeSnapshot(videoElement: HTMLVideoElement): HTMLCanvasElement {
         
         this.canvasElement.width = videoElement.videoWidth;

@@ -26,16 +26,6 @@ export default class SliderVideoBG {
     
     constructor(projectTitle: string, canvasElement: HTMLCanvasElement, videoElement: HTMLVideoElement, alive: boolean, onFreezedCallback: Function) {
         
-        /*PIXI.loader.load(() => {
-            console.log('loaded', PIXI.loader.resources);
-            
-            var vert = PIXI.loader.resources["../dist/assets/shaders/postEffect.vs"].data;
-            var frag = PIXI.loader.resources["../dist/assets/shaders/postEffect.fs"].data;
-            
-            this.snapshotShader = new PIXI.Filter(vert, frag);
-        });*/
-
-
         //this.pixiTicker.stop();
         this.projectTitle = projectTitle;
         this.onFreezedCallback = onFreezedCallback;
@@ -47,9 +37,9 @@ export default class SliderVideoBG {
             false
         );
         this.pixiApp = new PIXI.Application({ 
-            antialias: true,    // default: false
-            transparent: false, // default: false
-            resolution: 1,       // default: 1,
+            antialias: true,
+            transparent: false,
+            resolution: 1,
             view: canvasElement
         });
         this.pixiApp.renderer.autoResize = true;
@@ -63,6 +53,8 @@ export default class SliderVideoBG {
         this.snapshot = new PIXI.Sprite(this.snapshotTexture);
         this.snapshot.position.x = window.innerWidth*0.5;
         this.snapshot.anchor.x = 0.5;
+        this.snapshot.position.y = window.innerHeight*0.5;
+        this.snapshot.anchor.y = 0.5;
         this.snapshotShader = new PIXI.Filter('', fShaderCode);
         //this.snapshot.filters = [this.snapshotShader];
         this.snapshot.filters = [new PIXI.filters.NoiseFilter()];
@@ -70,8 +62,6 @@ export default class SliderVideoBG {
     }
 
     onVideoStartPlaying(): void {
-        
-        
         if (!this.inited) {
             if (!this.alive) {
                 this.freezeVideo();
@@ -86,26 +76,6 @@ export default class SliderVideoBG {
         
         var t0 = performance.now();
         this.snapshotTexture.baseTexture.source.pause();
-        /*this.videoElement.pause();
-        VideoSnapshooter.getInstance().takeSnapshot(this.videoElement, (blobURL: string) => {
-            this.snapshotURLData = blobURL;
-            this.snapshot = PIXI.Sprite.fromImage(this.snapshotURLData);
-            this.snapshot.position.x = window.innerWidth*0.5;
-            //this.snapshot.position.y = window.innerHeight;
-            this.snapshot.anchor.x = 0.5;
-            //this.snapshot.anchor.y = 0.5;
-            this.snapshot.on('added', () => {
-                if(callback)
-                    callback();
-                var t1 = performance.now();
-                console.log("Call to snapshot took " + Math.floor(t1 - t0) + " milliseconds.");
-            })
-            this.pixiApp.stage.addChild(this.snapshot);
-        });*/
-                
-        //this.snapshot.texture.update();
-        //console.log('update!!', this.videoElement);
-        
         //this.pixiTicker.start();
         this.onFreezedCallback();
     }
