@@ -13,19 +13,6 @@ Vue.use(Vuex)
 
 let vueApp: Vue = new Vue({
   el: document.querySelector('#app') as Element,
-  components: {App},
-  store: new Vuex.Store({ 
-    state: new State(),
-    getters,
-    mutations
-  }),
-  render (h) {
-    return h('App')
-  }
-})
-/*
-let vueApp: Vue = new Vue({
-  el: document.querySelector('#app') as Element,
   components: {AppPIXI},
   store: new Vuex.Store({ 
     state: new State(),
@@ -35,7 +22,7 @@ let vueApp: Vue = new Vue({
   render (h) {
     return h('AppPIXI')
   }
-})*/
+})
 
 let stats: Stats = new Stats();
 stats.showPanel( 2 ); // 0: fps, 1: ms, 2: mb, 3+: custom

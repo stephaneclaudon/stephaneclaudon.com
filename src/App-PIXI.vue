@@ -32,8 +32,9 @@ import * as PIXI from "pixi.js";
 export default class AppPIXI extends Vue {
   videoElement: HTMLVideoElement;
   pixiApp: PIXI.Application;
-  projectSprite: PIXI.Sprite;
-  projectTexture: PIXI.Texture;
+  projectsContainer: PIXI.Container;
+  //projectSprite: PIXI.Sprite;
+  //projectTexture: PIXI.Texture;
 
   inited: boolean = false;
 
@@ -81,43 +82,36 @@ export default class AppPIXI extends Vue {
   }
 
   initProjects() {
-    // Create a 5x5 grid of bunnies
-    for (var i = 0; i < 1; i++) {
+    this.projectsContainer = new PIXI.Container();
+    this.pixiApp.stage.addChild(this.projectsContainer);
+    for (var i = 0; i < 5; i++) {
       let startText: PIXI.Texture = PIXI.Texture.fromVideo(this.videoElement);
       
       startText.autoPlay = true;
       startText.autoUpdate = true;
       let frame: PIXI.Rectangle = new PIXI.Rectangle(
-        0,
+        i*180,
         0,
         180,
         320
       );
-      this.projectTexture = new PIXI.Texture(startText, frame);
+      let projectTexture = new PIXI.Texture(startText, frame);
       startText.destroy();
       startText = null;
-      /*this.projectTexture.trim = new PIXI.Rectangle(
-        0,
-        0,
-        window.innerWidth,
-        window.innerWidth
-      );*/
-      //this.projectTexture._updateUvs();
 
-      this.projectSprite = new PIXI.Sprite(this.projectTexture);
-      this.projectSprite.position.x =
-        window.innerWidth * 0.5;
-      this.projectSprite.anchor.x = 0.5;
-      this.projectSprite.position.y = window.innerHeight * 0.5;
-      this.projectSprite.anchor.y = 0.5;
+      let projectSprite = new PIXI.Sprite(projectTexture);
+      projectSprite.position.x = (window.innerWidth * 0.5) + (i*50);
+        console.log(projectSprite.position.x);
+        
+      projectSprite.anchor.x = 0.5;
+      projectSprite.position.y = window.innerHeight * 0.5;
+      projectSprite.anchor.y = 0.5;
       
-      this.projectSprite.width = window.innerWidth-10;
-      this.projectSprite.height = window.innerHeight-10;
+      projectSprite.width = window.innerWidth-10;
+      projectSprite.height = window.innerHeight-10;
       
-      this.pixiApp.stage.addChild(this.projectSprite);
-      //this.projectSprite.baseTexture.source.pause();
-
-      console.log(this.pixiApp.stage.width, this.pixiApp.renderer.width, window.innerWidth);
+      this.projectsContainer.addChild(projectSprite);
+      
     }
   this.inited = true;
   }
