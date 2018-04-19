@@ -1,5 +1,4 @@
 import VideoSnapshooter from "./VideoSnapshooter";
-//@ts-ignore
 import * as PIXI from "pixi.js";
 //@ts-ignore
 import * as fShaderCode from "../shaders/postEffect.fs"
@@ -19,7 +18,7 @@ export default class SliderVideoBG {
     alive: boolean;
     inited: boolean = false;
     snapshotURLData: string;
-    snapshotShader: PIXI.Filter;
+    snapshotShader: PIXI.Filter<{}>;
   
     onFreezedCallback: Function;
     projectTitle:string;
@@ -46,10 +45,10 @@ export default class SliderVideoBG {
         this.pixiApp.renderer.resize(window.innerWidth, window.innerHeight);
         //this.videoElement.parentElement!.appendChild(this.pixiApp.view);
         
-        this.snapshotTexture = PIXI.Texture.fromVideo(this.videoElement);
-        this.snapshotTexture.autoPlay = false;
-        this.snapshotTexture.autoUpdate = false;
-        this.snapshot = new PIXI.Sprite(this.snapshotTexture);
+        this.snapshotTexture = PIXI.Texture.fromVideo(videoElement);
+        (<PIXI.VideoBaseTexture>this.snapshotTexture.baseTexture).autoPlay = true;
+        (<PIXI.VideoBaseTexture>this.snapshotTexture.baseTexture).autoUpdate = true;
+        this.snapshot = new PIXI.Sprite(new PIXI.Texture(this.snapshotTexture.baseTexture));
         this.snapshot.position.x = window.innerWidth*0.5;
         this.snapshot.anchor.x = 0.5;
         this.snapshot.position.y = window.innerHeight*0.5;
@@ -70,7 +69,7 @@ export default class SliderVideoBG {
     }
 
     freezeVideo(): void {
-        this.snapshotTexture.baseTexture.source.pause();
+        (<PIXI.VideoBaseTexture>this.snapshotTexture.baseTexture).source.pause();
         //this.pixiTicker.start();
         this.onFreezedCallback();
     }
