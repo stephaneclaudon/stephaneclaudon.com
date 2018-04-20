@@ -24,9 +24,6 @@ import {
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 import * as PIXI from "pixi.js";
-import { TweenMax } from "gsap";
-//@ts-ignore
-import * as PixiPlugin from "gsap/PixiPlugin";
 import SliderVideoContainer from "./components-ts/SliderVideoContainer";
 
 @Component({

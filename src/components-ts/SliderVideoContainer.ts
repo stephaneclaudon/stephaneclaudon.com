@@ -1,4 +1,7 @@
 import * as PIXI from "pixi.js";
+import { TweenMax } from "gsap";
+//@ts-ignore
+import * as PixiPlugin from "gsap/PixiPlugin";
 
 export default class SliderVideoContainer extends PIXI.Container {
     dragging: any = false;
@@ -32,8 +35,8 @@ export default class SliderVideoContainer extends PIXI.Container {
             projectSprite.position.y = window.innerHeight * 0.5;
             projectSprite.anchor.y = 0.5;
 
-            projectSprite.width = window.innerWidth - 10;
-            projectSprite.height = window.innerHeight - 10;
+            projectSprite.width = window.innerWidth;
+            projectSprite.height = window.innerHeight;
 
             this.addChild(projectSprite);
         }
@@ -65,7 +68,6 @@ export default class SliderVideoContainer extends PIXI.Container {
         if (this.dragging) {
             let newPos = this.dragData.getLocalPosition(this.parent);
             this.position.x = this.dragData.getLocalPosition(this.parent).x;
-            this.computeClosestScreen();
         }
     }
 
@@ -74,10 +76,20 @@ export default class SliderVideoContainer extends PIXI.Container {
     }
 
     computeClosestScreen(): void {
-        let positionToScreenCenter : number = this.position.x + (this.screenWidth * 0.5 );
-        let numberOfScreensLeftSide: number = positionToScreenCenter % this.screenWidth;
-        console.log(positionToScreenCenter- (numberOfScreensLeftSide * this.screenWidth));
+        let positionToScreenCenter : number = Math.abs((this.position.x - this.pivot.x));
         
-        //this.currentProjectIndex = 
+        let numberOfScreensLeftSide: number = Math.abs(Math.floor(positionToScreenCenter / this.screenWidth));
+        let spaceBetweenLeftScreenAndCenter: number = (positionToScreenCenter % this.screenWidth) - (this.screenWidth *0.5);
+        console.log(numberOfScreensLeftSide, spaceBetweenLeftScreenAndCenter);
+        if(spaceBetweenLeftScreenAndCenter > 0) {
+            console.log("goto left");
+            let positionToGoTo: number = -((numberOfScreensLeftSide + 1) * this.screenWidth) + this.pivot.x;
+            TweenMax.to(this.position, 0.1, {x: positionToGoTo});
+        }else {
+            console.log("goto right");
+            let positionToGoTo: number = -((numberOfScreensLeftSide) * this.screenWidth) + this.pivot.x;
+            TweenMax.to(this.position, 0.1, {x: positionToGoTo});
+        }
+        
     }
 }
