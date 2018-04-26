@@ -24,7 +24,7 @@ import {
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 import * as PIXI from "pixi.js";
-import SliderVideoContainer from "./components-ts/SliderVideoContainer";
+import PixiSliderVideoContainer from "./components-ts/PixiSliderVideoContainer";
 
 @Component({
   components: {}
@@ -32,7 +32,7 @@ import SliderVideoContainer from "./components-ts/SliderVideoContainer";
 export default class AppPIXI extends Vue {
   videoElement: HTMLVideoElement;
   pixiApp: PIXI.Application;
-  projectsContainer: SliderVideoContainer;
+  projectsContainer: PixiSliderVideoContainer;
 
   inited: boolean = false;
 
@@ -78,7 +78,7 @@ export default class AppPIXI extends Vue {
   }
 
   initProjects() {
-    this.projectsContainer = new SliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
+    this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
     this.pixiApp.stage.addChild(this.projectsContainer);
     this.inited = true;
   }

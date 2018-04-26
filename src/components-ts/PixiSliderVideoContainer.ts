@@ -3,7 +3,7 @@ import { TweenMax, Power4 } from "gsap";
 //@ts-ignore
 import * as PixiPlugin from "gsap/PixiPlugin";
 
-export default class SliderVideoContainer extends PIXI.Container {
+export default class PixiSliderVideoContainer extends PIXI.Container {
     dragging: any = false;
     dragData: any;
     dragMaxVelocity: number = 15;
