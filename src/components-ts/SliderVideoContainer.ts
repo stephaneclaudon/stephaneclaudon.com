@@ -14,7 +14,7 @@ export default class SliderVideoContainer extends PIXI.Container {
     dragTween: TweenMax;
 
     app: PIXI.Application;
-    projectsCount: number;
+    lastProjectIndex: number;
     currentProjectIndex: number;
     projectIndexToGo: number;
     screenHalfWidth: number;
@@ -23,7 +23,7 @@ export default class SliderVideoContainer extends PIXI.Container {
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
         super();
         this.app = app;
-        this.projectsCount = projects.length;
+        this.lastProjectIndex = projects.length - 1;
         this.screenWidth = this.app.screen.width;
         this.screenHalfWidth = this.app.screen.width * 0.5;
         this.dragTween = new TweenMax(this, 0.1, {});
@@ -39,7 +39,6 @@ export default class SliderVideoContainer extends PIXI.Container {
 
             let projectSprite = new PIXI.Sprite(projectTexture);
             projectSprite.position.x = window.innerWidth * 0.5 + i * window.innerWidth;
-            console.log(projectSprite.position.x);
 
             projectSprite.anchor.x = 0.5;
             projectSprite.position.y = window.innerHeight * 0.5;
@@ -76,7 +75,6 @@ export default class SliderVideoContainer extends PIXI.Container {
 
     onDragEnd(event: any): void {
         this.dragging = false;
-        
         this.finishDrag();
     }
 
@@ -84,9 +82,16 @@ export default class SliderVideoContainer extends PIXI.Container {
         if (this.dragging) {
             let newPos = this.dragData.getLocalPosition(this.parent).x;
             this.dragVelocity = Math.min(this.dragMaxVelocity, Math.abs(newPos - this.position.x));
-            this.position.x = newPos;
-            this.dragAmount = Math.abs(this.position.x - this.beforeDragPosX);
-            this.dragDirection = ((this.position.x - this.beforeDragPosX) > 0)?-1:1;
+            this.dragAmount = Math.abs(newPos - this.beforeDragPosX);
+            this.dragDirection = ((newPos - this.beforeDragPosX) > 0)?-1:1;
+            
+            if((this.dragDirection === -1) && (this.currentProjectIndex === 0)){
+                this.position.x = this.beforeDragPosX + (0.1 * this.dragAmount);
+            }else if ((this.dragDirection === 1) && (this.currentProjectIndex === this.lastProjectIndex)){
+                this.position.x = this.beforeDragPosX - (0.1 * this.dragAmount);
+            } else {
+                this.position.x = newPos;
+            }
         }
     }
 
@@ -107,7 +112,7 @@ export default class SliderVideoContainer extends PIXI.Container {
         numberOfScreenToJump = numberOfScreenToJump * this.dragDirection;
         
         if(this.dragAmount > detectionArea){
-            if(((this.dragDirection === 1) && (this.currentProjectIndex < (this.projectsCount - 1))) || ((this.dragDirection === -1) && (this.currentProjectIndex > 0))){
+            if(((this.dragDirection === 1) && (this.currentProjectIndex < this.lastProjectIndex)) || ((this.dragDirection === -1) && (this.currentProjectIndex > 0))){
                 this.projectIndexToGo = this.currentProjectIndex + numberOfScreenToJump;
             }
         }
