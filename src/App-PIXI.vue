@@ -23,6 +23,8 @@ import {
 } from "vue-property-decorator";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
+//@ts-ignore
+import Modernizr from "modernizr";
 import * as PIXI from "pixi.js";
 import PixiSliderVideoContainer from "./components-ts/PixiSliderVideoContainer";
 

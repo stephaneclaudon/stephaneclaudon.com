@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const copyWebpackPlugin = require('copy-webpack-plugin')
 const writeFilePlugin = require('write-file-webpack-plugin')
+const ModernizrWebpackPlugin = require('modernizr-webpack-plugin')
 
 let config = {
   entry: './src/main.ts',
@@ -25,15 +26,15 @@ let config = {
       }
     },
     {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-    }, 
+      test: /\.vue$/,
+      loader: 'vue-loader'
+    },
     {
-        test: /\.s[a|c]ss$/,
-        loader: 'style!css!sass',
-        query: {
-          includePaths: [path.resolve(__dirname, 'node_modules')]
-        }
+      test: /\.s[a|c]ss$/,
+      loader: 'style!css!sass',
+      query: {
+        includePaths: [path.resolve(__dirname, 'node_modules')]
+      }
     },
     {
       test: /\.woff(2)?(\?[a-z0-9]+)?$/,
@@ -61,7 +62,12 @@ let config = {
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
     new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new copyWebpackPlugin([{ from: './src/shaders', to: 'assets/shaders' }]),
-    new writeFilePlugin()
+    new writeFilePlugin(),
+    new ModernizrWebpackPlugin({
+      'feature-detects': [
+        'canvas'
+      ]
+    })
   ]
 }
 
