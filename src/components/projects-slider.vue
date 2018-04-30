@@ -33,7 +33,6 @@ export default class ProjectsSlider extends Vue {
   projectsArrayTitle: Array<Array<string>> = [];
   projectsSwipe: Object = {};
   currentIndex: number = 0;
-  titlesComputed: boolean = false;
   sliderIsMoving: boolean = false;
 
   viewProject(project: any): void {

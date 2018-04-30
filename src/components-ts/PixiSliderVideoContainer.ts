@@ -1,26 +1,34 @@
+import { SignalDispatcher, EventDispatcher } from "strongly-typed-events";
 import * as PIXI from "pixi.js";
 import { TweenMax, Power4 } from "gsap";
 //@ts-ignore
 import * as PixiPlugin from "gsap/PixiPlugin";
 
 export default class PixiSliderVideoContainer extends PIXI.Container {
-    dragging: any = false;
-    dragData: any;
-    dragMaxVelocity: number = 15;
-    dragVelocity: number = 0;
-    beforeDragPosX: number = 0;
-    dragAmount: number = 0;
-    dragDirection: number = 0;
-    dragTween: TweenMax;
+    private _onDragStartEvent = new SignalDispatcher();
+    private _onDragEndEvent = new SignalDispatcher();
+    private _onDragUpdateEvent = new EventDispatcher<PixiSliderVideoContainer, number>();
 
-    app: PIXI.Application;
-    lastProjectIndex: number;
-    currentProjectIndex: number;
-    projectIndexToGo: number;
-    screenHalfWidth: number;
-    screenWidth: number;
-    screenHeight: number;
-    screenTextureWidth: number;
+    private animationRequestId: number;
+
+    private dragging: any = false;
+    private dragData: any;
+    private dragMaxVelocity: number = 15;
+    private dragVelocity: number = 0;
+    private beforeDragPosX: number = 0;
+    private dragAmount: number = 0;
+    private dragDirection: number = 0;
+    private dragTween: TweenMax;
+
+    private app: PIXI.Application;
+    private lastProjectIndex: number;
+    private currentProjectIndex: number;
+    private projectIndexToGo: number;
+    private screenHalfWidth: number;
+    private screenWidth: number;
+    private screenHeight: number;
+    private screenTextureWidth: number;
+
 
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
         super();
@@ -30,7 +38,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.screenHeight = this.app.screen.height;
         this.screenHalfWidth = this.app.screen.width * 0.5;
         this.dragTween = new TweenMax(this, 0.1, {});
-        
+
         for (var i = 0; i < 5; i++) {
             let startText: PIXI.Texture = PIXI.Texture.fromVideo(domVideoElement);
             (<PIXI.VideoBaseTexture>startText.baseTexture).autoPlay = true;
@@ -57,7 +65,19 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.createDragAndDropFor();
     }
 
-    createDragAndDropFor() {
+    public get onDragStartEvent() {
+        return this._onDragStartEvent.asEvent();
+    }
+    
+    public get onDragEndEvent() {
+        return this._onDragEndEvent.asEvent();
+    }
+
+    public get onDragUpdateEvent() {
+        return this._onDragUpdateEvent.asEvent();
+    }
+
+    private createDragAndDropFor() {
         this.interactive = true;
         this.on("pointerdown", this.onDragStart);
         this.on("pointerup", this.onDragEnd);
@@ -65,7 +85,9 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.on("pointermove", this.onDragUpdate);
     }
 
-    onDragStart(event: any): void {
+    private onDragStart(event: any): void {
+        this._onDragStartEvent.dispatch();
+        this.onAnimationUpdate();
         this.dragTween.kill();
         this.dragging = this;
         this.dragData = event.data;
@@ -76,21 +98,21 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.dragAmount = 0;
     }
 
-    onDragEnd(event: any): void {
+    private onDragEnd(event: any): void {
         this.dragging = false;
         this.finishDrag();
     }
 
-    onDragUpdate(event: any): void {
+    private onDragUpdate(event: any): void {
         if (this.dragging) {
             let newPos = this.dragData.getLocalPosition(this.parent).x;
             this.dragVelocity = Math.min(this.dragMaxVelocity, Math.abs(newPos - this.position.x));
             this.dragAmount = Math.abs(newPos - this.beforeDragPosX);
-            this.dragDirection = ((newPos - this.beforeDragPosX) > 0)?-1:1;
-            
-            if((this.dragDirection === -1) && (this.currentProjectIndex === 0)){
+            this.dragDirection = ((newPos - this.beforeDragPosX) > 0) ? -1 : 1;
+
+            if ((this.dragDirection === -1) && (this.currentProjectIndex === 0)) {
                 this.position.x = this.beforeDragPosX + (0.1 * this.dragAmount);
-            }else if ((this.dragDirection === 1) && (this.currentProjectIndex === this.lastProjectIndex)){
+            } else if ((this.dragDirection === 1) && (this.currentProjectIndex === this.lastProjectIndex)) {
                 this.position.x = this.beforeDragPosX - (0.1 * this.dragAmount);
             } else {
                 this.position.x = newPos;
@@ -98,13 +120,13 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         }
     }
 
-    finishDrag() {
+    private finishDrag() {
         this.computeClosestScreen();
     }
 
-    computeClosestScreen(): void {
-        
-        let positionToScreenCenter : number = Math.abs((this.position.x - this.pivot.x));
+    private computeClosestScreen(): void {
+
+        let positionToScreenCenter: number = Math.abs((this.position.x - this.pivot.x));
         let numberOfScreensLeftSide: number = Math.abs(Math.floor(positionToScreenCenter / this.screenWidth));
         let spaceBetweenLeftScreenAndCenter: number = (positionToScreenCenter % this.screenWidth) - this.screenHalfWidth;
         let spaceBetweenLeftScreenAndLeftBorder: number = Math.abs((positionToScreenCenter % this.screenWidth) - (this.screenWidth));
@@ -113,19 +135,34 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         let numberOfScreenToJump: number = Math.floor((this.dragAmount + this.screenHalfWidth) / this.screenWidth);
         numberOfScreenToJump = (numberOfScreenToJump < 1) ? 1 : numberOfScreenToJump;
         numberOfScreenToJump = numberOfScreenToJump * this.dragDirection;
-        
-        if(this.dragAmount > detectionArea){
-            if(((this.dragDirection === 1) && (this.currentProjectIndex < this.lastProjectIndex)) || ((this.dragDirection === -1) && (this.currentProjectIndex > 0))){
+
+        if (this.dragAmount > detectionArea) {
+            if (((this.dragDirection === 1) && (this.currentProjectIndex < this.lastProjectIndex)) || ((this.dragDirection === -1) && (this.currentProjectIndex > 0))) {
                 this.projectIndexToGo = this.currentProjectIndex + numberOfScreenToJump;
             }
         }
-        
+
         this.executeTween();
     }
 
-    executeTween(): void {
+    private executeTween(): void {
         let positionToGoTo: number = -((this.projectIndexToGo) * this.screenWidth) + this.pivot.x;
-        this.dragTween = TweenMax.to(this.position, 0.5, {x: positionToGoTo, ease:Power4.easeOut});
+        this.dragTween = TweenMax.to(this.position, 0.5, {
+            x: positionToGoTo, ease: Power4.easeOut, onComplete: this.onTweenEnded
+        });
         this.currentProjectIndex = this.projectIndexToGo;
+    }
+
+    private onTweenEnded = () => {
+        cancelAnimationFrame(this.animationRequestId);
+        this._onDragEndEvent.dispatch();
+    }
+
+    private onAnimationUpdate(): void {
+        const handler = () => {            
+            this._onDragUpdateEvent.dispatch(this, this.position.x - this.pivot.x);
+            this.animationRequestId = window.requestAnimationFrame(handler);
+        };
+        this.animationRequestId = requestAnimationFrame(handler);
     }
 }

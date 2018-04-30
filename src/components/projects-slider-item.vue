@@ -8,13 +8,9 @@
                 </video>
             </div>
         </div>
-        <div class="projects-slider-item__title grid-x align-middle">
+        <div class="projects-slider-item__title-container grid-x align-middle">
             <div class="cell small-9 small-offset-1">
-                <h1 v-if="alive">
-                    <span class="title--inner" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex"><span>{{ titleString }}</span></span>
-                </h1>
-
-                <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex">{{ project.title }}</span></div>
+                <projects-slider-item-title :project="project" :project-index="projectIndex" :alive="alive"></projects-slider-item-title>
             </div>
         </div>
     </div>
@@ -22,12 +18,15 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import WebGLCompiler from "../components-ts/WebGLCompiler";
 import SliderVideoBG from "../components-ts/SliderVideoBG";
+import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 import Utils from "../utils/Utils";
-import * as PIXI from "pixi.js";
 
-@Component
+@Component({
+  components: {
+    ProjectsSliderItemTitle
+  }
+})
 export default class ProjectsSliderItem extends Vue {
   projectArrayTitle: Array<string> = [];
   titleComputed: boolean = false;
@@ -92,8 +91,6 @@ export default class ProjectsSliderItem extends Vue {
 
 <style lang="scss" scoped>
 @import "../style/main.scss";
-$titleAnimationDuration: 0.75s;
-$titleAnimationMultilineDelay: 0.15s;
 
 .html-video-wrapper {
   height: 100%;
@@ -122,7 +119,7 @@ $titleAnimationMultilineDelay: 0.15s;
       display: block;
     }
   }
-  &__title {
+  &__title-container {
     position: absolute;
     top: 0;
     height: 100%;
@@ -130,98 +127,6 @@ $titleAnimationMultilineDelay: 0.15s;
     text-align: left;
     .cell {
       margin-top: 35%;
-    }
-    .title--inner,
-    .title--innerfake {
-      position: relative;
-      display: inline-block;
-      z-index: 200;
-      padding: 0.5em;
-      vertical-align: middle;
-      text-transform: uppercase;
-      font-size: 2em;
-      span {
-        @include roboto-black;
-        letter-spacing: 0.05em;
-      }
-    }
-    .title--innerfake {
-      visibility: hidden;
-    }
-    .title--inner {
-      overflow: hidden;
-      span {
-        visibility: hidden;
-        @keyframes textAnim {
-          from {
-            visibility: hidden;
-          }
-          to {
-            visibility: visible;
-          }
-        }
-      }
-      &::after {
-        position: absolute;
-        display: block;
-        top: -1px;
-        right: 100%;
-        bottom: -1px;
-        left: -1%;
-        content: "";
-        background: $black;
-
-        @keyframes blackBG {
-          0% {
-            right: 100%;
-          }
-          50% {
-            right: 0%;
-            left: -1%;
-          }
-          100% {
-            right: 0%;
-            left: 100%;
-          }
-        }
-        @include animation-timing-function(cubic-bezier(0.55, 0, 0.28, 1));
-      }
-      &::before {
-        position: absolute;
-        visibility: hidden;
-        z-index: -1;
-        top: -1px;
-        right: 0%;
-        bottom: 0px;
-        left: -1%;
-        content: "";
-        @include horizontal-gradient($blue, $purple);
-
-        @keyframes gradientBG {
-          from {
-            visibility: hidden;
-          }
-          to {
-            visibility: visible;
-          }
-        }
-      }
-    }
-    .title--inner:not(:last-child)::before {
-      border-bottom: solid 1px $black;
-    }
-    @for $i from 0 through 4 {
-      .title--inner:nth-child(#{$i}) {
-        span {
-          @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
-        }
-        &::before {
-          @include animation(#{$i * $titleAnimationMultilineDelay+$titleAnimationDuration * 0.5}, 0.01s, gradientBG);
-        }
-        &::after {
-          @include animation(#{$i * $titleAnimationMultilineDelay}, $titleAnimationDuration, blackBG);
-        }
-      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div id="projects-slider-canvas">
+  <div id="projects-slider-canvas" class="projects-slider-canvas">
     <div id="videosContainer">
       <video id="video" playsinline loop muted autoplay>
         <source :src="getVideoPath()" type="video/mp4">
@@ -7,6 +7,13 @@
       </video>
     </div>
     <canvas id="pixiElement"></canvas>
+    <div class="projects-slider-canvas-titles">
+      <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id" >
+            <div class="cell small-9 small-offset-1">
+              <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -24,9 +31,12 @@ import {
 import * as MutationTypes from "../store/mutation-types";
 import * as PIXI from "pixi.js";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
+import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 
 @Component({
-  components: {}
+  components: {
+    ProjectsSliderItemTitle
+  }
 })
 export default class ProjectsSliderCanvas extends Vue {
   videoElement: HTMLVideoElement;
@@ -34,10 +44,10 @@ export default class ProjectsSliderCanvas extends Vue {
   projectsContainer: PixiSliderVideoContainer;
 
   inited: boolean = false;
+  currentIndex: number = 0;
+  sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-  @Mutation(MutationTypes.LOAD_PROJECTS)
-  loadProject: (projects: Array<any>) => void;
 
   created() {
   }
@@ -78,8 +88,23 @@ export default class ProjectsSliderCanvas extends Vue {
 
   initProjects() {
     this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
+    this.projectsContainer.onDragStartEvent.subscribe(() => console.log("On dragstarttttt"));
+    this.projectsContainer.onDragEndEvent.subscribe(() => console.log("On onDragEndEvent!!!!!"));
+    this.projectsContainer.onDragUpdateEvent.subscribe((container: PixiSliderVideoContainer, posX: number) => console.log("On dragupdattte", posX));
     this.pixiApp.stage.addChild(this.projectsContainer);
     this.inited = true;
+  }
+
+  onSliderTransitionStart(): void {
+    this.sliderIsMoving = true;
+  }
+  onSliderTransitionEnd(index: number, elem: HTMLElement): void {
+    this.sliderIsMoving = false;
+    this.currentIndex = index;
+  }
+
+  isCurrentIndex(index: number): boolean {
+    return this.currentIndex === index;
   }
 }
 </script>
@@ -99,5 +124,24 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     top: 0;
     left: 0;
+  }
+
+  .projects-slider-canvas {
+    &-titles {
+      pointer-events: none;
+      position: absolute;
+      height: 100%;
+
+      .grid-x {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        text-align: left;
+        .cell {
+          margin-top: 35%;
+        }
+      }
+    }
   }
 </style>

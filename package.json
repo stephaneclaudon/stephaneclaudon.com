@@ -39,6 +39,7 @@
     "@types/modernizr": "^3.5.2",
     "gsap": "^1.20.4",
     "pixi.js": "^4.7.1",
+    "strongly-typed-events": "^1.4.3",
     "swipejs": "^2.2.11",
     "uninstall": "0.0.0",
     "vue": "^2.5.13",
