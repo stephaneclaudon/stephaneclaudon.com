@@ -19,12 +19,15 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     projectIndexToGo: number;
     screenHalfWidth: number;
     screenWidth: number;
+    screenHeight: number;
+    screenTextureWidth: number;
 
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
         super();
         this.app = app;
         this.lastProjectIndex = projects.length - 1;
         this.screenWidth = this.app.screen.width;
+        this.screenHeight = this.app.screen.height;
         this.screenHalfWidth = this.app.screen.width * 0.5;
         this.dragTween = new TweenMax(this, 0.1, {});
         
@@ -32,8 +35,8 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
             let startText: PIXI.Texture = PIXI.Texture.fromVideo(domVideoElement);
             (<PIXI.VideoBaseTexture>startText.baseTexture).autoPlay = true;
             (<PIXI.VideoBaseTexture>startText.baseTexture).autoUpdate = true;
-
-            let frame: PIXI.Rectangle = new PIXI.Rectangle(i * 180, 0, 180, 320);
+            this.screenTextureWidth = startText.width / projects.length;
+            let frame: PIXI.Rectangle = new PIXI.Rectangle(i * this.screenTextureWidth, 0, this.screenTextureWidth, startText.height);
             let projectTexture = new PIXI.Texture(startText.baseTexture, frame);
             startText.destroy();
 
