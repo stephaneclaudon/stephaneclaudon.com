@@ -13,7 +13,7 @@ let config = {
   resolve: {
     extensions: ['.js', '.ts', '.vue', '.json'],
     alias: {
-      modernizr$: path.resolve(__dirname, "/.moderniz--rrc.js")
+      modernizr$: path.resolve(__dirname, ".modernizrrc")
     }
   },
   devServer: {
@@ -61,7 +61,7 @@ let config = {
       },
       {
         loader: "webpack-modernizr-loader",
-        test: /\.modernizrrc\.js$/
+        test: /\.modernizrrc$/,
       }
     ]
   },

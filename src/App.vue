@@ -39,8 +39,7 @@ import ProjectDetails from "./components/project-details.vue";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
-//@ts-ignore
-import motttdernizr from 'moderddddnizr';
+import * as ModernizrObject from 'modernizr';
 import VideoSnapshooter from "./components-ts/VideoSnapshooter"
 
 @Component({
@@ -58,7 +57,7 @@ export default class App extends Vue {
   loadProject: (projects: Array<Object>) => void;
 
   get Modernizr(): any {
-    return {}//modernizr;
+    return ModernizrObject;
   }
 
   created() {
