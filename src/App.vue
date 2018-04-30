@@ -1,7 +1,9 @@
 <template>
   <div class="app grid-container full">
 
-    <projects-slider class="project-slider"></projects-slider>
+    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas"></projects-slider-canvas>
+    <projects-slider v-else class="project-slider"></projects-slider>
+
     <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
 
     <div class="name-wrapper">
@@ -32,16 +34,20 @@ import {
 } from "vue-property-decorator";
 import ContactBox from "./components/contact.vue";
 import ProjectsSlider from "./components/projects-slider.vue";
+import ProjectsSliderCanvas from "./components/projects-slider-canvas.vue";
 import ProjectDetails from "./components/project-details.vue";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
+//@ts-ignore
+import motttdernizr from 'moderddddnizr';
 import VideoSnapshooter from "./components-ts/VideoSnapshooter"
 
 @Component({
   components: {
     ContactBox,
     ProjectsSlider,
+    ProjectsSliderCanvas,
     ProjectDetails
   }
 })
@@ -50,6 +56,10 @@ export default class App extends Vue {
 
   @Mutation(MutationTypes.LOAD_PROJECTS)
   loadProject: (projects: Array<Object>) => void;
+
+  get Modernizr(): any {
+    return {}//modernizr;
+  }
 
   created() {
     this.loadProject(jsonData);

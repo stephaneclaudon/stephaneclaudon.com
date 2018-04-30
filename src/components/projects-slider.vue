@@ -42,6 +42,7 @@ export default class ProjectsSlider extends Vue {
   }
 
   mounted() {
+    console.log("Init ProjectsSlider");
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,
       {

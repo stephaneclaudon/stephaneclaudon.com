@@ -28,7 +28,6 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import WebGLCompiler from "../components-ts/WebGLCompiler";
 import SliderVideoBG from "../components-ts/SliderVideoBG";
 import Utils from "../utils/Utils";
-//@ts-ignore
 import * as PIXI from "pixi.js";
 
 @Component
@@ -64,16 +63,6 @@ export default class ProjectsSliderItem extends Vue {
 
   getVideoPath(): String {
     return "/dist/assets/loops/" + this.project.id + "-mobile.mp4";
-  }
-
-  toggleVideo() {
-    if (this.alive) {
-      this.videoTexture.baseTexture.source.play();
-      this.pixiTicker.start();
-    } else {
-      this.videoTexture.baseTexture.source.pause();
-      this.pixiTicker.stop();
-    }
   }
 
   mounted() {
