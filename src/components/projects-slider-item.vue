@@ -1,14 +1,11 @@
 <template>
-    <div :id="wrapperId" class="canvas-video-wrapper projects-slider-item">
-        <div class="projects-slider-item__bg grid-x align-middle align-center" :class="{snapshoted: snapshoted}">
-            <!--<img :src="getVideoPoster(project)" :alt="project.title">-->
-            <!--<canvas-video :alive="isCurrentIndex(index)" :name="project.id" :title="project.title"></canvas-video>-->
+    <div :id="wrapperId" class="html-video-wrapper projects-slider-item">
+        <div class="projects-slider-item__bg grid-x align-middle align-center">
             <div>
                 <video :id="'video-' + project.id" playsinline loop muted autoplay>
                     <source :src="getVideoPath()" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <canvas :id="'canvas-' + project.id"></canvas>
             </div>
         </div>
         <div class="projects-slider-item__title grid-x align-middle">
@@ -35,20 +32,13 @@ export default class ProjectsSliderItem extends Vue {
   projectArrayTitle: Array<string> = [];
   titleComputed: boolean = false;
   videoElement: HTMLVideoElement;
-  canvasElement: HTMLCanvasElement;
-  canvasContext: CanvasRenderingContext2D;
-  canvasGLContext: WebGLRenderingContext;
   videoBG: SliderVideoBG;
-  snapshot: string = "";
-  snapshoted: boolean = false;
   inited: boolean = false;
 
   testImg: string = '';
 
   loopsPath: string = "dist/assets/loops/";
-  wrapperId: string = "canvas-video-wrapper_";
-  pixiTicker: any = PIXI.ticker.shared;
-  videoTexture: PIXI.Texture;
+  wrapperId: string = "html-video-wrapper_";
 
   @Prop() project: any;
   @Prop() projectIndex: number;
@@ -72,13 +62,10 @@ export default class ProjectsSliderItem extends Vue {
     this.titleComputed = true;
 
     this.videoElement = document.getElementById("video-" + this.project.id) as HTMLVideoElement;
-    this.canvasElement = document.getElementById("canvas-" + this.project.id) as HTMLCanvasElement;
     this.videoBG = new SliderVideoBG(
       this.project.title,
-      this.canvasElement,
       this.videoElement,
-      this.alive,
-      this.onVideoFreezed
+      this.alive
     );
   }
 
@@ -86,18 +73,12 @@ export default class ProjectsSliderItem extends Vue {
     this.videoBG.freezeVideo();
   }
 
-  onVideoFreezed() {
-    this.snapshoted = true;
-  }
-
   unfreezeVideo() {
     this.videoBG.unfreezeVideo();
-    this.snapshoted = false;
   }
 
   @Watch("alive", { immediate: false, deep: false })
   onAliveChanged(val: boolean, oldVal: boolean) {
-    //this.canvasBG.alive = val;
     if (val) this.unfreezeVideo();
   }
 
@@ -114,7 +95,7 @@ export default class ProjectsSliderItem extends Vue {
 $titleAnimationDuration: 0.75s;
 $titleAnimationMultilineDelay: 0.15s;
 
-.canvas-video-wrapper {
+.html-video-wrapper {
   height: 100%;
   width: 100%;
 }
@@ -139,17 +120,6 @@ $titleAnimationMultilineDelay: 0.15s;
     }
     video {
       display: block;
-    }
-    canvas {
-      display: none;
-    }
-    &.snapshoted {
-      video {
-        display: none;
-      }
-      canvas {
-        display: block;
-      }
     }
   }
   &__title {

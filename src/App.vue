@@ -1,7 +1,7 @@
 <template>
   <div class="app grid-container full">
 
-    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas"></projects-slider-canvas>
+    <projects-slider-canvas v-if="!Modernizr.canvas" class="project-slider-canvas"></projects-slider-canvas>
     <projects-slider v-else class="project-slider"></projects-slider>
 
     <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
