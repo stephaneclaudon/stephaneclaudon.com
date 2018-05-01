@@ -1,11 +1,10 @@
 import { SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events";
 import * as PIXI from "pixi.js";
-import { TweenMax, Power4 } from "gsap";
-//@ts-ignore
-import * as PixiPlugin from "gsap/PixiPlugin";
+import { TweenLite, Power4 } from "gsap";
 
 export default class PixiSliderVideoContainer extends PIXI.Container {
     private _onDragStartEvent = new SignalDispatcher();
+    private _onProjectClickedEvent = new SimpleEventDispatcher<number>();
     private _onDragEndEvent = new SimpleEventDispatcher<number>();
     private _onDragUpdateEvent = new SimpleEventDispatcher<number>();
 
@@ -18,7 +17,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private beforeDragPosX: number = 0;
     private dragAmount: number = 0;
     private dragDirection: number = 0;
-    private dragTween: TweenMax;
+    private dragTween: TweenLite;
 
     private app: PIXI.Application;
     private lastProjectIndex: number;
@@ -37,7 +36,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.screenWidth = this.app.screen.width;
         this.screenHeight = this.app.screen.height;
         this.screenHalfWidth = this.app.screen.width * 0.5;
-        this.dragTween = new TweenMax(this, 0.1, {});
+        this.dragTween = new TweenLite(this, 0.1, {});
 
         for (var i = 0; i < 5; i++) {
             let startText: PIXI.Texture = PIXI.Texture.fromVideo(domVideoElement);
@@ -69,6 +68,10 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         return this._onDragStartEvent.asEvent();
     }
     
+    public get onProjectClickedEvent() {
+        return this._onProjectClickedEvent.asEvent();
+    }
+
     public get onDragEndEvent() {
         return this._onDragEndEvent.asEvent();
     }
@@ -100,7 +103,11 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private onDragEnd(event: any): void {
         this.dragging = false;
-        this.finishDrag();
+        if(this.dragAmount !== 0) {
+            this.finishDrag();
+        } else {
+            this._onProjectClickedEvent.dispatch(this.currentProjectIndex);
+        }
     }
 
     private onDragUpdate(event: any): void {
@@ -147,7 +154,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private executeTween(): void {
         let positionToGoTo: number = -((this.projectIndexToGo) * this.screenWidth) + this.pivot.x;
-        this.dragTween = TweenMax.to(this.position, 0.5, {
+        this.dragTween = TweenLite.to(this.position, 0.5, {
             x: positionToGoTo, ease: Power4.easeOut, onComplete: this.onTweenEnded
         });
         this.currentProjectIndex = this.projectIndexToGo;

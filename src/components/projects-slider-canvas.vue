@@ -30,6 +30,9 @@ import {
 } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
 import * as PIXI from "pixi.js";
+import { TweenLite, Power4 } from "gsap";
+//@ts-ignore
+import "gsap/ScrollToPlugin";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 
@@ -39,15 +42,18 @@ import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
   }
 })
 export default class ProjectsSliderCanvas extends Vue {
+  titlesContainerElement: Element;
   videoElement: HTMLVideoElement;
   pixiApp: PIXI.Application;
   projectsContainer: PixiSliderVideoContainer;
 
-  inited: boolean = false;
   currentIndex: number = 0;
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
+
+  @Mutation(MutationTypes.SET_CURRENT_PROJECT)
+  setCurrentProject: (project: Object) => void;
 
   created() {
     
@@ -59,33 +65,28 @@ export default class ProjectsSliderCanvas extends Vue {
     this.initPIXI();
   }
 
-  @Watch("projects", { immediate: false, deep: false })
-  onProjectsChanged(val: boolean, oldVal: boolean) {
-    console.log(this.projects);
-  }
-
   getVideoPath(): String {
     return "/dist/assets/loops/all-projects-mobile-low.mp4";
   }
 
   initPIXI() {
     this.pixiApp = new PIXI.Application(window.innerWidth, window.innerHeight, {
-      backgroundColor: 0x1099ff,
+      backgroundColor: 0x0f0f0f,
       antialias: false,
       transparent: false,
       resolution: 1,
       view: document.getElementById("pixiElement")
     } as PIXI.ApplicationOptions);
+    //@ts-ignore
+    this.pixiApp.renderer.view.style["touch-action"] = "auto";
+    this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener(
-      "playing",
-      () => this.onVideoStartPlaying(),
-      false
-    );
+    this.videoElement.addEventListener("playing", this.onVideoStartPlaying, false);
   }
 
   onVideoStartPlaying(): void {
-    if (!this.inited) this.initProjects();
+    this.videoElement.removeEventListener("playing", this.onVideoStartPlaying, false);
+    this.initProjects();
   }
 
   initProjects() {
@@ -93,8 +94,8 @@ export default class ProjectsSliderCanvas extends Vue {
     this.projectsContainer.onDragStartEvent.subscribe(this.onSliderTransitionStart);
     this.projectsContainer.onDragEndEvent.subscribe(this.onSliderTransitionEnd);
     this.projectsContainer.onDragUpdateEvent.subscribe(this.onSliderTransitionUpdate);
+    this.projectsContainer.onProjectClickedEvent.subscribe(this.onProjectClicked);
     this.pixiApp.stage.addChild(this.projectsContainer);
-    this.inited = true;
   }
 
   onSliderTransitionStart(): void {
@@ -102,7 +103,7 @@ export default class ProjectsSliderCanvas extends Vue {
   }
   
   onSliderTransitionUpdate(posX: number): void {
-    (<HTMLElement>this.$refs.sliderTitlesContainer).style.left = posX + "px";
+    (<HTMLElement>this.titlesContainerElement).style.left = posX + "px";
   }
 
   onSliderTransitionEnd(index: number): void {
@@ -110,20 +111,28 @@ export default class ProjectsSliderCanvas extends Vue {
     this.currentIndex = index;
   }
 
+  onProjectClicked(projectIndex: number): void {
+    this.setCurrentProject(this.projects[projectIndex]);
+    TweenLite.to(window, 1, {
+        scrollTo: window.innerHeight * 0.5, ease: Power4.easeOut
+    });
+    
+  }
+
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
   }
 
   initTitles(): void {
-    let titlesContainer: Element = <Element>this.$refs.sliderTitlesContainer;
-    let allTitles: HTMLCollection = titlesContainer.children as HTMLCollection;
+    this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
+    let allTitles: HTMLCollection = this.titlesContainerElement.children as HTMLCollection;
     let containerWidth: number = 0;
     for (let index = 0; index < allTitles.length; index++) {
       let title: Element = allTitles[index];
       (<HTMLElement>title).style.width = title.clientWidth + "px";
       containerWidth += title.clientWidth;
     }
-    (<HTMLElement>titlesContainer).style.width = containerWidth + "px";
+    (<HTMLElement>this.titlesContainerElement).style.width = containerWidth + "px";
   }
 }
 </script>
@@ -143,6 +152,8 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     top: 0;
     left: 0;
+
+    
   }
 
   .projects-slider-canvas {
@@ -151,6 +162,22 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     position: relative;
     z-index: 0;
+
+    &::after {
+      pointer-events: none;
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      /*background-image:
+      linear-gradient(rgba(0,0,0,.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,.5) 1px, transparent 1px),
+      radial-gradient(transparent, rgba(0,0,0,0.8));
+      background-size: 2px 2px, 2px 2px, 2px 2px, 2px 2px;*/
+      background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+    }
 
     &-titles {
       pointer-events: none;
