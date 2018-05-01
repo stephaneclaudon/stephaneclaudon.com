@@ -1,4 +1,4 @@
-import { SignalDispatcher, EventDispatcher } from "strongly-typed-events";
+import { SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events";
 import * as PIXI from "pixi.js";
 import { TweenMax, Power4 } from "gsap";
 //@ts-ignore
@@ -6,8 +6,8 @@ import * as PixiPlugin from "gsap/PixiPlugin";
 
 export default class PixiSliderVideoContainer extends PIXI.Container {
     private _onDragStartEvent = new SignalDispatcher();
-    private _onDragEndEvent = new SignalDispatcher();
-    private _onDragUpdateEvent = new EventDispatcher<PixiSliderVideoContainer, number>();
+    private _onDragEndEvent = new SimpleEventDispatcher<number>();
+    private _onDragUpdateEvent = new SimpleEventDispatcher<number>();
 
     private animationRequestId: number;
 
@@ -155,12 +155,12 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private onTweenEnded = () => {
         cancelAnimationFrame(this.animationRequestId);
-        this._onDragEndEvent.dispatch();
+        this._onDragEndEvent.dispatch(this.currentProjectIndex);
     }
 
     private onAnimationUpdate(): void {
         const handler = () => {            
-            this._onDragUpdateEvent.dispatch(this, this.position.x - this.pivot.x);
+            this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x);
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
         this.animationRequestId = requestAnimationFrame(handler);

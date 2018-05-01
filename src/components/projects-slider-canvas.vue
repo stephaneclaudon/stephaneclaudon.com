@@ -7,8 +7,8 @@
       </video>
     </div>
     <canvas id="pixiElement"></canvas>
-    <div class="projects-slider-canvas-titles">
-      <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id" >
+    <div id="projects-slider-canvas-titles" class="projects-slider-canvas-titles" ref="sliderTitlesContainer">
+      <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id">
             <div class="cell small-9 small-offset-1">
               <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
             </div>
@@ -50,10 +50,12 @@ export default class ProjectsSliderCanvas extends Vue {
   @State("projects") projects: Array<any>;
 
   created() {
+    
   }
 
   mounted() {
     console.log("Init ProjectsSliderCanvas");
+    this.initTitles();
     this.initPIXI();
   }
 
@@ -88,9 +90,9 @@ export default class ProjectsSliderCanvas extends Vue {
 
   initProjects() {
     this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
-    this.projectsContainer.onDragStartEvent.subscribe(() => console.log("On dragstarttttt"));
-    this.projectsContainer.onDragEndEvent.subscribe(() => console.log("On onDragEndEvent!!!!!"));
-    this.projectsContainer.onDragUpdateEvent.subscribe((container: PixiSliderVideoContainer, posX: number) => console.log("On dragupdattte", posX));
+    this.projectsContainer.onDragStartEvent.subscribe(this.onSliderTransitionStart);
+    this.projectsContainer.onDragEndEvent.subscribe(this.onSliderTransitionEnd);
+    this.projectsContainer.onDragUpdateEvent.subscribe(this.onSliderTransitionUpdate);
     this.pixiApp.stage.addChild(this.projectsContainer);
     this.inited = true;
   }
@@ -98,13 +100,30 @@ export default class ProjectsSliderCanvas extends Vue {
   onSliderTransitionStart(): void {
     this.sliderIsMoving = true;
   }
-  onSliderTransitionEnd(index: number, elem: HTMLElement): void {
+  
+  onSliderTransitionUpdate(posX: number): void {
+    (<HTMLElement>this.$refs.sliderTitlesContainer).style.left = posX + "px";
+  }
+
+  onSliderTransitionEnd(index: number): void {
     this.sliderIsMoving = false;
     this.currentIndex = index;
   }
 
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
+  }
+
+  initTitles(): void {
+    let titlesContainer: Element = <Element>this.$refs.sliderTitlesContainer;
+    let allTitles: HTMLCollection = titlesContainer.children as HTMLCollection;
+    let containerWidth: number = 0;
+    for (let index = 0; index < allTitles.length; index++) {
+      let title: Element = allTitles[index];
+      (<HTMLElement>title).style.width = title.clientWidth + "px";
+      containerWidth += title.clientWidth;
+    }
+    (<HTMLElement>titlesContainer).style.width = containerWidth + "px";
   }
 }
 </script>
@@ -127,16 +146,22 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   .projects-slider-canvas {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 0;
+
     &-titles {
       pointer-events: none;
       position: absolute;
       height: 100%;
+      width: 100%;
 
       .grid-x {
-        position: absolute;
-        top: 0;
         height: 100%;
         width: 100%;
+        float: left;
         text-align: left;
         .cell {
           margin-top: 35%;
