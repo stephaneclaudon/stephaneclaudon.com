@@ -150,6 +150,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         }
 
         this.executeTween();
+        this._onDragEndEvent.dispatch(this.currentProjectIndex);
     }
 
     private executeTween(): void {
@@ -162,7 +163,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private onTweenEnded = () => {
         cancelAnimationFrame(this.animationRequestId);
-        this._onDragEndEvent.dispatch(this.currentProjectIndex);
     }
 
     private onAnimationUpdate(): void {

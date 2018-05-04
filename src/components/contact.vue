@@ -58,10 +58,11 @@ export default class ContactBox extends Vue {
   display: inline-block;
   height: 50px;
   background-size: 73px 16px;
-  font-size: 1em;
+  font-size: 0.8em;
   letter-spacing: 0.3em;
+  text-transform: uppercase;
   @include opacity(0);
-  @include roboto-regular;
+  @include roboto-black;
   @include transform(rotate(-90deg));
   @include transform-origin(35% 53% 0px);
   @keyframes contactToggle {

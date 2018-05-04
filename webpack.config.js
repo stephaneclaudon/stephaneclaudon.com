@@ -56,7 +56,7 @@ let config = {
         ]
       },
       {
-        test: /\.(txt|vs|fs)$/,
+        test: /\.(txt|vs|fs|frag|vert)$/,
         use: 'raw-loader'
       },
       {
