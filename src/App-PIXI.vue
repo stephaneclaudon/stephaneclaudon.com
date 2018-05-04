@@ -68,7 +68,7 @@ export default class AppPIXI extends Vue {
     document.getElementById("app")!.appendChild(this.pixiApp.view);
 
     this.sprite = PIXI.Sprite.fromImage(
-      "https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/awpc%403x.jpg"
+      "https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/nautilus%403x.jpg"
     );
     this.sprite.anchor.set(0.5);
     this.sprite.x = this.pixiApp.screen.width / 2;
@@ -78,7 +78,9 @@ export default class AppPIXI extends Vue {
     this.initFilter();
 
     this.pixiApp.ticker.add(delta => {
-      this.smokeShader.size += 0.01;
+      //this.smokeShader.size += 0.5;
+      this.smokeShader.size = this.pixiApp.renderer.plugins.interaction.mouse.global.x - (window.innerWidth * 0.5);
+      
     });
   }
 
@@ -89,7 +91,7 @@ export default class AppPIXI extends Vue {
     uniforms.size = { type: "v2", value: { x: 1, y: 1 } };
 
     var shaderCode = document.getElementById("fragShader")!.innerHTML;
-    this.smokeShader = new PixelSortingFilter(50);
+    this.smokeShader = new PixelSortingFilter(0);
     this.pixiApp.stage.filters = [this.smokeShader];
     console.log(this.smokeShader.uniforms);
 
