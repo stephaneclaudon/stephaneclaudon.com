@@ -1,4 +1,4 @@
-precision mediump float;
+/*precision mediump float;
 
 varying vec2 vTextureCoord;
 
@@ -37,4 +37,47 @@ void main(void)
     coord = unmapCoord(coord);
 
     gl_FragColor = texture2D(uSampler, coord);
+}*/
+precision mediump float;
+varying vec2 vTextureCoord;
+uniform vec2 size;
+uniform sampler2D uSampler;
+uniform vec4 filterArea;
+
+const float thresh = 0.6;
+const vec4 lumcoeff = vec4(0.299,0.587,0.114,0.0);
+
+vec2 mapCoord( vec2 coord )
+{
+    coord *= filterArea.xy;
+    coord += filterArea.zw;
+
+    return coord;
+}
+
+vec2 unmapCoord( vec2 coord )
+{
+    coord -= filterArea.zw;
+    coord /= filterArea.xy;
+
+    return coord;
+}
+
+vec2 pixelsorting(vec2 coord, vec2 size)
+{
+	return floor( coord / size ) * size;
+}
+
+void main(void)
+{   
+    vec4 input0 = texture2D(uSampler, vTextureCoord);
+
+    float luma = dot(input0,lumcoeff);
+
+    if(luma > thresh){
+        gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    }else{ 
+        gl_FragColor = input0;
+    }
+    //gl_FragColor = texture2D(uSampler, vTextureCoord);
 }

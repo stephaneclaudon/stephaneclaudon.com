@@ -63,7 +63,6 @@ export default class AppPIXI extends Vue {
   }
 
   initPIXI() {
-    console.log("yoyoyoyoyo");
 
     this.pixiApp = new PIXI.Application(window.innerWidth, window.innerHeight);
     document.getElementById("app")!.appendChild(this.pixiApp.view);
