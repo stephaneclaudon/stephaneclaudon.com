@@ -1,7 +1,7 @@
 //@ts-ignore
 import vertex from './pixelsorting.vert';
 //@ts-ignore
-import fragment from './pixelsorting.frag';
+import fragment from './pixelsorting.glslx';
 import * as PIXI from 'pixi.js';
 
 /**
