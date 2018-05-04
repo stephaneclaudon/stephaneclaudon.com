@@ -1,5 +1,6 @@
 import { SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events";
 import * as PIXI from "pixi.js";
+import PixelSortingFilter from '../shaders/pixelsorting/PixelSortingFilter';
 import { TweenLite, Power4 } from "gsap";
 
 export default class PixiSliderVideoContainer extends PIXI.Container {
@@ -18,8 +19,10 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private dragAmount: number = 0;
     private dragDirection: number = 0;
     private dragTween: TweenLite;
+    private domVideoElement: HTMLVideoElement;
 
     private app: PIXI.Application;
+    private shader: PixelSortingFilter;
     private lastProjectIndex: number;
     private currentProjectIndex: number;
     private projectIndexToGo: number;
@@ -32,6 +35,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
         super();
         this.app = app;
+        this.domVideoElement = domVideoElement;
         this.lastProjectIndex = projects.length - 1;
         this.screenWidth = this.app.screen.width;
         this.screenHeight = this.app.screen.height;
@@ -59,6 +63,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
             this.addChild(projectSprite);
         }
+        this.initShader();
         this.currentProjectIndex = 0;
         this.projectIndexToGo = 0;
         this.createDragAndDropFor();
@@ -80,6 +85,11 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         return this._onDragUpdateEvent.asEvent();
     }
 
+    private initShader(): void {
+        this.shader = new PixelSortingFilter(10);
+        this.app.stage.filters = [this.shader];
+    }
+
     private createDragAndDropFor() {
         this.interactive = true;
         this.on("pointerdown", this.onDragStart);
@@ -90,6 +100,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private onDragStart(event: any): void {
         this._onDragStartEvent.dispatch();
+        this.domVideoElement.pause();
         this.onAnimationUpdate();
         this.dragTween.kill();
         this.dragging = this;
@@ -103,6 +114,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private onDragEnd(event: any): void {
         this.dragging = false;
+        this.domVideoElement.play();
         if(this.dragAmount !== 0) {
             this.finishDrag();
         } else {
@@ -148,7 +160,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
                 this.projectIndexToGo = this.currentProjectIndex + numberOfScreenToJump;
             }
         }
-
+        this.dragAmount = 0;
         this.executeTween();
         this._onDragEndEvent.dispatch(this.currentProjectIndex);
     }
@@ -168,6 +180,8 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private onAnimationUpdate(): void {
         const handler = () => {            
             this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x);
+            this.shader.size = this.dragAmount;
+            
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
         this.animationRequestId = requestAnimationFrame(handler);

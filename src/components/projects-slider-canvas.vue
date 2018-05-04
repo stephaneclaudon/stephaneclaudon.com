@@ -163,7 +163,7 @@ export default class ProjectsSliderCanvas extends Vue {
     position: relative;
     z-index: 0;
 
-    &::after {
+    /*&::after {
       pointer-events: none;
       content: "";
       position: absolute;
@@ -172,7 +172,7 @@ export default class ProjectsSliderCanvas extends Vue {
       right: -1px;
       bottom: -1px;
       background-image: radial-gradient(transparent, rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
-    }
+    }*/
 
     &-titles {
       pointer-events: none;
