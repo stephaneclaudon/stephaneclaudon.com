@@ -81,16 +81,18 @@ void main(void)
     int horizontalPixelsCount = int(vTextureCoord.x);
 
     for(int i=1242; i > 0; i--){
-        float range = float(i) / float(1242);
+        float index = float(i);
+        float range = index / 1242.0;
 		vec2 translation = vec2(range, 0);
         movedTextureCoord = vTextureCoord - translation;
 
         testColor = texture2D(uSampler, movedTextureCoord);
         luma = dot(testColor,lumcoeff);
-        if(luma > thresh && float(i) < moveDistance){
-            /*float luminanceValue = 0.5 + 0.5 * min((range * moveDistance), 1.0);
+        if(luma > thresh && index < moveDistance){
+            float distanceToCurrentPixel = gl_FragCoord.x - index;
+            float luminanceValue = 0. + (1.0 * min((distanceToCurrentPixel / moveDistance), 1.0));
             vec4 newLuminance = vec4(luminanceValue, luminanceValue, luminanceValue, 1.0);
-            testColor = testColor * newLuminance;*/
+            testColor = testColor * newLuminance;
             newColor = testColor;
             break;
         }
