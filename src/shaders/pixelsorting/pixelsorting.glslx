@@ -1,5 +1,5 @@
-precision mediump float;
 precision lowp int;
+precision lowp float;
 
 uniform vec4 filterArea;
 uniform vec2 iResolution;
@@ -30,6 +30,18 @@ vec2 unmapCoord( vec2 coord )
     return coord;
 }
 
+float levelChannel(float inPixel, float inBlack, float inGamma, float inWhite, float outBlack, float outWhite) {
+    return (pow(((inPixel * 255.0) - inBlack) / (inWhite - inBlack), inGamma) * (outWhite - outBlack) + outBlack) / 255.0;
+}
+
+vec3 levels(vec3 inPixel, float inBlack, float inGamma, float inWhite, float outBlack, float outWhite) {
+    vec3 o = vec3(1.0);
+    o.r = levelChannel(inPixel.r, inBlack, inGamma, inWhite, outBlack, outWhite);
+    o.g = levelChannel(inPixel.g, inBlack, inGamma, inWhite, outBlack, outWhite);
+    o.b = levelChannel(inPixel.b, inBlack, inGamma, inWhite, outBlack, outWhite);
+    return o;
+}
+
 //"Random" function borrowed from The Book of Shaders: Random
 float random ( vec2 xy )
 {
@@ -41,25 +53,31 @@ float luminance(vec4 color)
     return ( (color.r * 0.3) + (color.g * 0.6) + (color.b * 0.1) ) * color.a;
 }
 
+vec4 preProcessTexture(vec2 coords) {
+    vec3 prepareTexture = levels(texture2D( uSampler, coords ).xyz, size.x * 50.0, 1.0, 255.0 - (size.x * 255.0), 0.0, 255.0);
+    float gray = dot(prepareTexture.rgb, vec3(0.299, 0.587, 0.114));
+    return vec4(vec3(gray), 1.0);
+}
+
 // Returns the y coordinate of the first pixel that is brighter than the threshold
-float getFirstThresholdPixel(vec2 xy, float threshold)
+float getFirstThresholdPixel(vec4 texture, vec2 xy, float threshold)
 {
 	float luma ;
-
+    float initialY = xy.y;
 	//Looking at every sequential pixel is very resource intensive,
 	//thus, we'll increment the inspected pixel by dividing the image height in sections,
 	//and add a little randomness across the x axis to hide the division of said sections
-    float increment = 1.0; 
+    float increment = 1.0;//iResolution.y / (10.0 + (random( xy.xx ) * 6.0)); 
     //Check if the luminance of the current pixel is brighter than the threshold,
     //if not, check the next pixel
-	for( int i = 1000; i >=0; --i )
+	for( int i = 699; i >=0; --i )
 	{
-		xy.y -= increment;
-        if( xy.y <= 0.0 ) return 0.0;
-		luma = luminance( texture2D( uSampler, unmapCoord(xy) ) );
+        if( xy.y <= 0.0 ) break;
+		luma = luminance( preProcessTexture(unmapCoord(xy)) );
         if(luma > threshold) break;
+        else xy.y -= increment;
 	}
-    
+    if(xy.y <= 0.0) xy.y = initialY;
 	return xy.y;
 }
 
@@ -107,17 +125,21 @@ void sortArray()
 {
     vec4 tempcolor;
     int swapped = 1;
-    
-    for( int j = 9; j > 0; --j )
+    for( int m = 10; m > 0; --m )
     {
-    	if( luminance(colorarray[j]) > luminance(colorarray[j - 1]) )
-    	{           
-        	tempcolor = colorarray[j];
-        	colorarray[j] = colorarray[j - 1];
-        	colorarray[j - 1] = tempcolor;
-        
-        	++swapped;
-    	}
+        if(swapped==0)break;
+        swapped = 0;
+        for( int j = 9; j > 0; --j )
+        {
+            if( luminance(colorarray[j]) > luminance(colorarray[j - 1]) )
+            {           
+                tempcolor = colorarray[j];
+                colorarray[j] = colorarray[j - 1];
+                colorarray[j - 1] = tempcolor;
+            
+                ++swapped;
+            }
+        }
     }
     
 }
@@ -172,23 +194,35 @@ void setValueInColorArray(int index, vec4 value) {
     }
 }
 
+
+
+void initColorArray() {
+    for( int j = 0; j < 10; j++ )
+    {
+        colorarray[j] = vec4(1.0);
+    }
+}
+
 void main(void)
 { 
-    THRESHOLD1 = size.x / iResolution.x;
-    THRESHOLD2 = 1. - THRESHOLD1;
-
+    THRESHOLD1 = size.x;
+    THRESHOLD2 = 1.0 - THRESHOLD1;
+    initColorArray();
+    
+    vec4 gsTexture = preProcessTexture(vTextureCoord);
     vec2 coord = mapCoord(vTextureCoord);
-	float firsty = getFirstThresholdPixel( vec2(coord.x, iResolution.y), THRESHOLD1 );
-    float secondy = getFirstThresholdPixel( vec2(coord.x, firsty) - 1.0, THRESHOLD2 );
+	float firsty = getFirstThresholdPixel( gsTexture, vec2(coord.x, iResolution.y), THRESHOLD1 );
+    //float secondy = getFirstThresholdPixel( gsTexture, vec2(coord.x, firsty), THRESHOLD2 );
+    float secondy = firsty - (size.x * iResolution.y);
    
-    if( coord.y < firsty && coord.y > secondy)
+    if(firsty < iResolution.y - 10.0 && coord.y < firsty && coord.y > secondy)
     {
-        float size = firsty - secondy;
+        float distance = firsty - secondy;
 
-		putItIn( vec2(coord.x, secondy), size );
+		putItIn( vec2(coord.x, secondy), distance );
 		sortArray( );
 	
-		float sectionSize = size / 9.0;
+		float sectionSize = distance / 9.0;
 		float location = floor( (coord.y - secondy) / sectionSize );
         int i = 5;
 		float bottom = secondy + (sectionSize * location);
@@ -201,8 +235,13 @@ void main(void)
 		gl_FragColor = topColor + bottomColor;
         //gl_FragColor = vec4(1.0,0.6,0.0,1.0);
     } else {
-        gl_FragColor = texture2D( uSampler, vTextureCoord );
+        gl_FragColor = texture2D( uSampler, vTextureCoord );//gsTexture;
     }
+    /*if( coord.y < firsty && coord.y > secondy){
+        gl_FragColor = texture2D( uSampler, vTextureCoord ) + vec4(0.0,0.0,1.0,1.0);
+    }else{
+        gl_FragColor = gsTexture;
+    }*/
 
     //Only work on the pixels that are between the two threshold pixels
     /*if( vTextureCoord.y < firsty && vTextureCoord.y > secondy )
