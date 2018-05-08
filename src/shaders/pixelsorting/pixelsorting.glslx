@@ -1,3 +1,4 @@
+precision mediump float;
 precision lowp int;
 
 uniform vec4 filterArea;
