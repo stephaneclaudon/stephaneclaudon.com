@@ -154,12 +154,12 @@ void initColorArray() {
 }
 
 float getPseudoRandomDistance(float coordY) {
-    return sin(coordY / 10.) * sin(coordY) * (size.x * 100.) + (size.x * 500.);
+    return sin(coordY / 10.) * sin(coordY) * (size.x * (iResolution.x * 0.2)) + (size.x * iResolution.x);
 }
 
 void main(void)
 { 
-    THRESHOLD1 = 0.5;
+    THRESHOLD1 = 0.3;
     THRESHOLD2 = 1.0 - THRESHOLD1;
     initColorArray();
     
@@ -190,11 +190,6 @@ void main(void)
         gl_FragColor = texture2D( uSampler, vTextureCoord );//gsTexture;
     }
 
-    /*if(firsty > coord.x)
-    {
-        gl_FragColor = vec4(1.,0.,0.,1.0);
-    }else {
-        gl_FragColor = gsTexture;
-    }*/
+    //gl_FragColor = gsTexture;
 }
 

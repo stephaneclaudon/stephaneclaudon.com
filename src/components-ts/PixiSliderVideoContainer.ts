@@ -86,7 +86,8 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private initShader(): void {
-        this.shader = new PixelSortingFilter(10);
+        this.shader = new PixelSortingFilter(0);
+        this.shader.uniforms.iResolution = [this.app.screen.width, this.app.screen.height];
         this.app.stage.filters = [this.shader];
     }
 
@@ -180,7 +181,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private onAnimationUpdate(): void {
         const handler = () => {            
             this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x);
-            this.shader.size = this.dragAmount;
+            this.shader.size = this.dragAmount / this.app.screen.width;
             
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
