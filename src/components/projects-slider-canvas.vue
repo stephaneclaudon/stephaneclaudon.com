@@ -90,6 +90,10 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   initProjects() {
+    let bg = new PIXI.Sprite();
+    bg.width = window.innerWidth;
+    bg.height = window.innerHeight;
+    this.pixiApp.stage.addChild(bg);
     this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
     this.projectsContainer.onDragStartEvent.subscribe(this.onSliderTransitionStart);
     this.projectsContainer.onDragEndEvent.subscribe(this.onSliderTransitionEnd);

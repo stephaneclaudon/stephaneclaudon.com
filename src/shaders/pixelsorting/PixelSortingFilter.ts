@@ -38,4 +38,18 @@ export default class PixelSortingFilter extends PIXI.Filter<any> {
         }
         
     }
+
+
+    /**
+     * This a point that describes the time in scene.
+     *
+     * @member {PIXI.Point|Array<number>|number}
+     * @default 10
+     */
+    get time(): number {
+        return this.uniforms.time;
+    }
+    set time(value: number) {
+        this.uniforms.time = value;
+    }
 }

@@ -42,9 +42,7 @@ export default class AppPIXI extends Vue {
     this.initFilter();
 
     this.pixiApp.ticker.add(delta => {
-      //this.smokeShader.size += 0.1;
-      this.smokeShader.size = this.pixiApp.renderer.plugins.interaction.mouse.global.x / this.pixiApp.screen.width;
-      
+      this.smokeShader.size = ((this.pixiApp.renderer.plugins.interaction.mouse.global.x / this.pixiApp.screen.width) - 0.5) * 2;
     });
   }
 
@@ -57,7 +55,6 @@ export default class AppPIXI extends Vue {
     this.smokeShader = new PixelSortingFilter(0);
     this.smokeShader.uniforms.iResolution = [this.pixiApp.screen.width, this.pixiApp.screen.height];
     this.pixiApp.stage.filters = [this.smokeShader];
-    console.log(this.pixiApp.renderer);
 
   }
 }

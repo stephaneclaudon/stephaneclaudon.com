@@ -1,0 +1,57 @@
+precision lowp int;
+precision lowp float;
+
+uniform vec4 filterArea;
+uniform vec2 iResolution;
+uniform vec2 size;
+uniform float time;
+varying vec2 vTextureCoord;
+uniform vec2 variable;
+uniform sampler2D uSampler;
+
+float PI = 3.14159265358;
+float TWO_PI = 6.28318530718;
+
+vec2 mapCoord( vec2 coord )
+{
+    coord *= filterArea.xy;
+    coord += filterArea.zw;
+
+    return coord;
+}
+
+vec2 unmapCoord( vec2 coord )
+{
+    coord -= filterArea.zw;
+    coord /= filterArea.xy;
+
+    return coord;
+}
+
+float saw(float rads) {
+    rads += PI * 0.5; // sync oscillation up with sin()
+    float percent = mod(rads, PI) / PI;				
+    float dir = sign(sin(rads));
+    return dir * (2. * percent  - 1.);
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+   
+}
+
+void main() {
+    vec2 fragCoord = mapCoord ( vTextureCoord );
+	vec2 uv = vTextureCoord;						
+    float freq = 25. + 15. * size.x  + time - time;
+    float amp = 0.1 + 0.1 * size.x;
+    float increaseOsc = smoothstep(0.1, 1., uv.x * 0.65);	// more oscillations to the right
+    float yOsc = saw(PI/2. + increaseOsc * freq);
+    float yOscOffset = saw(PI + increaseOsc * freq);
+    float yAdd = amp * (increaseOsc + increaseOsc * yOsc);
+    uv += vec2(0., yAdd * (0.5 + 0.5 * cos(uv.x)));
+    float stripeFreq = 70.;
+    float col = smoothstep(uv.x * 0.3, 0.4 + uv.x * 0.3, 0.5 + 0.5 * sin(uv.y * stripeFreq));	// faded stripes
+    if(yOscOffset > 0.) col -= uv.x * 1. * amp;				// add fake lighting
+	gl_FragColor = texture2D( uSampler,  uv );
+}
