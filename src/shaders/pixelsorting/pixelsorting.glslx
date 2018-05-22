@@ -1,0 +1,218 @@
+precision lowp int;
+precision lowp float;
+
+uniform vec4 filterArea;
+uniform vec2 iResolution;
+uniform vec2 size;
+varying vec2 vTextureCoord;
+uniform vec2 variable;
+uniform sampler2D uSampler;
+
+float THRESHOLD1 =.0;
+float THRESHOLD2= 0.5;
+
+vec4 colorarray[10];
+
+
+vec2 mapCoord( vec2 coord )
+{
+    coord *= filterArea.xy;
+    coord += filterArea.zw;
+
+    return coord;
+}
+
+vec2 unmapCoord( vec2 coord )
+{
+    coord -= filterArea.zw;
+    coord /= filterArea.xy;
+
+    return coord;
+}
+
+float levelChannel(float inPixel, float inBlack, float inGamma, float inWhite, float outBlack, float outWhite) {
+    return (pow(((inPixel * 255.0) - inBlack) / (inWhite - inBlack), inGamma) * (outWhite - outBlack) + outBlack) / 255.0;
+}
+
+vec3 levels(vec3 inPixel, float inBlack, float inGamma, float inWhite, float outBlack, float outWhite) {
+    vec3 o = vec3(1.0);
+    o.r = levelChannel(inPixel.r, inBlack, inGamma, inWhite, outBlack, outWhite);
+    o.g = levelChannel(inPixel.g, inBlack, inGamma, inWhite, outBlack, outWhite);
+    o.b = levelChannel(inPixel.b, inBlack, inGamma, inWhite, outBlack, outWhite);
+    return o;
+}
+
+//"Random" function borrowed from The Book of Shaders: Random
+float random ( vec2 xy )
+{
+    return fract( sin( dot( xy.xy, vec2(12, 78) ) ) );
+}
+
+float luminance(vec4 color)
+{
+    return ( (color.r * 0.3) + (color.g * 0.6) + (color.b * 0.1) ) * color.a;
+}
+
+vec4 preProcessTexture(vec2 coords) {
+    vec3 prepareTexture = levels(texture2D( uSampler, coords ).xyz, 100.0, 1.0, 150.0, 0.0, 255.0);
+    float gray = dot(prepareTexture.rgb, vec3(0.299, 0.587, 0.114));
+    return vec4(vec3(gray), 1.0);
+}
+
+// Returns the y coordinate of the first pixel that is brighter than the threshold
+float getFirstThresholdPixel(vec2 xy, float threshold)
+{
+	float luma ;
+    float initialX = xy.x;
+	//Looking at every sequential pixel is very resource intensive,
+	//thus, we'll increment the inspected pixel by dividing the image height in sections,
+	//and add a little randomness across the x axis to hide the division of said sections
+    float increment = iResolution.y * 0.008;//iResolution.y / (5.0 + (random( xy.xx ) * 3.0));
+    if(size.x > 0.) {
+        increment = increment;
+    }else {
+        increment = -increment;
+    }
+    //Check if the luminance of the current pixel is brighter than the threshold,
+    //if not, check the next pixel
+	for( int i = 1242; i >=0; --i )
+	{
+        if( xy.x <= 0.0 || xy.x > iResolution.x ) break;
+		luma = luminance( preProcessTexture(unmapCoord(xy)) );
+        if(luma > threshold) break;
+        else xy.x -= increment;
+	}
+    if(xy.x <= 0.0 || xy.x > iResolution.x) xy.x = initialX;
+	return xy.x;
+}
+
+
+//Puts 10 pixels in an array
+void putItIn( vec2 startxy, float size )
+{
+    vec2 xy;
+    
+    for( int j = 9; j >= 0; --j )
+    {
+        //Divide the line of pixels into 10 sections,
+        //then store the pixel found at the junction of each section
+        xy = vec2(startxy.x + (size / 9.0) * float(j), startxy.y);
+        colorarray[j] = texture2D( uSampler, unmapCoord(xy) );
+    }
+    
+}
+
+//An attempt at Bubble sort for 10 pixels, sorting them from darkest to brightest, top to bottom
+void sortArray()
+{
+    vec4 tempcolor;
+    int swapped = 1;
+    for( int m = 1000; m > 0; --m )
+    {
+        if(swapped==0)break;
+        swapped = 0;
+        for( int j = 9; j >= 0; --j )
+        {
+            if( luminance(colorarray[j]) > luminance(colorarray[j - 1]) )
+            {           
+                tempcolor = colorarray[j];
+                colorarray[j] = colorarray[j - 1];
+                colorarray[j - 1] = tempcolor;
+            
+                swapped = swapped + 1;
+            }
+        }
+    }
+    
+}
+
+vec4 getValueInColorArray(int index) {
+    if (index == 0) {
+        return colorarray[0];
+    } else if (index == 1) {
+        return colorarray[1];
+    } else if (index == 2) {
+       return colorarray[2];
+    } else if (index == 3) {
+        return colorarray[3];
+    } else if (index == 4) {
+       return colorarray[4];
+    } else if (index == 5) {
+        return colorarray[5];
+    } else if (index == 6) {
+       return colorarray[6];
+    } else if (index == 7) {
+        return colorarray[7];
+    } else if (index == 8) {
+       return colorarray[8];
+    } else if (index == 9) {
+        return colorarray[9];
+    }
+    return colorarray[0];
+}
+
+void initColorArray() {
+    for( int j = 0; j < 10; j++ )
+    {
+        colorarray[j] = vec4(1.0);
+    }
+}
+
+float getPseudoRandomDistance(float coordY) {
+    return sin(coordY / 10.) * sin(coordY) * (size.x * (iResolution.x * 0.2)) + (size.x * iResolution.x);
+}
+
+void main(void)
+{ 
+    if(size.x != 0.) {
+        THRESHOLD1 = 0.3;
+        THRESHOLD2 = 1.0 - THRESHOLD1;
+        initColorArray();
+        
+        vec4 gsTexture = preProcessTexture(vTextureCoord);
+        vec2 coord = mapCoord(vTextureCoord);
+        float firsty, secondy;
+        if(size.x > .0) {
+            firsty = getFirstThresholdPixel( vec2(iResolution.x, coord.y), THRESHOLD2 );
+            secondy = firsty - getPseudoRandomDistance(coord.y);
+        } else {
+            secondy = getFirstThresholdPixel( vec2(1., coord.y), THRESHOLD2 );
+            firsty = secondy - getPseudoRandomDistance(coord.y);
+        }
+        
+    
+        if(firsty < iResolution.x && coord.x < firsty && coord.x > secondy)
+        {
+            float distance = firsty - secondy;
+
+            putItIn( vec2(secondy, coord.y), distance );
+            //sortArray( );
+        
+            float sectionSize = distance / 9.0;
+            float location = floor( abs(coord.x - secondy) / sectionSize );
+            float bottom = secondy + (sectionSize * location);
+            float locationBetween = (coord.x - bottom) / sectionSize;
+
+            //A simple method for "fading" between the colors of our ten sampled pixels
+            vec4 topColor = getValueInColorArray(int(location) + 1) * locationBetween;
+            vec4 bottomColor = getValueInColorArray(int(location)) * (1.0 - locationBetween);
+            
+            gl_FragColor = (topColor + bottomColor);// - (sin(vTextureCoord.y * 100.) * 0.2 + 0.2);
+        } else {
+            gl_FragColor = texture2D( uSampler, vTextureCoord );//gsTexture;
+        }
+    }else {
+        gl_FragColor = texture2D( uSampler, vTextureCoord );
+    }
+    
+    /*if(floor(coord.x) == floor(firsty)){
+        gl_FragColor = vec4(1.,0.,0.,1.);
+    } else if(floor(coord.x) == floor(secondy)){
+        gl_FragColor = vec4(0.,1.,0.,1.);
+    } else {
+        gl_FragColor = texture2D( uSampler, vTextureCoord );
+    }*/
+
+    //gl_FragColor = gsTexture;
+}
+

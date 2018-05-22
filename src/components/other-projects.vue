@@ -23,3 +23,15 @@
 
   }
 </script>
+
+<style lang="scss" scoped>
+  @import '../style/main.scss';
+
+  .other-title {
+    color: $grey;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 2em 0;
+  }
+
+</style>

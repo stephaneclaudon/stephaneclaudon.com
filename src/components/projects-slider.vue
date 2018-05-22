@@ -33,15 +33,10 @@ export default class ProjectsSlider extends Vue {
   projectsArrayTitle: Array<Array<string>> = [];
   projectsSwipe: Object = {};
   currentIndex: number = 0;
-  titlesComputed: boolean = false;
   sliderIsMoving: boolean = false;
 
-  viewProject(project: any): void {
-    this.setCurrentProject(project);
-    console.log("View project " + project.title);
-  }
-
   mounted() {
+    console.log("Init ProjectsSlider");
     this.projectsSwipe = SwipeJS(
       document.getElementById("slider") as HTMLElement,
       {
@@ -52,14 +47,16 @@ export default class ProjectsSlider extends Vue {
         continuous: true,
         disableScroll: false,
         stopPropagation: true,
-        callback: this.onSliderInited,
         transitionEnd: this.onSliderTransitionEnd,
         transitionStart: this.onSliderTransitionStart
       }
     ) as Object;
   }
 
-  onSliderInited(index: number, elem: HTMLElement, dir: number): void {}
+  viewProject(project: any): void {
+    this.setCurrentProject(project);
+  }
+
   onSliderTransitionStart(): void {
     this.sliderIsMoving = true;
   }

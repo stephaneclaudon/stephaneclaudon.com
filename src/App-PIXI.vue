@@ -1,105 +1,65 @@
 <template>
-  <div class="app grid-container full">
-    <div id="videosContainer">
-      <video id="video" playsinline loop muted autoplay>
-        <source :src="getVideoPath()" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <canvas id="pixiElement"></canvas>
+  <div id="app" class="app">
+    
   </div>
 </template>
 
 <script lang="ts">
-import { State, Mutation } from "vuex-class";
-import {
-  Vue,
-  Component,
-  Prop,
-  Provide,
-  Inject,
-  Model,
-  Watch
-} from "vue-property-decorator";
-import jsonData from "./assets/data/data.json";
-import * as MutationTypes from "./store/mutation-types";
+import { Vue, Component } from "vue-property-decorator";
 import * as PIXI from "pixi.js";
-import PixiSliderVideoContainer from "./components-ts/PixiSliderVideoContainer";
+import PixelSortingFilter from './shaders/pixelsorting/PixelSortingFilter';
 
 @Component({
   components: {}
 })
 export default class AppPIXI extends Vue {
-  videoElement: HTMLVideoElement;
   pixiApp: PIXI.Application;
-  projectsContainer: PixiSliderVideoContainer;
-
-  inited: boolean = false;
-
-  @State("projects") projects: Array<any>;
-  @Mutation(MutationTypes.LOAD_PROJECTS)
-  loadProject: (projects: Array<any>) => void;
-
-  created() {
-    this.loadProject(jsonData);
-  }
-
+  sprite: PIXI.Sprite;
+  smokeShader: PixelSortingFilter;
+  count: number = 0;
   mounted() {
     this.initPIXI();
   }
 
-  @Watch("projects", { immediate: false, deep: false })
-  onProjectsChanged(val: boolean, oldVal: boolean) {
-    console.log(this.projects);
-  }
-
-  getVideoPath(): String {
-    return "/dist/assets/loops/all-projects-mobile-low.mp4";
-  }
-
   initPIXI() {
-    this.pixiApp = new PIXI.Application(window.innerWidth, window.innerHeight, {
-      backgroundColor: 0x1099ff,
-      antialias: false,
-      transparent: false,
-      resolution: 1,
-      view: document.getElementById("pixiElement")
-    } as PIXI.ApplicationOptions);
-    this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener(
-      "playing",
-      () => this.onVideoStartPlaying(),
-      false
+
+    this.pixiApp = new PIXI.Application(1242, 699);
+    document.getElementById("app")!.appendChild(this.pixiApp.view);
+
+    this.sprite = PIXI.Sprite.fromImage(
+      //"https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/awpc%403x.jpg"
+      //"https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/nautilus%403x.jpg"
+      "https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/quattro2%403x.jpg"
+      //"/dist/assets/img/pixel.jpg"
     );
+    this.sprite.anchor.set(0.5);
+    this.sprite.x = this.pixiApp.screen.width / 2;
+    this.sprite.y = this.pixiApp.screen.height / 2;
+    this.sprite.width = this.pixiApp.screen.width;
+    this.sprite.height = this.pixiApp.screen.height;
+
+    this.pixiApp.stage.addChild(this.sprite);
+    this.initFilter();
+
+    this.pixiApp.ticker.add(delta => {
+      this.smokeShader.size = ((this.pixiApp.renderer.plugins.interaction.mouse.global.x / this.pixiApp.screen.width) - 0.5) * 2;
+    });
   }
 
-  onVideoStartPlaying(): void {
-    if (!this.inited) this.initProjects();
-  }
+  initFilter(): void {
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var uniforms: any = {};
+    uniforms.size = { type: "v2", value: { x: 1, y: 1 } };
 
-  initProjects() {
-    this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
-    this.pixiApp.stage.addChild(this.projectsContainer);
-    this.inited = true;
+    this.smokeShader = new PixelSortingFilter(0);
+    this.smokeShader.uniforms.iResolution = [this.pixiApp.screen.width, this.pixiApp.screen.height];
+    this.pixiApp.stage.filters = [this.smokeShader];
+
   }
 }
 </script>
 
 <style lang="scss">
 @import "./style/main.scss";
-#videosContainer {
-  visibility: hidden;
-  position: relative;
-  video {
-    position: absolute;
-    width: 100%;
-  }
-}
-#pixiElement {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-}
 </style>

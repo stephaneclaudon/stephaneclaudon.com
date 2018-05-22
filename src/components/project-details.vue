@@ -38,6 +38,7 @@
     &-credits {
       color: $grey;
       padding: 2em 0;
+      font-size: 1.2em;
 
       h2 {
         text-transform: uppercase;
