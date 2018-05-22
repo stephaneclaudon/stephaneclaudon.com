@@ -29,7 +29,11 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private screenHalfWidth: number;
     private screenWidth: number;
     private screenHeight: number;
+    private screenRatio: number;
+    private mediaRatio: number;
+    private videoTexture: PIXI.Texture;
     private screenTextureWidth: number;
+    private screenTextureHeight: number;
 
 
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
@@ -39,30 +43,31 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.lastProjectIndex = projects.length - 1;
         this.screenWidth = this.app.screen.width;
         this.screenHeight = this.app.screen.height;
+        this.screenRatio = this.screenWidth / this.screenHeight;
         this.screenHalfWidth = this.app.screen.width * 0.5;
         this.dragTween = new TweenLite(this, 0.1, {});
 
-        for (var i = 0; i < 5; i++) {
-            let startText: PIXI.Texture = PIXI.Texture.fromVideo(domVideoElement);
-            (<PIXI.VideoBaseTexture>startText.baseTexture).autoPlay = true;
-            (<PIXI.VideoBaseTexture>startText.baseTexture).autoUpdate = true;
-            this.screenTextureWidth = startText.width / projects.length;
-            let frame: PIXI.Rectangle = new PIXI.Rectangle(i * this.screenTextureWidth, 0, this.screenTextureWidth, startText.height);
-            let projectTexture = new PIXI.Texture(startText.baseTexture, frame);
-            startText.destroy();
-
+        this.videoTexture = PIXI.Texture.fromVideo(domVideoElement);
+        (<PIXI.VideoBaseTexture>this.videoTexture.baseTexture).autoPlay = true;
+        (<PIXI.VideoBaseTexture>this.videoTexture.baseTexture).autoUpdate = true;
+        this.screenTextureWidth = this.videoTexture.width / projects.length;
+        this.screenTextureHeight = this.videoTexture.height;
+        this.mediaRatio = this.screenTextureWidth / this.screenTextureHeight;
+        
+        for (var i = 0; i < projects.length; i++) {
+            let frame: PIXI.Rectangle = this.getVideoTextureRect(i);
+            let projectTexture = new PIXI.Texture(this.videoTexture.baseTexture, frame);
             let projectSprite = new PIXI.Sprite(projectTexture);
-            projectSprite.position.x = window.innerWidth * 0.5 + i * window.innerWidth;
-
+            projectSprite.position.x = this.screenWidth * 0.5 + i * this.screenWidth;
             projectSprite.anchor.x = 0.5;
-            projectSprite.position.y = window.innerHeight * 0.5;
+            projectSprite.position.y = this.screenHeight * 0.5;
             projectSprite.anchor.y = 0.5;
-
-            projectSprite.width = window.innerWidth;
-            projectSprite.height = window.innerHeight;
-
+            projectSprite.width = this.screenWidth;
+            projectSprite.height = this.screenHeight;
             this.addChild(projectSprite);
         }
+
+        this.videoTexture.destroy();
         this.initShader();
         this.currentProjectIndex = 0;
         this.projectIndexToGo = 0;
@@ -72,7 +77,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     public get onDragStartEvent() {
         return this._onDragStartEvent.asEvent();
     }
-    
+
     public get onProjectClickedEvent() {
         return this._onProjectClickedEvent.asEvent();
     }
@@ -85,12 +90,31 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         return this._onDragUpdateEvent.asEvent();
     }
 
+    private getVideoTextureRect(projectIndex: number): PIXI.Rectangle {
+        
+        let cropTextureWidth: number;
+        let cropTextureHeight: number;
+        let cropTextureOffset: PIXI.Point = new PIXI.Point();
+
+        if( this.screenRatio > this.mediaRatio) {
+            cropTextureWidth = this.screenTextureWidth;
+            cropTextureHeight = cropTextureWidth / this.screenRatio;
+        } else {
+            cropTextureHeight = this.screenTextureHeight;
+            cropTextureWidth = cropTextureHeight * this.screenRatio;
+        }
+        cropTextureOffset.x = (this.screenTextureWidth - cropTextureWidth) * 0.5;
+        cropTextureOffset.y = (this.screenTextureHeight - cropTextureHeight) * 0.5;
+
+        return new PIXI.Rectangle((projectIndex * this.screenTextureWidth) + cropTextureOffset.x, cropTextureOffset.y, cropTextureWidth, cropTextureHeight);
+    }
+
     private initShader(): void {
         this.shader = new PixelSortingFilter(0);
         this.shader.uniforms.iResolution = [this.app.screen.width, this.app.screen.height];
         this.app.stage.filters = [this.shader];
         this.app.ticker.add(delta => {
-            this.shader.time += 0.01;            
+            this.shader.time += 0.01;
         });
     }
 
@@ -119,7 +143,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private onDragEnd(event: any): void {
         this.dragging = false;
         this.domVideoElement.play();
-        if(this.dragAmount !== 0) {
+        if (this.dragAmount !== 0) {
             this.finishDrag();
         } else {
             this._onProjectClickedEvent.dispatch(this.currentProjectIndex);
@@ -182,11 +206,11 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onAnimationUpdate(): void {
-        const handler = () => {            
+        const handler = () => {
             this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x);
             this.shader.size = (this.dragAmount / this.app.screen.width) * -this.dragDirection;
             //console.log(this.shader.size);
-            
+
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
         this.animationRequestId = requestAnimationFrame(handler);
