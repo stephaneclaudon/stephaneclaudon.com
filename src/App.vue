@@ -30,7 +30,8 @@ import {
   Prop,
   Provide,
   Inject,
-  Model
+  Model,
+  Watch
 } from "vue-property-decorator";
 import ContactBox from "./components/contact.vue";
 import ProjectsSlider from "./components/projects-slider.vue";
@@ -39,8 +40,10 @@ import ProjectDetails from "./components/project-details.vue";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
-import * as ModernizrObject from 'modernizr';
-import VideoSnapshooter from "./components-ts/VideoSnapshooter"
+import * as ModernizrObject from "modernizr";
+import { TweenLite, Power4 } from "gsap";
+//@ts-ignore
+import "gsap/ScrollToPlugin";
 
 @Component({
   components: {
@@ -51,10 +54,16 @@ import VideoSnapshooter from "./components-ts/VideoSnapshooter"
   }
 })
 export default class App extends Vue {
+  @State("projects") projects: Array<any>;
   @State("currentProject") currentProject: Object;
 
   @Mutation(MutationTypes.LOAD_PROJECTS)
   loadProject: (projects: Array<Object>) => void;
+
+  @Mutation(MutationTypes.SET_CURRENT_PROJECT)
+  setCurrentProject: (project: Object) => void;
+
+  private needScrollDown: boolean = false;
 
   get Modernizr(): any {
     return ModernizrObject;
@@ -62,7 +71,58 @@ export default class App extends Vue {
 
   created() {
     this.loadProject(jsonData);
-    //VideoSnapshooter.getInstance().init();
+    if (this.$router.currentRoute.name === "project") {
+      this.gotoProject(this.$router.currentRoute.params.id);
+    }
+  }
+
+  @Watch("$route")
+  onRouteChanged(to: any, from: any): void {
+    if (to.name === "project") {
+      this.gotoProject(to.params.id);
+    } else {
+      this.needScrollDown = false;
+    }
+  }
+
+  @Watch("currentProject")
+  onProjectChanged(to: any, from: any): void {
+    console.log("project changed!!!!");
+    
+    this.checkScrollDown();
+  }
+
+  gotoProject(projectId: string): void {
+    this.needScrollDown = true;
+    this.setCurrentProject(this.getProjectFromId(projectId));
+  }
+
+  mounted(): void {
+    //this.checkScrollDown();
+  }
+
+  updated(): void {
+    this.checkScrollDown();
+  }
+
+  checkScrollDown(): void {
+    console.log("scrollto ?????", document.body.scrollHeight, window.innerHeight, this.needScrollDown);
+    this.$nextTick(() => {
+        if(this.needScrollDown) {
+          TweenLite.to(window, 1, {
+              scrollTo: window.innerHeight * 0.5, ease: Power4.easeOut
+            });
+        }
+      });
+    
+  }
+
+  getProjectFromId(projectId: string): any {
+    for (let index = 0; index < this.projects.length; index++) {
+      if (this.projects[index].id === projectId) {
+        return this.projects[index];
+      }
+    }
   }
 }
 </script>

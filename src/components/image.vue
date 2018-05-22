@@ -15,7 +15,7 @@
   
   @Component
   export default class ImageSrc extends Vue {
-    imagePath: string = 'dist/assets/img/'
+    imagePath: string = '/dist/assets/img/'
     @Prop()
     name: string
     @Prop()

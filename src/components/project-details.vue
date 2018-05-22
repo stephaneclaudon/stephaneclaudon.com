@@ -5,7 +5,7 @@
         <h2>Credits</h2>
         <p>{{ currentProject.credits }}</p>
       </div>
-      <other-projects></other-projects>
+      <!--<other-projects></other-projects>-->
   </div>
 </template>
 
@@ -24,7 +24,19 @@
     @State('currentProject') currentProject: Object
 
     videoPlayer () : String {
-        return ''
+      return ''
+    }
+
+    mounted(): void {
+      this.$nextTick(() => {
+        console.log("mounted from component ", document.body.scrollHeight);
+        
+      });
+    }
+
+    updated(): void {
+      console.log("updated from component ", document.body.scrollHeight);
+      
     }
   }
 </script>
