@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
-import AppPIXI from './App-PIXI.vue'
 import { State } from './store/state'
 import getters from './store/getters'
 import mutations from './store/mutations'
@@ -13,14 +12,14 @@ Vue.use(Vuex)
 
 let vueApp: Vue = new Vue({
   el: document.querySelector('#app') as Element,
-  components: {AppPIXI},
+  components: {App},
   store: new Vuex.Store({ 
     state: new State(),
     getters,
     mutations
   }),
   render (h) {
-    return h('AppPIXI')
+    return h('App')
   }
 })
 

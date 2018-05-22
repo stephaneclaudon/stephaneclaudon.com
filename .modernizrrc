@@ -1,0 +1,9 @@
+console.log("--------------------------");
+module.exports = {
+  options: [
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/canvas"
+  ]
+};
