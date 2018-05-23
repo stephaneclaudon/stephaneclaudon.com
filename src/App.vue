@@ -6,14 +6,10 @@
 
     <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
 
-    <div class="name-wrapper">
-      <div class="grid-x">
-        <div class="cell small-10 small-offset-1">
-          <div class="main-name">
-            <div class="main-name__first">Stéphane</div>
-            <div class="main-name__last">CLAUDON</div>
-          </div>
-        </div>
+    <div class="name-wrapper small-offset-1">
+      <div class="main-name">
+        <div class="main-name__first">Stéphane</div>
+        <div class="main-name__last">CLAUDON</div>
       </div>
     </div>
     
@@ -41,7 +37,7 @@ import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
 import * as ModernizrObject from "modernizr";
-import { TweenLite, Power4 } from "gsap";
+import { TweenLite, Power2 } from "gsap";
 //@ts-ignore
 import "gsap/ScrollToPlugin";
 
@@ -81,14 +77,13 @@ export default class App extends Vue {
     if (to.name === "project") {
       this.gotoProject(to.params.id);
     } else {
+      this.setCurrentProject({});
       this.needScrollDown = false;
     }
   }
 
   @Watch("currentProject")
-  onProjectChanged(to: any, from: any): void {
-    console.log("project changed!!!!");
-    
+  onProjectChanged(to: any, from: any): void {    
     this.checkScrollDown();
   }
 
@@ -98,7 +93,7 @@ export default class App extends Vue {
   }
 
   mounted(): void {
-    //this.checkScrollDown();
+    this.checkScrollDown();
   }
 
   updated(): void {
@@ -106,12 +101,11 @@ export default class App extends Vue {
   }
 
   checkScrollDown(): void {
-    console.log("scrollto ?????", document.body.scrollHeight, window.innerHeight, this.needScrollDown);
     this.$nextTick(() => {
         if(this.needScrollDown) {
-          TweenLite.to(window, 1, {
-              scrollTo: window.innerHeight * 0.5, ease: Power4.easeOut
-            });
+          /*TweenLite.to(window, 0.5, {
+            scrollTo: window.innerHeight * 0.5, ease: Power2.easeInOut, delay: 0.05
+          });*/
         }
       });
     
@@ -146,7 +140,6 @@ export default class App extends Vue {
 .name-wrapper {
   position: absolute;
   top: 5%;
-  width: 100%;
 }
 
 .main {

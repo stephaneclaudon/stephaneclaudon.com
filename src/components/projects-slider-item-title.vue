@@ -4,7 +4,7 @@
           <span class="title--inner" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex"><span>{{ titleString }}</span></span>
         </h1>
 
-        <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex">{{ project.title }}</span></div>
+        <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
     </div>
 </template>
 
@@ -47,6 +47,7 @@ $titleAnimationMultilineDelay: 0.15s;
     vertical-align: middle;
     text-transform: uppercase;
     font-size: 2em;
+    white-space: pre-line;
     span {
       @include roboto-black;
       letter-spacing: 0.05em;
@@ -117,7 +118,7 @@ $titleAnimationMultilineDelay: 0.15s;
   .title--inner:not(:last-child)::before {
     border-bottom: solid 1px $black;
   }
-  @for $i from 0 through 4 {
+  @for $i from 0 through 10 {
     .title--inner:nth-child(#{$i}) {
       span {
         @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);

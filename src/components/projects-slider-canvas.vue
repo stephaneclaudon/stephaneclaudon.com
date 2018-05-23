@@ -131,7 +131,9 @@ export default class ProjectsSliderCanvas extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  @import "../style/main.scss";
+
   #videosContainer {
     visibility: hidden;
     position: fixed;
