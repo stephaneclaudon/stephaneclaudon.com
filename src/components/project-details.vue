@@ -1,6 +1,6 @@
 <template>
   <div class="project-details grid-x">
-      <div class="cell small-10 small-offset-1">
+      <div class="cell small-10 small-offset-1 align-text-right">
         <router-link class="project-details-back-button" :to="{ name: 'home' }">
           <close-button></close-button>
         </router-link>
@@ -48,10 +48,12 @@
     position: absolute;
     top: 0;
     background: $black;
-    padding: 2em 0 2em 0;
+    width: 100%;
+    min-height: 100%;
 
     &-back-button {
-      text-align: right;
+      display: inline-block;
+      margin: 4em 0 0 0;
     }
 
     &-header {

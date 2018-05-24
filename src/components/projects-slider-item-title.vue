@@ -1,7 +1,10 @@
 <template>
     <div class="projects-slider-item__title">
         <h1 v-if="alive">
-          <span class="title--inner" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex"><span>{{ titleString }}</span></span>
+          <span class="title--outer" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex">
+            <span class="title--inner"><span>{{ titleString }}</span></span>
+            <br />
+          </span>
         </h1>
 
         <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
@@ -114,12 +117,27 @@ $titleAnimationMultilineDelay: 0.15s;
         }
       }
     }
+
   }
-  .title--inner:not(:last-child)::before {
+  .title--outer:not(:last-child) .title--inner::before {
     border-bottom: solid 1px $black;
   }
+  .title--outer:first-child {
+    .title--innerfake, .title--inner {
+      font-size: 1.5em;
+      span {
+        @include roboto-light;
+      }
+    }
+    .title--inner {
+      color: $black;
+      &::before {
+        @include horizontal-gradient(#bbbbbb, #fdfbfb);
+      }
+    }
+  } 
   @for $i from 0 through 10 {
-    .title--inner:nth-child(#{$i}) {
+    .title--outer:nth-child(#{$i}) .title--inner {
       span {
         @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
       }

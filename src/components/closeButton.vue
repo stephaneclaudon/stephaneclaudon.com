@@ -45,7 +45,7 @@ export default class CloseButton extends Vue {
     line-height: 4em;
     text-transform: uppercase;
     color: #ffffff;
-    @include transition(all 0.2s ease-in);
+    @include transition(all 0.1s ease-in-out);
     @include opacity(0);
     cursor: pointer;
   }
@@ -58,7 +58,7 @@ export default class CloseButton extends Vue {
     width: inherit;
     background: #ffffff;
     left: 0;
-    @include transition(all 0.2s ease-in);
+    @include transition(all 0.1s ease-in-out);
   }
 
   .inner:before {

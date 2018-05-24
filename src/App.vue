@@ -1,10 +1,12 @@
 <template>
   <div class="app grid-container full">
 
-    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas"></projects-slider-canvas>
+    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
     <projects-slider v-else class="project-slider"></projects-slider>
 
-    <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
+    <transition name="trans-project">
+      <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
+    </transition>
 
     <div class="name-wrapper small-offset-1">
       <div class="main-name">
@@ -51,7 +53,7 @@ import "gsap/ScrollToPlugin";
 })
 export default class App extends Vue {
   @State("projects") projects: Array<any>;
-  @State("currentProject") currentProject: Object;
+  @State("currentProject") currentProject: any;
 
   @Mutation(MutationTypes.LOAD_PROJECTS)
   loadProject: (projects: Array<Object>) => void;
@@ -65,6 +67,10 @@ export default class App extends Vue {
     return ModernizrObject;
   }
 
+  get sliderActive(): boolean {
+    return this.currentProject.id === undefined;
+  }
+
   created() {
     this.loadProject(jsonData);
     if (this.$router.currentRoute.name === "project") {
@@ -76,7 +82,7 @@ export default class App extends Vue {
   onRouteChanged(to: any, from: any): void {
     if (to.name === "project") {
       this.gotoProject(to.params.id);
-    } else {
+    } else if (to.name != "contact"){
       this.setCurrentProject({});
       this.needScrollDown = false;
     }
@@ -167,5 +173,27 @@ export default class App extends Vue {
       letter-spacing: 0.105em;
     }
   }
+}
+
+.trans-project-enter-active, .trans-project-leave-active {
+  @include transition(all .5s ease-out);
+  @include transform(scale(1));
+  .project-details-header, .project-details-video, .project-details-credits {
+    @include transition(all .5s ease-out);
+    @include transform(translateY(0));
+  }
+}
+.trans-project-enter, .trans-project-leave-to {
+  @include opacity(0);
+  @include transform(scale(1.4));
+  /*.project-details-header {
+    transform: translateY(50%);
+  }
+  .project-details-video {
+    transform: translateY(70%);
+  }
+  .project-details-credits {
+    transform: translateY(100%);
+  }*/
 }
 </style>

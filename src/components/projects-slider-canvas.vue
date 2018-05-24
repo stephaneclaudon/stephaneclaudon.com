@@ -48,7 +48,8 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-
+  @Prop() sliderActive: boolean;
+  
   created() {
     
   }
@@ -115,6 +116,15 @@ export default class ProjectsSliderCanvas extends Vue {
 
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
+  }
+
+  @Watch('sliderActive')
+  onSliderStateChanged(val: boolean, oldVal: boolean) {
+    if(val) {
+      this.pixiApp.ticker.start();
+    } else {
+      this.pixiApp.ticker.stop();
+    }
   }
 
   initTitles(): void {

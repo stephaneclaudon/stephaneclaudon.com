@@ -40,12 +40,12 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   get width(): number {
-    return this.$el.clientWidth;
+    return this.$el.getBoundingClientRect().width;
   }
 
   get height(): number {
     // 16/9 ratio
-    return this.$el.clientWidth * 0.5625;
+    return this.width * 0.5625;
   }
 
   serializeURLParameters(params: any): string { 
@@ -64,5 +64,6 @@ export default class EmbedVideoPlayer extends Vue {
   @import "../style/main.scss";
   .video-player {
     width: 100%;
+    height: 56vw;
   }
 </style>
