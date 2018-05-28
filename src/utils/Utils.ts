@@ -4,26 +4,28 @@ export default class Utils {
         if (htmlElement) {
             let text: string = htmlElement.textContent as string;
             let words = text.split(" ");
-            htmlElement.textContent = words[0];
-            let height = htmlElement.getBoundingClientRect().height;
-
+            htmlElement.textContent = "";
+            let height = 0;
             let lastFoundWordIndex: number = 0;
 
-            for (let i = 1; i < words.length; i++) {
-                htmlElement.textContent =
-                    htmlElement.textContent + " " + words[i];
-
-                if (htmlElement.getBoundingClientRect().height > height) {
-                    height = htmlElement.getBoundingClientRect().height;
-
+            for (let i = 0; i < words.length; i++) {
+                if(i === 0) {
+                    htmlElement.textContent = words[i];
+                }else {
+                    htmlElement.textContent = htmlElement.textContent + " " + words[i];
+                }
+                
+                if ((htmlElement.getBoundingClientRect().height > height && i > 0)) {                    
                     currentTitleArray.push(words.slice(lastFoundWordIndex, i).join(" "));
                     lastFoundWordIndex = i;
                 }
+                height = htmlElement.getBoundingClientRect().height;
             }
             currentTitleArray.push(
                 words.slice(lastFoundWordIndex, words.length).join(" ")
             );
         }
+        
         return currentTitleArray;
     }
 }

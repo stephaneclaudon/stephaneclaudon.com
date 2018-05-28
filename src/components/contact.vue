@@ -2,11 +2,11 @@
   <div class="contact-wrapper">
     <div class="grid-x">
       <div class="cell small-10 small-offset-1">
-        <div class="toggle" v-on:click="toggle()">Contact</div>
+        <div class="toggle" v-on:click="open()">Contact</div>
       </div>
       
       <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">
-        <div class="contact-overlay" v-on:click="toggle()"></div>
+        <div class="contact-overlay" v-on:click="close()"></div>
         <div class="contact-content grid-x align-center-middle">
           <div class="cell">
             <ul class="contact-content__social grid-x align-center">
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 
 @Component
 export default class ContactBox extends Vue {
@@ -38,15 +38,37 @@ export default class ContactBox extends Vue {
   hidden: boolean = true;
 
   @Emit()
+  open(): void {
+    this.$router.push('/contact');
+  }
+
+  @Emit()
+  close(): void {
+    window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/home');
+  }
+
+  @Watch('$route')
+  onRouteChanged(to: any, from: any): void {
+    if(from.name != to.name && ( from.name === 'contact' || to.name === 'contact')) {
+      this.toggle();
+    }
+  }
+
+  created(): void {
+    if(this.$router.currentRoute.name === "contact") {
+      this.toggle();
+    }
+  }
+
   toggle() {
     this.opened = !this.opened;
-    if (!this.opened) {
-      setTimeout(() => {
-        this.hidden = true;
-      }, 500);
-    } else {
-      this.hidden = false;
-    }
+      if (!this.opened) {
+        setTimeout(() => {
+          this.hidden = true;
+        }, 500);
+      } else {
+        this.hidden = false;
+      }
   }
 }
 </script>

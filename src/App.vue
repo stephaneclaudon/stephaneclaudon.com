@@ -1,21 +1,25 @@
 <template>
-  <div class="app grid-container full">
+  <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
 
-    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas"></projects-slider-canvas>
-    <projects-slider v-else class="project-slider"></projects-slider>
+    <transition name="trans-slider">
+      <div v-show="!showProjectDetails" class="project-slider-container">
+        <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
+        <projects-slider v-else class="project-slider"></projects-slider>
+      </div>
+    </transition>
 
-    <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
+    <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
+      <project-details v-show="showProjectDetails" :visible="projectDetailsVisible"></project-details>
+    </transition>
 
-    <div class="name-wrapper">
-      <div class="grid-x">
-        <div class="cell small-10 small-offset-1">
-          <div class="main-name">
-            <div class="main-name__first">Stéphane</div>
-            <div class="main-name__last">CLAUDON</div>
-          </div>
+    <transition name="trans-name">
+      <div v-show="!showProjectDetails" class="name-wrapper small-offset-1">
+        <div class="main-name">
+          <div class="main-name__first">Stéphane</div>
+          <div class="main-name__last">CLAUDON</div>
         </div>
       </div>
-    </div>
+    </transition>
     
     <contact-box></contact-box>
 
@@ -30,7 +34,8 @@ import {
   Prop,
   Provide,
   Inject,
-  Model
+  Model,
+  Watch
 } from "vue-property-decorator";
 import ContactBox from "./components/contact.vue";
 import ProjectsSlider from "./components/projects-slider.vue";
@@ -39,8 +44,10 @@ import ProjectDetails from "./components/project-details.vue";
 import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
-import * as ModernizrObject from 'modernizr';
-import VideoSnapshooter from "./components-ts/VideoSnapshooter"
+import * as ModernizrObject from "modernizr";
+import { TweenLite, Power2 } from "gsap";
+//@ts-ignore
+import "gsap/ScrollToPlugin";
 
 @Component({
   components: {
@@ -51,18 +58,76 @@ import VideoSnapshooter from "./components-ts/VideoSnapshooter"
   }
 })
 export default class App extends Vue {
-  @State("currentProject") currentProject: Object;
+  @State("projects") projects: Array<any>;
+  @State("currentProject") currentProject: any;
 
   @Mutation(MutationTypes.LOAD_PROJECTS)
   loadProject: (projects: Array<Object>) => void;
+
+  @Mutation(MutationTypes.SET_CURRENT_PROJECT)
+  setCurrentProject: (project: Object) => void;
+
+  private transitioning: boolean = false;
+  private showProjectDetails: boolean = false;
+  private projectDetailsVisible: boolean = false;
 
   get Modernizr(): any {
     return ModernizrObject;
   }
 
+  get sliderActive(): boolean {
+    return this.currentProject.id === undefined;
+  }
+
   created() {
     this.loadProject(jsonData);
-    //VideoSnapshooter.getInstance().init();
+    if (this.$router.currentRoute.name === "project") {
+      this.gotoProject(this.$router.currentRoute.params.id);
+      this.projectDetailsVisible = true;
+    }
+  }
+
+  @Watch("$route")
+  onRouteChanged(to: any, from: any): void {
+    if (to.name === "project") {
+      this.gotoProject(to.params.id);
+    } else if (to.name != "contact"){
+      this.showProjectDetails = false;
+    }
+  }
+
+  @Watch("currentProject")
+  onProjectChanged(to: any, from: any): void {    
+  }
+
+  gotoProject(projectId: string): void {
+    this.showProjectDetails = true;
+    this.setCurrentProject(this.getProjectFromId(projectId));
+  }
+
+  onTransitionBeforeEnter(el: HTMLElement) {
+    this.transitioning = true;
+  }
+  onTransitionAfterEnter(el: HTMLElement) {
+    this.projectDetailsVisible = true;
+    this.transitioning = false;
+  }
+
+  onTransitionBeforeLeave(el: HTMLElement) {
+    this.transitioning = true;
+  }
+
+  onTransitionAfterLeave(el: HTMLElement) {
+    this.projectDetailsVisible = false;
+    this.transitioning = false;
+  }
+
+  getProjectFromId(projectId: string): any {
+    for (let index = 0; index < this.projects.length; index++) {
+      if (this.projects[index].id === projectId) {
+        return this.projects[index];
+      }
+    }
   }
 }
 </script>
@@ -86,7 +151,14 @@ export default class App extends Vue {
 .name-wrapper {
   position: absolute;
   top: 5%;
-  width: 100%;
+}
+.app {
+  &--transitioning {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
 }
 
 .main {
@@ -114,5 +186,40 @@ export default class App extends Vue {
       letter-spacing: 0.105em;
     }
   }
+}
+
+.project-slider-container {
+  height: 100%;
+  width: 100%;
+}
+
+.trans-slider-enter-active, .trans-slider-leave-active {
+  @include transition(all .5s ease-out);
+  @include transform(scale(1));
+  @include opacity(1);
+}
+.trans-slider-enter, .trans-slider-leave-to {
+  @include opacity(0);
+  @include transform(scale(0.7));
+}
+
+.trans-project-enter-active, .trans-project-leave-active {
+  @include transition(all .5s ease-out);
+  @include transform(scale(1));
+  @include opacity(1);
+}
+.trans-project-enter, .trans-project-leave-to {
+  @include opacity(0);
+  @include transform(scale(1.4));
+}
+
+.trans-name-enter-active, .trans-name-leave-active {
+  @include transition(all .5s ease);
+  @include transform(translateY(0));
+  @include opacity(1);
+}
+.trans-name-enter, .trans-name-leave-to {
+  @include transform(translateY(-50px));
+  @include opacity(0);
 }
 </style>

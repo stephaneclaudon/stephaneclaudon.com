@@ -17,7 +17,8 @@ let config = {
     }
   },
   devServer: {
-    noInfo: false
+    noInfo: false,
+    historyApiFallback: true
   },
   module: {
     rules: [

@@ -30,9 +30,6 @@ import {
 } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
 import * as PIXI from "pixi.js";
-import { TweenLite, Power4 } from "gsap";
-//@ts-ignore
-import "gsap/ScrollToPlugin";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 
@@ -51,10 +48,8 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-
-  @Mutation(MutationTypes.SET_CURRENT_PROJECT)
-  setCurrentProject: (project: Object) => void;
-
+  @Prop() sliderActive: boolean;
+  
   created() {
     
   }
@@ -116,15 +111,20 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onProjectClicked(projectIndex: number): void {
-    this.setCurrentProject(this.projects[projectIndex]);
-    TweenLite.to(window, 1, {
-        scrollTo: window.innerHeight * 0.5, ease: Power4.easeOut
-    });
-    
+    this.$router.push({ name: 'project', params: { id: this.projects[projectIndex].id }})
   }
 
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
+  }
+
+  @Watch('sliderActive')
+  onSliderStateChanged(val: boolean, oldVal: boolean) {
+    if(val) {
+      this.pixiApp.ticker.start();
+    } else {
+      this.pixiApp.ticker.stop();
+    }
   }
 
   initTitles(): void {
@@ -141,10 +141,12 @@ export default class ProjectsSliderCanvas extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  @import "../style/main.scss";
+
   #videosContainer {
     visibility: hidden;
-    position: relative;
+    position: fixed;
     video {
       position: absolute;
       width: 100%;
@@ -156,8 +158,6 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     top: 0;
     left: 0;
-
-    
   }
 
   .projects-slider-canvas {

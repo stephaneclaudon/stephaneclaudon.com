@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueRouter from 'vue-router'
 import App from './App.vue'
 import { State } from './store/state'
 import getters from './store/getters'
@@ -8,11 +9,22 @@ import mutations from './store/mutations'
 import Stats from './lib/stats.min.js'
 
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', name: 'home', component: App },
+    { path: '/project/:id', name: 'project', component: App },
+    { path: '/contact', name: 'contact', component: App }
+  ]
+})
 
 let vueApp: Vue = new Vue({
   el: document.querySelector('#app') as Element,
   components: {App},
+  router,
   store: new Vuex.Store({ 
     state: new State(),
     getters,
