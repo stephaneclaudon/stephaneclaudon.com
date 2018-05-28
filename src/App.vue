@@ -1,19 +1,25 @@
 <template>
-  <div class="app grid-container full">
+  <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
 
-    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
-    <projects-slider v-else class="project-slider"></projects-slider>
-
-    <transition name="trans-project">
-      <project-details v-if="this.currentProject.id" :project="this.currentProject"></project-details>
+    <transition name="trans-slider">
+      <div v-show="!showProjectDetails" class="project-slider-container">
+        <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
+        <projects-slider v-else class="project-slider"></projects-slider>
+      </div>
     </transition>
 
-    <div class="name-wrapper small-offset-1">
-      <div class="main-name">
-        <div class="main-name__first">Stéphane</div>
-        <div class="main-name__last">CLAUDON</div>
+    <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
+      <project-details v-show="showProjectDetails" :visible="projectDetailsVisible"></project-details>
+    </transition>
+
+    <transition name="trans-name">
+      <div v-show="!showProjectDetails" class="name-wrapper small-offset-1">
+        <div class="main-name">
+          <div class="main-name__first">Stéphane</div>
+          <div class="main-name__last">CLAUDON</div>
+        </div>
       </div>
-    </div>
+    </transition>
     
     <contact-box></contact-box>
 
@@ -61,7 +67,9 @@ export default class App extends Vue {
   @Mutation(MutationTypes.SET_CURRENT_PROJECT)
   setCurrentProject: (project: Object) => void;
 
-  private needScrollDown: boolean = false;
+  private transitioning: boolean = false;
+  private showProjectDetails: boolean = false;
+  private projectDetailsVisible: boolean = false;
 
   get Modernizr(): any {
     return ModernizrObject;
@@ -75,6 +83,7 @@ export default class App extends Vue {
     this.loadProject(jsonData);
     if (this.$router.currentRoute.name === "project") {
       this.gotoProject(this.$router.currentRoute.params.id);
+      this.projectDetailsVisible = true;
     }
   }
 
@@ -83,38 +92,34 @@ export default class App extends Vue {
     if (to.name === "project") {
       this.gotoProject(to.params.id);
     } else if (to.name != "contact"){
-      this.setCurrentProject({});
-      this.needScrollDown = false;
+      this.showProjectDetails = false;
     }
   }
 
   @Watch("currentProject")
   onProjectChanged(to: any, from: any): void {    
-    this.checkScrollDown();
   }
 
   gotoProject(projectId: string): void {
-    this.needScrollDown = true;
+    this.showProjectDetails = true;
     this.setCurrentProject(this.getProjectFromId(projectId));
   }
 
-  mounted(): void {
-    this.checkScrollDown();
+  onTransitionBeforeEnter(el: HTMLElement) {
+    this.transitioning = true;
+  }
+  onTransitionAfterEnter(el: HTMLElement) {
+    this.projectDetailsVisible = true;
+    this.transitioning = false;
   }
 
-  updated(): void {
-    this.checkScrollDown();
+  onTransitionBeforeLeave(el: HTMLElement) {
+    this.transitioning = true;
   }
 
-  checkScrollDown(): void {
-    this.$nextTick(() => {
-        if(this.needScrollDown) {
-          /*TweenLite.to(window, 0.5, {
-            scrollTo: window.innerHeight * 0.5, ease: Power2.easeInOut, delay: 0.05
-          });*/
-        }
-      });
-    
+  onTransitionAfterLeave(el: HTMLElement) {
+    this.projectDetailsVisible = false;
+    this.transitioning = false;
   }
 
   getProjectFromId(projectId: string): any {
@@ -147,6 +152,14 @@ export default class App extends Vue {
   position: absolute;
   top: 5%;
 }
+.app {
+  &--transitioning {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+}
 
 .main {
   &-name {
@@ -175,25 +188,38 @@ export default class App extends Vue {
   }
 }
 
+.project-slider-container {
+  height: 100%;
+  width: 100%;
+}
+
+.trans-slider-enter-active, .trans-slider-leave-active {
+  @include transition(all .5s ease-out);
+  @include transform(scale(1));
+  @include opacity(1);
+}
+.trans-slider-enter, .trans-slider-leave-to {
+  @include opacity(0);
+  @include transform(scale(0.7));
+}
+
 .trans-project-enter-active, .trans-project-leave-active {
   @include transition(all .5s ease-out);
   @include transform(scale(1));
-  .project-details-header, .project-details-video, .project-details-credits {
-    @include transition(all .5s ease-out);
-    @include transform(translateY(0));
-  }
+  @include opacity(1);
 }
 .trans-project-enter, .trans-project-leave-to {
   @include opacity(0);
   @include transform(scale(1.4));
-  /*.project-details-header {
-    transform: translateY(50%);
-  }
-  .project-details-video {
-    transform: translateY(70%);
-  }
-  .project-details-credits {
-    transform: translateY(100%);
-  }*/
+}
+
+.trans-name-enter-active, .trans-name-leave-active {
+  @include transition(all .5s ease);
+  @include transform(translateY(0));
+  @include opacity(1);
+}
+.trans-name-enter, .trans-name-leave-to {
+  @include transform(translateY(-50px));
+  @include opacity(0);
 }
 </style>

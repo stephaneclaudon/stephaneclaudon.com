@@ -11,7 +11,7 @@
         <h2 class="project-details-header--title">{{ currentProject.title }}</h2>
       </div>
 
-      <embed-video-player class="project-details-video" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
+      <embed-video-player class="project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
       <div class="project-details-credits cell small-10 small-offset-1">
         <h2>Credits</h2>
@@ -37,8 +37,9 @@
     }
   })
   export default class ProjectDetails extends Vue {
-    @State('projects') projects: Array<Object>
-    @State('currentProject') currentProject: Object
+    @State('projects') projects: Array<Object>;
+    @State('currentProject') currentProject: Object;
+    @Prop() visible: boolean;
   }
 </script>
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="video-player">
-    <iframe v-if="plateform === 'vimeo' && isMounted" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe v-if="plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ import {
 export default class EmbedVideoPlayer extends Vue {
   @Prop() plateform: string;
   @Prop() videoId: string;
+  @Prop() visible: boolean;
 
   private isMounted: boolean = false;
 
