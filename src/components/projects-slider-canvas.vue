@@ -1,5 +1,5 @@
 <template>
-  <div id="projects-slider-canvas" class="projects-slider-canvas">
+  <div id="projects-slider-canvas" class="projects-slider-canvas" :class="{'inactive': !active}">
     <div id="videosContainer">
       <video id="video" playsinline loop muted autoplay>
         <source :src="getVideoPath()" type="video/mp4">
@@ -48,7 +48,7 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-  @Prop() sliderActive: boolean;
+  @Prop() active: boolean;
   
   created() {
     
@@ -111,14 +111,19 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onProjectClicked(projectIndex: number): void {
-    this.$router.push({ name: 'project', params: { id: this.projects[projectIndex].id }})
+    if(this.active) {
+      this.$router.push({ name: 'project', params: { id: this.projects[projectIndex].id }})
+    } else {
+      this.$router.push({ name: 'home', params: {}})
+    }
+    
   }
 
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
   }
 
-  @Watch('sliderActive')
+  @Watch('active')
   onSliderStateChanged(val: boolean, oldVal: boolean) {
     if(val) {
       this.pixiApp.ticker.start();
@@ -166,6 +171,12 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     position: relative;
     z-index: 0;
+    @include transition(height .5s ease);
+
+    &.inactive {
+      height: 20%;
+      overflow: visible;
+    }
 
     /*&::after {
       pointer-events: none;

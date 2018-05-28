@@ -1,12 +1,8 @@
 <template>
   <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
 
-    <transition name="trans-slider">
-      <div v-show="!showProjectDetails" class="project-slider-container">
-        <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
-        <projects-slider v-else class="project-slider"></projects-slider>
-      </div>
-    </transition>
+    <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
+    <projects-slider v-else class="project-slider"></projects-slider>
 
     <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
       <project-details v-show="showProjectDetails" :visible="projectDetailsVisible"></project-details>
@@ -76,7 +72,7 @@ export default class App extends Vue {
   }
 
   get sliderActive(): boolean {
-    return this.currentProject.id === undefined;
+    return !this.showProjectDetails;
   }
 
   created() {
@@ -210,7 +206,7 @@ export default class App extends Vue {
 }
 .trans-project-enter, .trans-project-leave-to {
   @include opacity(0);
-  @include transform(scale(1.4));
+  //@include transform(scale(1.4));
 }
 
 .trans-name-enter-active, .trans-name-leave-active {

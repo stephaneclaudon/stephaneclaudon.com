@@ -6,10 +6,10 @@
         </router-link>
       </div>
 
-      <div class="project-details-header cell small-10 small-offset-1">
+      <!--<div class="project-details-header cell small-10 small-offset-1">
         <h1 class="project-details-header--client">{{ currentProject.client }}</h1>
         <h2 class="project-details-header--title">{{ currentProject.title }}</h2>
-      </div>
+      </div>-->
 
       <embed-video-player class="project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
@@ -46,15 +46,16 @@
   @import '../style/main.scss';
 
   .project-details {
-    position: absolute;
-    top: 0;
+    
     background: $black;
     width: 100%;
     min-height: 100%;
 
     &-back-button {
+      position: absolute;
       display: inline-block;
-      margin: 4em 0 0 0;
+      left: 8%;
+      top: 1em;
     }
 
     &-header {
