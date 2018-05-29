@@ -9,7 +9,7 @@
     <canvas id="pixiElement"></canvas>
     <div id="projects-slider-canvas-titles" class="projects-slider-canvas-titles" ref="sliderTitlesContainer">
       <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id">
-            <div class="cell small-9 small-offset-1">
+            <div class="cell small-10 small-offset-1">
               <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
             </div>
         </div>
@@ -146,7 +146,7 @@ export default class ProjectsSliderCanvas extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import "../style/main.scss";
 
   #videosContainer {
@@ -166,16 +166,28 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   .projects-slider-canvas {
-    overflow: hidden;
     height: 100%;
     width: 100%;
     position: relative;
     z-index: 0;
-    @include transition(height .5s ease);
+    overflow: hidden;
+    @include transition(all .5s ease-out);
+    &-titles .grid-x, &-titles .grid-x .call, &-titles .projects-slider-item__title h1 {    
+      @include transition(all .5s ease-out);
+    }
 
     &.inactive {
-      height: 20%;
-      overflow: visible;
+      height: 35%;
+      .projects-slider-canvas-titles {
+        .grid-x {
+          .cell {
+            margin-top: 0%;
+            .projects-slider-item__title h1 {
+              width: 100%;
+            }
+          }
+        }
+      }
     }
 
     /*&::after {
@@ -202,6 +214,15 @@ export default class ProjectsSliderCanvas extends Vue {
         text-align: left;
         .cell {
           margin-top: 35%;
+          .projects-slider-item__title h1 {
+            text-align: center;
+            display: inline-block;
+            width: 22%;
+            .title--inner {
+              white-space: nowrap
+            }
+          }
+          
         }
       }
     }
