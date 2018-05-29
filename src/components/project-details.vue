@@ -1,16 +1,23 @@
 <template>
   <div class="project-details grid-x">
-      <div class="cell small-10 small-offset-1 align-text-right">
-        <router-link class="project-details-back-button" :to="{ name: 'home' }">
-          <close-button></close-button>
-        </router-link>
-      </div>
-
+      
       <div class="project-details-header cell small-10 small-offset-1">
-        <h1 class="project-details-header--client">{{ currentProject.client }}</h1>
-        <h2 class="project-details-header--title">{{ currentProject.title }}</h2>
+        <div class="grid-x">
+          <div class="cell small-1">
+            <router-link class="project-details-back-button" :to="{ name: 'home' }">
+              <close-button></close-button>
+            </router-link>
+          </div>
+          <div class="cell small-10">
+            <projects-slider-item-title :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
+            <!--<h1 class="project-details-header--client">{{ currentProject.client }}</h1>
+            <h2 class="project-details-header--title">{{ currentProject.title }}</h2>-->
+          </div>
+          
+        </div>        
       </div>
 
+      
       <embed-video-player class="project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
       <div class="project-details-credits cell small-10 small-offset-1">
@@ -28,12 +35,14 @@
   import OtherProjects from '../components/other-projects.vue'
   import EmbedVideoPlayer from '../components/embedVideoPlayer.vue'
   import CloseButton from '../components/closeButton.vue'
+  import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
   
   @Component({
     components: {
       OtherProjects,
       EmbedVideoPlayer,
-      CloseButton
+      CloseButton,
+      ProjectsSliderItemTitle
     }
   })
   export default class ProjectDetails extends Vue {
@@ -54,23 +63,18 @@
 
     &-back-button {
       display: inline-block;
-      margin: 4em 0 0 0;
     }
 
     &-header {
-      color: $light-grey;
-      letter-spacing: 0.05em;
       text-align: center;
-      text-transform: uppercase;
       margin-top: 2em;
       margin-bottom: 2em;
+      
       &--client {
-        @include roboto-light;
-        font-size: 1.5em;
+        font-size: 1em;
       }
       &--title {
-        @include roboto-black;
-        font-size: 2.5em;
+        font-size: 2em;
       }
     }
     &-video {

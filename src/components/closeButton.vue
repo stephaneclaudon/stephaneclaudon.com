@@ -29,8 +29,8 @@ export default class CloseButton extends Vue {
 .close-button {
   .outer {
     display: inline-block;
-    width: 3.8em;
-    height: 3.8em;
+    width: 1.8em;
+    height: 1.8em;
     cursor: pointer;
   }
 
@@ -38,6 +38,8 @@ export default class CloseButton extends Vue {
     width: inherit;
     text-align: center;
     position: relative;
+    line-height: inherit;
+    height: inherit;
   }
 
   label {
