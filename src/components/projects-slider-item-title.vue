@@ -1,6 +1,6 @@
 <template>
     <div class="projects-slider-item__title">
-        <h1 v-if="alive">
+        <h1 v-if="alive && titleComputed">
           <span class="title--outer" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex">
             <span class="title--inner"><span>{{ titleString }}</span></span>
             <br />
