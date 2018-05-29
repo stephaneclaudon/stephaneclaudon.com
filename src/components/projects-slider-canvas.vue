@@ -48,7 +48,7 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-  @Prop() sliderActive: boolean;
+  @Prop() active: boolean;
   
   created() {
     
@@ -118,7 +118,7 @@ export default class ProjectsSliderCanvas extends Vue {
     return this.currentIndex === index;
   }
 
-  @Watch('sliderActive')
+  @Watch('active')
   onSliderStateChanged(val: boolean, oldVal: boolean) {
     if(val) {
       this.pixiApp.ticker.start();

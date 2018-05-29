@@ -2,7 +2,7 @@
   <div class="close-button">
       <div class="outer">
         <div class="inner">
-            <label>Back</label>
+            <label>Close</label>
         </div>
     </div>
   </div>
@@ -60,7 +60,6 @@ export default class CloseButton extends Vue {
     width: inherit;
     background: #ffffff;
     left: 0;
-    @include transition(all 0.1s ease-in-out);
   }
 
   .inner:before {
@@ -71,23 +70,6 @@ export default class CloseButton extends Vue {
   .inner:after {
     bottom: 50%;
     @include transform(rotate(-45deg));
-  }
-
-  .outer:hover label {
-    @include opacity(1);
-  }
-
-  .outer:hover .inner:before,
-  .outer:hover .inner:after {
-    @include transform(rotate(0));
-  }
-
-  .outer:hover .inner:before {
-    top: 0;
-  }
-
-  .outer:hover .inner:after {
-    bottom: 0;
   }
 }
 </style>

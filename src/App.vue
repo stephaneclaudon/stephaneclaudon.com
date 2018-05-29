@@ -2,7 +2,7 @@
   <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
 
     <div class="project-slider-container" :class="{'inactive': !projectSliderVisible}">
-      <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
+      <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="projectSliderVisible"></projects-slider-canvas>
       <projects-slider v-else class="project-slider"></projects-slider>
     </div>
 
@@ -202,13 +202,24 @@ export default class App extends Vue {
   @include transition(all 0.3s ease-out);
   @include transform(scale(1));
   @include opacity(1);
+
+  /*.projects-slider-canvas-titles .grid-x .cell {
+    @include transition(all 0.3s ease-out);
+  }*/
 }
 .trans-name-enter, .trans-name-leave-to, .project-slider-container.inactive  {
   @include opacity(0);
   @include transform(scale(0.8));
+
+  /*.projects-slider-canvas-titles .grid-x .cell {
+    margin-top: -110%;
+    margin-left: 25%;
+  }*/
+  
 }
 
 .trans-project-enter-active, .trans-project-leave-active {
+  pointer-events: none;
   @include transition(all 0.3s ease-out);
   @include transform(scale(1));
   @include opacity(1);

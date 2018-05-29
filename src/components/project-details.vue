@@ -17,7 +17,6 @@
         </div>        
       </div>
 
-      
       <embed-video-player class="project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
       <div class="project-details-credits cell small-10 small-offset-1">
@@ -51,7 +50,7 @@
     @Prop() visible: boolean;
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../style/main.scss';
 
   .project-details {
@@ -94,6 +93,23 @@
         white-space: pre-wrap; 
         word-wrap: break-word;
         line-height: 1.3em;
+      }
+    }
+
+    .projects-slider-item__title {
+      .title--innerfake, .title--inner {
+        font-size: 1.2em;
+      }
+      .title--outer:first-child {
+        .title--innerfake, .title--inner {
+          font-size: 1.2em;
+        }
+      } 
+      .title--inner {
+        span, &::before, &::after {
+          @include animation-duration(0.01s !important);
+          @include animation-delay(0.01s !important);
+        }
       }
     }
   }
