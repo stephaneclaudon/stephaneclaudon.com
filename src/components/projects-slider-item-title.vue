@@ -7,7 +7,7 @@
           </span>
         </h1>
 
-        <div v-if="!titleComputed" class="title--innerfake"><span :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
+        <div v-if="!titleComputed" class="title--innerfake"><span ref="innerfake" :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
     </div>
 </template>
 
@@ -20,16 +20,13 @@ export default class ProjectsSliderItem extends Vue {
   projectArrayTitle: Array<string> = [];
   titleComputed: boolean = false;
   inited: boolean = false;
-
+  
   @Prop() project: any;
   @Prop() projectIndex: number;
-  @Prop({ default: false })
-  alive: boolean;
+  @Prop({ default: false }) alive: boolean;
 
   mounted() {
-    this.projectArrayTitle = Utils.lineBreaksToArray(document.getElementById(
-      this.project.id
-    ) as Element);
+    this.projectArrayTitle = Utils.lineBreaksToArray(this.$refs.innerfake as Element); 
     this.titleComputed = true;
   }
 }
