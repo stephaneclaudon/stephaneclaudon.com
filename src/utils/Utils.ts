@@ -16,7 +16,7 @@ export default class Utils {
                 }
                 
                 if ((htmlElement.getBoundingClientRect().height > height && i > 0)) {                    
-                    currentTitleArray.push(words.slice(lastFoundWordIndex, i).join(" "));
+                    currentTitleArray.push(words.slice(lastFoundWordIndex, i).join(" ").trim());
                     lastFoundWordIndex = i;
                 }
                 height = htmlElement.getBoundingClientRect().height;
