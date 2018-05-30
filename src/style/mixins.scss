@@ -14,6 +14,15 @@
  -webkit-transform: $transforms;
        transform: $transforms;
 }
+
+// generic transform-origin
+@mixin transform-origin($transforms) {
+    -moz-transform-origin: $transforms;
+      -o-transform-origin: $transforms;
+     -ms-transform-origin: $transforms;
+ -webkit-transform-origin: $transforms;
+       transform-origin: $transforms;
+}
 // rotate
 @mixin rotate ($deg) {
 @include transform(rotate(#{$deg}deg));
@@ -65,6 +74,18 @@
     /* IE6-9 */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from', endColorstr='$to',GradientType=1 );
 }
+
+@mixin vertical-gradient($startColor: #555, $endColor: #333, $start: 100%, $stop: 100%) {
+    background-color: $startColor;
+    background-image: -moz-linear-gradient(top, $startColor $start, $endColor $stop); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop($start, $startColor), color-stop($stop, $endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, $startColor $start, $endColor $stop); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, $startColor $start, $endColor $stop); // Opera 11.10
+    background: -ms-linear-gradient(top, $startColor $start, $endColor $stop); // IE10
+    background: linear-gradient(top, $startColor $start, $endColor $stop); // The standard
+    /* IE6-9 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
+  }
 
 @mixin animation ($delay, $duration, $animation, $direction: forward, $fillmode: forwards) {
     -webkit-animation-delay: $delay;

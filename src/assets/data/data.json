@@ -1,25 +1,5 @@
 [
     {
-        "id": "nautilus",
-        "title": "to Nautilus",
-        "client": "Your Pride",
-        "videoid": "257029486",
-        "videoplateform": "vimeo",
-        "mainloop": 1,
-        "credits": "nautilus Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
-        "detailloops": 1
-    },
-    {
-        "id": "awpc",
-        "title": "Another Worthless Personal Creation",
-        "client": "personal",
-        "videoid": "22388984",
-        "videoplateform": "vimeo",
-        "mainloop": 1,
-        "credits": "awpc Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
-        "detailloops": 1
-    },
-    {
         "id": "quattro2",
         "title": "Candide Thovex Quattro 2",
         "client": "AUDI",
@@ -31,6 +11,19 @@
         "date": "October 2016"
     },
     {
+        "id": "nautilus",
+        "title": "to Nautilus",
+        "client": "Your Pride",
+        "videoid": "257029486",
+        "videoplateform": "vimeo",
+        "mainloop": 1,
+        "description": "Official music video for the French deathcore band : Your Pride.",
+        "credits": "quattro2 Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
+        "detailloops": 1,
+        "date": "October 2016",
+        "gallerycount": 8
+    },
+    {
         "id": "ootd3",
         "title": "One of those days 3",
         "client": "Candide Thovex",
@@ -38,7 +31,19 @@
         "videoplateform": "youtube",
         "mainloop": 1,
         "credits": "ootd3 Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
-        "detailloops": 1
+        "detailloops": 1,
+        "date": "October 2016"
+    },
+    {
+        "id": "awpc",
+        "title": "Another Worthless Personal Creation",
+        "client": "personal",
+        "videoid": "22388984",
+        "videoplateform": "vimeo",
+        "mainloop": 1,
+        "credits": "awpc Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
+        "detailloops": 1,
+        "date": "October 2016"
     },
     {
         "id": "perfectmoment",
@@ -48,6 +53,7 @@
         "videoplateform": "vimeo",
         "mainloop": 1,
         "credits": "perfectmoment Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
-        "detailloops": 1
+        "detailloops": 1,
+        "date": "October 2016"
     }
 ]

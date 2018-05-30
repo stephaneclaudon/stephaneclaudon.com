@@ -83,25 +83,9 @@ export default class EmbedVideoPlayer extends Vue {
   .video-player {
     width: 100%;
     height: 56vw;
-    /*@keyframes videoPlayer {
-      from {
-        transform: scaleY(3.3) translateY(14%);
-      }
-      to {
-        transform: scaleY(1) translateY(0);
-      }
-    }
-    @include animation(0s, 0.3s, videoPlayer);
-    @include animation-timing-function(ease-out);*/
 
     &--poster {
       height: 100%;
-      > div {
-        height: 100%;
-        img {
-          height: 100%;
-        }
-      }
     }
   }
 </style>

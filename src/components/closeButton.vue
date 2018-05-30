@@ -1,11 +1,9 @@
 <template>
-  <div class="close-button">
-      <div class="outer">
-        <div class="inner">
-            <label>Close</label>
-        </div>
-    </div>
-  </div>
+  <span class="outer">
+    <span class="inner">
+      <label>Close</label>
+    </span>
+  </span>
 </template>
 
 <script lang="ts">
@@ -26,15 +24,18 @@ export default class CloseButton extends Vue {
 <style lang="scss" scoped>
 @import "../style/main.scss";
 
-.close-button {
+
   .outer {
+    line-height: 1;
+    vertical-align: middle;
     display: inline-block;
-    width: 1.8em;
-    height: 1.8em;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
   }
 
   .inner {
+    display: block;
     width: inherit;
     text-align: center;
     position: relative;
@@ -56,20 +57,19 @@ export default class CloseButton extends Vue {
   .inner:after {
     position: absolute;
     content: "";
-    height: 1px;
+    height: 2px;
     width: inherit;
     background: #ffffff;
     left: 0;
   }
 
   .inner:before {
-    top: 50%;
+    top: 8px;
     @include transform(rotate(45deg));
   }
 
   .inner:after {
-    bottom: 50%;
+    bottom: 8px;
     @include transform(rotate(-45deg));
   }
-}
 </style>

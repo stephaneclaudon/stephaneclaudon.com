@@ -11,7 +11,6 @@
 
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
-  import OtherProjects from '../components/other-projects.vue'
   
   @Component
   export default class ImageSrc extends Vue {
