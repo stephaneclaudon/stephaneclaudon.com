@@ -43,13 +43,14 @@ export default class Gallery extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "../style/main.scss";
 .gallery {
     overflow: hidden;
   &-cell {
-      height: 50vw;
+      height: 42vw;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
+      border: solid 5px $black;
+      box-sizing: border-box;
 
       img {
         height: 100%;

@@ -14,13 +14,17 @@
       </div>   
     </div>
 
-    <div class="cell small-12 small-offset-0">
+    <div class="project-details-description cell small-10 small-offset-1">
+      <p>{{ currentProject.description }}</p>
+    </div>
+
+    <div class="cell small-10 small-offset-1">
       <div class="grid-x">
         <gallery class="project-details-gallery"></gallery>
       </div>
     </div>
       
-    <embed-video-player class="project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
+    <embed-video-player class="cell small-10 small-offset-1 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
     <div class="project-details-credits cell small-10 small-offset-1">
       <h2>Credits</h2>
@@ -63,7 +67,7 @@ export default class ProjectDetails extends Vue {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../style/main.scss";
 
 .project-details {
@@ -153,7 +157,7 @@ export default class ProjectDetails extends Vue {
   &-video {
   }
 
-  &-credits {
+  &-credits, &-description {
     color: $grey;
     padding: 2em 0;
     font-size: 1.2em;
@@ -171,6 +175,12 @@ export default class ProjectDetails extends Vue {
 
     &-date {
       padding: 2em 0;
+    }
+  }
+
+  &-description {
+    p {
+      font-size: 1.1em;
     }
   }
 }

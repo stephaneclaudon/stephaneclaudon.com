@@ -1,5 +1,20 @@
 [
     {
+        "id": "nautilus",
+        "title": "to Nautilus",
+        "client": "Your Pride",
+        "videoid": "257029486",
+        "videowidth": 1920,
+        "videoheight": 800,
+        "videoplateform": "vimeo",
+        "mainloop": 1,
+        "description": "Official music video for the French deathcore band : Your Pride.",
+        "credits": "Music writing, performing : Your Pride\r\nhttp:\/\/www.weareyourpride.com\r\n\r\nProduction : Aur\u00E9lien Pereira (Flatcurve)\r\nhttp:\/\/www.facebook.com\/flatcurve\r\n\r\nStoryboard, direction, animation & compositing : St\u00E9phane Claudon\u0003\r\nhttp:\/\/www.stephaneclaudon.com\r\n\r\nAdditional VFX : Crapule Prod\r\nhttp:\/\/www.facebook.com\/CrapuleProduction\r\n\r\nAstronaut model : Raoul Marks\r\nhttp:\/\/www.raoulmarks.com\n",
+        "detailloops": 1,
+        "date": "October 2016",
+        "gallerycount": 8
+    },
+    {
         "id": "quattro2",
         "title": "Candide Thovex Quattro 2",
         "client": "AUDI",
@@ -9,19 +24,6 @@
         "detailloops": 1,
         "credits": "quattro2 Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
         "date": "October 2016"
-    },
-    {
-        "id": "nautilus",
-        "title": "to Nautilus",
-        "client": "Your Pride",
-        "videoid": "257029486",
-        "videoplateform": "vimeo",
-        "mainloop": 1,
-        "description": "Official music video for the French deathcore band : Your Pride.",
-        "credits": "quattro2 Client: HBO\nDirector: Patrick Clair \nLead Animator / Compositor: Raoul Marks\nDesign & Visual Research: Paul Kim, Jeff Han, Felix Soletic, Maxx Burman, Henry DeLeon, Dan Alexandru.\nStoryboard Artist: Lance Slaton\nLighter: Shamus Johnson\nAnimator / Compositor: Yongsub Song\nHead of CG: Kirk Shintari \n3D Artists: Jose Limon Jessica Hurst, Dustin Mellum, Rie Ito, Joe Paniagua\n3D Rigging: Josh Dyer \nProducer: Ben Foster\nSupervising Producer: Carol Salek\nHead of Production: Kim Christensen \nManaging Partner: Jennifer Sofio Hall\nSpecial Thanks to Jonathan Nolan, Lisa Joy, Bruce Dunn, Stephen Semel, Athena Wickham, Roberto Patino and HBO\n",
-        "detailloops": 1,
-        "date": "October 2016",
-        "gallerycount": 8
     },
     {
         "id": "ootd3",

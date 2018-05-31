@@ -220,7 +220,7 @@ export default class App extends Vue {
 
 .trans-project-enter-active, .trans-project-leave-active {
   pointer-events: none;
-  @include transition(all 0.3s ease-out);
+  @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
   @include transform-origin(center 50vh);
   @include transform(scale(1));
   @include opacity(1);
