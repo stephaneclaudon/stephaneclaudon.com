@@ -1,11 +1,10 @@
 <template>
   <div class="video-player" :style="style">
     
-    
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
-      <image-src :name="project.id" :title="project.title"></image-src>
+      <image-src :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible"></image-src>
       <span class="video-player-play-button">
         <span></span>
       </span>
@@ -40,6 +39,7 @@ export default class EmbedVideoPlayer extends Vue {
   private height: number = 0;
   private style: string = "";
 
+  private imagePath: string = "/dist/assets/img/";
 
   mounted() {
     this.isMounted = true;
@@ -60,6 +60,15 @@ export default class EmbedVideoPlayer extends Vue {
   
   setStyle(): void {
     this.style = "height: " + this.height + "px;";
+  }
+
+  getVideoPosterSrc(): Array<string> {
+    let srcs: Array<string> = [
+      this.imagePath + this.project.id + "@1x.jpg",
+      this.imagePath + this.project.id + "@2x.jpg",
+      this.imagePath + this.project.id + "@3x.jpg",
+    ];
+    return srcs;
   }
 
   @Watch("visible")
@@ -165,7 +174,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   &-loader {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 10;
     top: 50%;

@@ -20,7 +20,7 @@
 
     <div class="cell small-10 small-offset-1">
       <div class="grid-x">
-        <gallery class="project-details-gallery"></gallery>
+        <gallery class="project-details-gallery" :loadimages="visible"></gallery>
       </div>
     </div>
       
