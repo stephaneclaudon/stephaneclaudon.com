@@ -2,13 +2,14 @@
   <div class="video-player" :style="style">
     
     
-    <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
-    <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()">
+    <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
       <image-src :name="project.id" :title="project.title"></image-src>
       <span class="video-player-play-button">
         <span></span>
       </span>
+      <loader class="video-player-loader"></loader>
     </div>
   </div>
 </template>
@@ -17,10 +18,12 @@
 import { State } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
+import Loader from "./loader.vue";
 
 @Component({
   components: {
-    ImageSrc
+    ImageSrc,
+    Loader
   }
 })
 export default class EmbedVideoPlayer extends Vue {
@@ -114,12 +117,26 @@ export default class EmbedVideoPlayer extends Vue {
     position: relative;
     height: 100%;
     overflow: hidden;
+    &.loading {
+      .video-player-play-button {
+        display: none;
+      }
+      .video-player-loader {
+        display: block;
+      }
+      img {
+        @include opacity(0.5);
+      }
+    }
+
     img {
       height: 100%;
       width: auto;
       max-width: inherit;
     }
   }
+
+  
 
   &-play-button {
     position: absolute;
@@ -145,6 +162,15 @@ export default class EmbedVideoPlayer extends Vue {
       border-top: 22px solid transparent;
       border-bottom: 22px solid transparent;
     }
+  }
+
+  &-loader {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 }
 </style>
