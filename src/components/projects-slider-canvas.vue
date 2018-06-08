@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+    <pagination :page-count="projects.length" :current-index="currentIndex"></pagination> 
   </div>
 </template>
 
@@ -32,10 +33,12 @@ import * as MutationTypes from "../store/mutation-types";
 import * as PIXI from "pixi.js";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
+import Pagination from "./pagination.vue";
 
 @Component({
   components: {
-    ProjectsSliderItemTitle
+    ProjectsSliderItemTitle,
+    Pagination
   }
 })
 export default class ProjectsSliderCanvas extends Vue {

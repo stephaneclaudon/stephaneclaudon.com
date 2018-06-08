@@ -179,6 +179,7 @@ export default class ProjectDetails extends Vue {
   }
 
   &-description {
+    padding: 4em 0 2em 0;
     p {
       font-size: 1.1em;
     }
