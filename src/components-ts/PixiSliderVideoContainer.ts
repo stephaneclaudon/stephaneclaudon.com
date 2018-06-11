@@ -24,6 +24,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private app: PIXI.Application;
     private shader: PixelSortingFilter;
     private lastProjectIndex: number;
+    private previousProjectIndex: number;
     private currentProjectIndex: number;
     private projectIndexToGo: number;
     private screenHalfWidth: number;
@@ -164,7 +165,15 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
             } else {
                 this.position.x = newPos;
             }
+
+            this.updateNeighborScale();
         }
+    }
+
+    private updateNeighborScale(): void {
+        
+        //this.getChildAt(this.currentProjectIndex).scale.set((1 - (this.dragAmount / this.screenWidth) * 0.5) * (this.screenWidth / this.screenTextureWidth));
+        this.getChildAt(this.currentProjectIndex).position.x = (this.screenWidth * 0.5 + this.currentProjectIndex * this.screenWidth) + (this.dragAmount * this.dragDirection * 0.7);
     }
 
     private finishDrag() {
@@ -192,10 +201,13 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.dragTween = TweenLite.to(this.position, 0.5, {
             x: positionToGoTo, ease: Power4.easeOut, onComplete: this.onTweenEnded
         });
+        this.previousProjectIndex = this.currentProjectIndex;
         this.currentProjectIndex = this.projectIndexToGo;
     }
 
     private onTweenEnded = () => {
+        this.getChildAt(this.previousProjectIndex).scale.set((this.screenWidth / this.screenTextureWidth));
+        this.getChildAt(this.previousProjectIndex).position.x = (this.screenWidth * 0.5 + this.previousProjectIndex * this.screenWidth);
         cancelAnimationFrame(this.animationRequestId);
     }
 
