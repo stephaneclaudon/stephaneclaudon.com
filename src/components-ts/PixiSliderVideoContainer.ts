@@ -172,12 +172,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private computeClosestScreen(): void {
-
-        let positionToScreenCenter: number = Math.abs((this.position.x - this.pivot.x));
-        let numberOfScreensLeftSide: number = Math.abs(Math.floor(positionToScreenCenter / this.screenWidth));
-        let spaceBetweenLeftScreenAndCenter: number = (positionToScreenCenter % this.screenWidth) - this.screenHalfWidth;
-        let spaceBetweenLeftScreenAndLeftBorder: number = Math.abs((positionToScreenCenter % this.screenWidth) - (this.screenWidth));
-
         let detectionArea: number = this.screenWidth - (this.screenHalfWidth + (this.screenHalfWidth * (this.dragVelocity / this.dragMaxVelocity)));
         let numberOfScreenToJump: number = Math.floor((this.dragAmount + this.screenHalfWidth) / this.screenWidth);
         numberOfScreenToJump = (numberOfScreenToJump < 1) ? 1 : numberOfScreenToJump;
@@ -214,5 +208,10 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
         this.animationRequestId = requestAnimationFrame(handler);
+    }
+
+    public goToProjectIndex( index: number ): void {
+        this.projectIndexToGo = index;
+        this.executeTween();
     }
 }

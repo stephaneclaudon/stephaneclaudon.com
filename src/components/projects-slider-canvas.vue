@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <pagination :page-count="projects.length" :current-index="currentIndex"></pagination> 
+    <pagination class="pagination" :page-count="projects.length" :current-index="currentIndex"></pagination> 
   </div>
 </template>
 
@@ -51,6 +51,7 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
+  @State("sliderCurrentProjectId") currentSliderIndex: number;
   @Prop() active: boolean;
   
   created() {
@@ -130,6 +131,12 @@ export default class ProjectsSliderCanvas extends Vue {
     }
   }
 
+  @Watch('currentSliderIndex')
+  onSliderIndexChanged(index: number, oldIndex: number) {
+    this.projectsContainer.goToProjectIndex(index);
+    this.currentIndex = index;
+  }
+
   initTitles(): void {
     this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
     let allTitles: HTMLCollection = this.titlesContainerElement.children as HTMLCollection;
@@ -197,5 +204,14 @@ export default class ProjectsSliderCanvas extends Vue {
         }
       }
     }
+  }
+
+  .pagination {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    height: 10vh;
+    width: 100%;
   }
 </style>

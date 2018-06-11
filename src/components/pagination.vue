@@ -3,12 +3,14 @@
         <span class="border-indicator">
         </span>
         <ol class="ol-4" :class="'active-' + currentIndex">
-            <li v-for="index in pageCount" :key="index" class="circle circle-mid-opacity" :class="'circle-pg-' + index"></li>
+          <li v-for="index in pageCount" :key="index" class="circle" @click="goToIndex(index - 1)"></li>
         </ol>
     </div>
 </template>
 
 <script lang="ts">
+import * as MutationTypes from "../store/mutation-types";
+import { State, Mutation } from "vuex-class";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({
@@ -18,6 +20,15 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class Pagination extends Vue {
   @Prop() pageCount: number;
   @Prop() currentIndex: number;
+
+  @Mutation(MutationTypes.SLIDER_SET_CURRENT_PROJECT_ID)
+  setCurrentSliderIndex: (index: number) => void;
+
+  goToIndex( index: number ): void {
+    console.log(index);
+    
+    this.setCurrentSliderIndex(index);
+  }
 
 }
 </script>
@@ -31,11 +42,11 @@ $animation-length: 2s;
 $rect-width: 20px;
 $rect-height: 2px;
 $mid-opacity-color: rgba(255, 255, 255, 0.5);
-$border-indicator-width: $circle-width * 1.4;
+$full-opacity-color: rgba(255, 255, 255, 1.0);
+$border-indicator-width: $circle-width + 4;
+$circle-margin: 4px;
 
 .page {
-  position: relative;
-  height: 200px;
   display: flex;
   ol:not(.ol-4) {
     list-style: none;
@@ -50,12 +61,12 @@ $border-indicator-width: $circle-width * 1.4;
   width: $circle-width;
   height: $circle-width;
   border-radius: 50%;
-  margin: 4px;
+  margin: $circle-margin;
+  background-color: $mid-opacity-color;
+  cursor: pointer;
+  @include transition(background-color 0.3s ease-out);
 }
 
-.circle-mid-opacity {
-  background-color: $mid-opacity-color;
-}
 
 .border-indicator {
   position: absolute;
@@ -70,7 +81,7 @@ $border-indicator-width: $circle-width * 1.4;
 }
 
 @mixin move-circles-4 ($step) {
-  margin-left: -$border-indicator-width/2 - ($step * 2 * $circle-width) ;
+  margin-left: -($step * ($circle-width + $circle-margin * 2)) - ($border-indicator-width/2 + 1) ;
 }
 
 ol.ol-4 {
@@ -86,29 +97,13 @@ ol.ol-4 {
   margin-top: -$border-indicator-width/2 - 1px;
   @include transition(all 0.3s ease-out);
 
-  &.active-0 {
-    @include move-circles-4 (0);
-  }
-  &.active-1 {
-      @include move-circles-4 (1);
-  }
-  &.active-2 {
-      @include move-circles-4 (2);
-  }
-  &.active-3 {
-      @include move-circles-4 (3);
-  }
-  &.active-4 {
-      @include move-circles-4 (4);
-  }
-  &.active-5 {
-      @include move-circles-4 (5);
-  }
-  &.active-6 {
-      @include move-circles-4 (6);
-  }
-  &.active-7 {
-      @include move-circles-4 (7);
+  @for $i from 0 through 10 {
+    &.active-#{$i} {
+      @include move-circles-4 ($i);
+      .circle:nth-child(#{$i+1}) {
+        background-color: $full-opacity-color;
+      }
+    }
   }
 }
 
