@@ -1,6 +1,7 @@
 import { SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events";
 import * as PIXI from "pixi.js";
 import PixelSortingFilter from '../shaders/pixelsorting/PixelSortingFilter';
+import PixiSliderVideoItem from './PixiSliderVideoItem';
 import { TweenLite, Power4 } from "gsap";
 
 export default class PixiSliderVideoContainer extends PIXI.Container {
@@ -11,7 +12,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
     private animationRequestId: number;
 
-    private dragging: any = false;
     private dragData: any;
     private dragMaxVelocity: number = 15;
     private dragVelocity: number = 0;
@@ -35,6 +35,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private videoTexture: PIXI.Texture;
     private screenTextureWidth: number;
     private screenTextureHeight: number;
+    private videoItemList: Array<PixiSliderVideoItem> = [];
 
 
     constructor(app: PIXI.Application, projects: Array<any>, domVideoElement: HTMLVideoElement) {
@@ -54,18 +55,13 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.screenTextureWidth = this.videoTexture.width / projects.length;
         this.screenTextureHeight = this.videoTexture.height;
         this.mediaRatio = this.screenTextureWidth / this.screenTextureHeight;
-        
+
         for (var i = 0; i < projects.length; i++) {
             let frame: PIXI.Rectangle = this.getVideoTextureRect(i);
             let projectTexture = new PIXI.Texture(this.videoTexture.baseTexture, frame);
-            let projectSprite = new PIXI.Sprite(projectTexture);
-            projectSprite.position.x = this.screenWidth * 0.5 + i * this.screenWidth;
-            projectSprite.anchor.x = 0.5;
-            projectSprite.position.y = this.screenHeight * 0.5;
-            projectSprite.anchor.y = 0.5;
-            projectSprite.width = this.screenWidth;
-            projectSprite.height = this.screenHeight;
+            let projectSprite = new PixiSliderVideoItem(i, projectTexture, this.screenWidth, this.screenHeight, this.screenRatio, this.screenTextureWidth, this.screenTextureHeight, this.mediaRatio);
             this.addChild(projectSprite);
+            this.videoItemList.push(projectSprite);
         }
 
         this.videoTexture.destroy();
@@ -91,25 +87,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         return this._onDragUpdateEvent.asEvent();
     }
 
-    private getVideoTextureRect(projectIndex: number): PIXI.Rectangle {
-        
-        let cropTextureWidth: number;
-        let cropTextureHeight: number;
-        let cropTextureOffset: PIXI.Point = new PIXI.Point();
-
-        if( this.screenRatio > this.mediaRatio) {
-            cropTextureWidth = this.screenTextureWidth;
-            cropTextureHeight = cropTextureWidth / this.screenRatio;
-        } else {
-            cropTextureHeight = this.screenTextureHeight;
-            cropTextureWidth = cropTextureHeight * this.screenRatio;
-        }
-        cropTextureOffset.x = (this.screenTextureWidth - cropTextureWidth) * 0.5;
-        cropTextureOffset.y = (this.screenTextureHeight - cropTextureHeight) * 0.5;
-
-        return new PIXI.Rectangle((projectIndex * this.screenTextureWidth) + cropTextureOffset.x, cropTextureOffset.y, cropTextureWidth, cropTextureHeight);
-    }
-
     private initShader(): void {
         this.shader = new PixelSortingFilter(0);
         this.shader.uniforms.iResolution = [this.app.screen.width, this.app.screen.height];
@@ -122,27 +99,33 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private createDragAndDropFor() {
         this.interactive = true;
         this.on("pointerdown", this.onDragStart);
-        this.on("pointerup", this.onDragEnd);
-        this.on("pointerupoutside", this.onDragEnd);
-        this.on("pointermove", this.onDragUpdate);
     }
 
     private onDragStart(event: any): void {
+        console.log("onDragStart");
+
+        this.off("pointerdown", this.onDragStart);
+        this.on("pointerup", this.onDragEnd);
+        this.on("pointerupoutside", this.onDragEnd);
+        this.on("pointermove", this.onDragUpdate);
+
         this._onDragStartEvent.dispatch();
         this.domVideoElement.pause();
         this.onAnimationUpdate();
         this.dragTween.kill();
-        this.dragging = this;
         this.dragData = event.data;
         let position = this.dragData.getLocalPosition(this);
         this.pivot.set(position.x, position.y);
         this.position.set(this.dragData.global.x, this.dragData.global.y);
         this.beforeDragPosX = this.position.x;
         this.dragAmount = 0;
+        this.updateZOrder();
     }
 
     private onDragEnd(event: any): void {
-        this.dragging = false;
+        this.off("pointerup", this.onDragEnd);
+        this.off("pointerupoutside", this.onDragEnd);
+        this.off("pointermove", this.onDragUpdate);
         this.domVideoElement.play();
         if (this.dragAmount !== 0) {
             this.finishDrag();
@@ -152,28 +135,30 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onDragUpdate(event: any): void {
-        if (this.dragging) {
-            let newPos = this.dragData.getLocalPosition(this.parent).x;
-            this.dragVelocity = Math.min(this.dragMaxVelocity, Math.abs(newPos - this.position.x));
-            this.dragAmount = Math.abs(newPos - this.beforeDragPosX);
-            this.dragDirection = ((newPos - this.beforeDragPosX) > 0) ? -1 : 1;
+        console.log("onDragUpdate");
+        let newPos = this.dragData.getLocalPosition(this.parent).x;
+        this.dragVelocity = Math.min(this.dragMaxVelocity, Math.abs(newPos - this.position.x));
+        this.dragAmount = Math.abs(newPos - this.beforeDragPosX);
+        this.dragDirection = ((newPos - this.beforeDragPosX) > 0) ? -1 : 1;
 
-            if ((this.dragDirection === -1) && (this.currentProjectIndex === 0)) {
-                this.position.x = this.beforeDragPosX + (0.1 * this.dragAmount);
-            } else if ((this.dragDirection === 1) && (this.currentProjectIndex === this.lastProjectIndex)) {
-                this.position.x = this.beforeDragPosX - (0.1 * this.dragAmount);
-            } else {
-                this.position.x = newPos;
-            }
-
-            this.updateNeighborScale();
+        if ((this.dragDirection === -1) && (this.currentProjectIndex === 0)) {
+            this.position.x = this.beforeDragPosX + (0.1 * this.dragAmount);
+        } else if ((this.dragDirection === 1) && (this.currentProjectIndex === this.lastProjectIndex)) {
+            this.position.x = this.beforeDragPosX - (0.1 * this.dragAmount);
+        } else {
+            this.position.x = newPos;
         }
+        this.updateNeighborScale();
     }
 
     private updateNeighborScale(): void {
-        
-        //this.getChildAt(this.currentProjectIndex).scale.set((1 - (this.dragAmount / this.screenWidth) * 0.5) * (this.screenWidth / this.screenTextureWidth));
-        this.getChildAt(this.currentProjectIndex).position.x = (this.screenWidth * 0.5 + this.currentProjectIndex * this.screenWidth) + (this.dragAmount * this.dragDirection * 0.7);
+        //this.videoItemList[this.currentProjectIndex].scale.set((1 - (this.dragAmount / this.screenWidth) * 0.5) * (this.screenWidth / this.screenTextureWidth));
+        if ((this.currentProjectIndex > 0 && this.currentProjectIndex < this.lastProjectIndex) || (this.dragDirection === 1 && this.currentProjectIndex === 0) || (this.dragDirection === -1 && this.currentProjectIndex === this.lastProjectIndex)) {
+            this.videoItemList[this.currentProjectIndex].position.x = (this.screenWidth * 0.5 + this.currentProjectIndex * this.screenWidth) + (this.dragAmount * this.dragDirection * 0.7);
+            console.log(this.dragAmount);
+
+            this.videoItemList[this.currentProjectIndex].alpha = 1 - ((this.dragAmount / (this.screenWidth * 0.5)));
+        }
     }
 
     private finishDrag() {
@@ -206,9 +191,35 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onTweenEnded = () => {
-        this.getChildAt(this.previousProjectIndex).scale.set((this.screenWidth / this.screenTextureWidth));
-        this.getChildAt(this.previousProjectIndex).position.x = (this.screenWidth * 0.5 + this.previousProjectIndex * this.screenWidth);
+        this.videoItemList[this.previousProjectIndex].scale.set((this.screenWidth / this.screenTextureWidth));
+        this.videoItemList[this.previousProjectIndex].position.x = (this.screenWidth * 0.5 + this.previousProjectIndex * this.screenWidth);
+        this.videoItemList[this.previousProjectIndex].alpha = 1;
+        this.on("pointerdown", this.onDragStart);
         cancelAnimationFrame(this.animationRequestId);
+    }
+
+    private updateZOrder(): void {
+        this.removeChild(this.videoItemList[this.currentProjectIndex]);
+        this.addChildAt(this.videoItemList[this.currentProjectIndex], 0);
+    }
+
+    private getVideoTextureRect(projectIndex: number): PIXI.Rectangle {
+
+        let cropTextureWidth: number;
+        let cropTextureHeight: number;
+        let cropTextureOffset: PIXI.Point = new PIXI.Point();
+
+        if (this.screenRatio > this.mediaRatio) {
+            cropTextureWidth = this.screenTextureWidth;
+            cropTextureHeight = cropTextureWidth / this.screenRatio;
+        } else {
+            cropTextureHeight = this.screenTextureHeight;
+            cropTextureWidth = cropTextureHeight * this.screenRatio;
+        }
+        cropTextureOffset.x = (this.screenTextureWidth - cropTextureWidth) * 0.5;
+        cropTextureOffset.y = (this.screenTextureHeight - cropTextureHeight) * 0.5;
+
+        return new PIXI.Rectangle((projectIndex * this.screenTextureWidth) + cropTextureOffset.x, cropTextureOffset.y, cropTextureWidth, cropTextureHeight);
     }
 
     private onAnimationUpdate(): void {
@@ -222,7 +233,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this.animationRequestId = requestAnimationFrame(handler);
     }
 
-    public goToProjectIndex( index: number ): void {
+    public goToProjectIndex(index: number): void {
         this.projectIndexToGo = index;
         this.executeTween();
     }
