@@ -102,8 +102,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onDragStart(event: any): void {
-        console.log("onDragStart");
-
         this.off("pointerdown", this.onDragStart);
         this.on("pointerup", this.onDragEnd);
         this.on("pointerupoutside", this.onDragEnd);
@@ -130,12 +128,12 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         if (this.dragAmount !== 0) {
             this.finishDrag();
         } else {
+            this.on("pointerdown", this.onDragStart);
             this._onProjectClickedEvent.dispatch(this.currentProjectIndex);
         }
     }
 
     private onDragUpdate(event: any): void {
-        console.log("onDragUpdate");
         let newPos = this.dragData.getLocalPosition(this.parent).x;
         this.dragVelocity = Math.min(this.dragMaxVelocity, Math.abs(newPos - this.position.x));
         this.dragAmount = Math.abs(newPos - this.beforeDragPosX);
@@ -155,8 +153,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         //this.videoItemList[this.currentProjectIndex].scale.set((1 - (this.dragAmount / this.screenWidth) * 0.5) * (this.screenWidth / this.screenTextureWidth));
         if ((this.currentProjectIndex > 0 && this.currentProjectIndex < this.lastProjectIndex) || (this.dragDirection === 1 && this.currentProjectIndex === 0) || (this.dragDirection === -1 && this.currentProjectIndex === this.lastProjectIndex)) {
             this.videoItemList[this.currentProjectIndex].position.x = (this.screenWidth * 0.5 + this.currentProjectIndex * this.screenWidth) + (this.dragAmount * this.dragDirection * 0.7);
-            console.log(this.dragAmount);
-
             this.videoItemList[this.currentProjectIndex].alpha = 1 - ((this.dragAmount / (this.screenWidth * 0.5)));
         }
     }
@@ -191,7 +187,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onTweenEnded = () => {
-        this.videoItemList[this.previousProjectIndex].scale.set((this.screenWidth / this.screenTextureWidth));
+       this.videoItemList[this.previousProjectIndex].scale.set((this.screenWidth / this.screenTextureWidth));
         this.videoItemList[this.previousProjectIndex].position.x = (this.screenWidth * 0.5 + this.previousProjectIndex * this.screenWidth);
         this.videoItemList[this.previousProjectIndex].alpha = 1;
         this.on("pointerdown", this.onDragStart);
