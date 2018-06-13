@@ -1,6 +1,6 @@
 export class State {
-    projects: Array<Object> = []
-    currentProject: Object = {}
+    projects: Array<any> = []
+    currentProject: any = {}
     sliderCurrentProjectId: number = 0
     sliderIsMoving: boolean = false
 }

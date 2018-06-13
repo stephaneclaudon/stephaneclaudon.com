@@ -30,6 +30,7 @@ import {
   Watch
 } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
+import * as ModernizrObject from "modernizr";
 import * as PIXI from "pixi.js";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
@@ -105,8 +106,9 @@ export default class ProjectsSliderCanvas extends Vue {
     this.sliderIsMoving = true;
   }
   
-  onSliderTransitionUpdate(posX: number): void {
+  onSliderTransitionUpdate(posX: number, percent: number): void {
     (<HTMLElement>this.titlesContainerElement).style.left = posX + "px";
+    (<HTMLElement>this.titlesContainerElement).style.setProperty(ModernizrObject.prefixedCSS("filter"), "brightness(" + (1 - percent * 2) + ")")
   }
 
   onSliderTransitionEnd(index: number): void {
@@ -115,7 +117,7 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onProjectClicked(projectIndex: number): void {
-    this.$router.push({ name: 'project', params: { id: this.projects[projectIndex].id }})
+    this.$router.push('/project/' + this.projects[projectIndex].id);
   }
 
   isCurrentIndex(index: number): boolean {
@@ -155,8 +157,8 @@ export default class ProjectsSliderCanvas extends Vue {
   @import "../style/main.scss";
 
   #videosContainer {
-    visibility: hidden;
     position: fixed;
+    opacity: 0.5;
     video {
       position: absolute;
       width: 100%;

@@ -59,9 +59,6 @@ export default class App extends Vue {
   @State("projects") projects: Array<any>;
   @State("currentProject") currentProject: any;
 
-  @Mutation(MutationTypes.LOAD_PROJECTS)
-  loadProject: (projects: Array<Object>) => void;
-
   @Mutation(MutationTypes.SET_CURRENT_PROJECT)
   setCurrentProject: (project: Object) => void;
 
@@ -76,9 +73,8 @@ export default class App extends Vue {
   }
 
   created() {
-    this.loadProject(jsonData);
-    if (this.$router.currentRoute.name === "project") {
-      this.gotoProject(this.$router.currentRoute.params.id);
+    if (this.$router.currentRoute.path.indexOf("project") > -1) {
+      this.gotoProject(this.$router.currentRoute.name!);
       this.projectDetailsVisible = true;
     } else {
       this.projectSliderVisible = true;
@@ -87,8 +83,10 @@ export default class App extends Vue {
 
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
-    if (to.name === "project") {
-      this.gotoProject(to.params.id);
+    console.log(to);
+    
+    if (to.path.indexOf("project") > -1) {
+      this.gotoProject(to.name);
     } else if (to.name != "contact"){
       this.showProjectDetails = false;
     }
