@@ -1,7 +1,7 @@
 <template>
   <div id="projects-slider-canvas" class="projects-slider-canvas">
     <div id="videosContainer">
-      <video id="video" playsinline loop muted autoplay>
+      <video id="video" playsinline loop muted autoplay preload="none">
         <source :src="getVideoPath()" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -81,11 +81,13 @@ export default class ProjectsSliderCanvas extends Vue {
     this.pixiApp.renderer.view.style["touch-action"] = "auto";
     this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener("playing", this.onVideoStartPlaying, false);
+    this.videoElement.addEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.load();
   }
 
-  onVideoStartPlaying(): void {
-    this.videoElement.removeEventListener("playing", this.onVideoStartPlaying, false);
+  onVideoLoaded(): void {
+    this.videoElement.removeEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.play();
     this.initProjects();
   }
 
