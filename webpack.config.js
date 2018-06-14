@@ -71,6 +71,7 @@ let config = {
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
     new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new copyWebpackPlugin([{ from: './src/shaders', to: 'assets/shaders' }]),
+    new copyWebpackPlugin([{ from: './src/lib/pace.min.js', to: 'lib/pace.min.js' }]),
     new writeFilePlugin()
   ]
 }

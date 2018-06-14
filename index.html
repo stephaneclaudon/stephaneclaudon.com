@@ -4,10 +4,24 @@
     <meta charset="utf-8">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui, viewport-fit=cover">
     <title>Stéphane Claudon - Freelance video</title>
+    <script src="/dist/lib/pace.min.js"></script>
   </head>
-  <body>
+  <body style="background-color: #0f0f0f;">
+    <style>
+      .pace-inactive {
+        display: none;
+      }
+      .pace-progress {
+        background: white;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+    </style>
     <div id="app"></div>
     <script src="/dist/main.js"></script>
   </body>
