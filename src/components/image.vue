@@ -1,36 +1,51 @@
 <template>
-    <div>
-        <picture>
-            <source media="(max-width: 375px)" :srcset="getImageAt('2x')">
-            <source media="(max-width: 750px)" :srcset="getImageAt('2x')">
-            <source media="(max-width: 1242px)" :srcset="getImageAt('3x')">
-            <img :src="getImageAt('3x')" :alt="this.title">
+    <span class="image" :class="{'loading': loading}">
+        <picture v-if="loadimage">
+            <source media="(max-width: 375px)" :srcset="srcs[0]">
+            <source media="(max-width: 750px)" :srcset="srcs[1]">
+            <source media="(max-width: 1242px)" :srcset="srcs[2]">
+            <img :src="srcs[2]" :alt="this.title" @load="loaded">
         </picture>
-    </div>
+        <loader v-if="loading" class="loader"></loader>
+    </span>
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Prop} from 'vue-property-decorator'
-  import OtherProjects from '../components/other-projects.vue'
-  
-  @Component
-  export default class ImageSrc extends Vue {
-    imagePath: string = '/dist/assets/img/'
-    @Prop()
-    name: string
-    @Prop()
-    title: string
+import { Vue, Component, Prop } from "vue-property-decorator";
+import Loader from "./loader.vue";
 
-    getImageAt(size: string): string {
-        let path: string = this.imagePath + this.name + '@' + size + '.jpg'
-        return path
-    }
-
+@Component({
+  components: {
+    Loader
   }
+})
+export default class ImageSrc extends Vue {
+  private loading: boolean = true;
+  @Prop() srcs: Array<string>;
+  @Prop() title: string;
+  @Prop() loadimage: boolean;
+
+  loaded(): void {
+    this.loading = false;
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-    img {
-        max-width: 100%;
+.image {
+    position: relative;
+    display: block;
+    height: 100%;
+    .loader {
+        display: block;
+        position: absolute;
+        z-index: 10;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
     }
+    img {
+        height: 100%;
+    }
+}
 </style>
