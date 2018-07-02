@@ -2,7 +2,7 @@
   <div class="contact-wrapper">
     <div class="grid-x">
       <div class="cell small-10 small-offset-1">
-        <div class="toggle" v-on:click="open()">Contact</div>
+        <div class="toggle noselect" v-on:click="open()">Contact</div>
       </div>
       
       <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">

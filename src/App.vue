@@ -1,15 +1,13 @@
 <template>
   <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
 
-    <transition name="trans-slider">
-      <div v-show="!showProjectDetails" class="project-slider-container">
-        <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="sliderActive"></projects-slider-canvas>
-        <projects-slider v-else class="project-slider"></projects-slider>
-      </div>
-    </transition>
+    <div class="project-slider-container" :class="{'inactive': !projectSliderVisible}">
+      <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="projectSliderVisible"></projects-slider-canvas>
+      <projects-slider v-else class="project-slider"></projects-slider>
+    </div>
 
     <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
-      <project-details v-show="showProjectDetails" :visible="projectDetailsVisible"></project-details>
+      <project-details v-if="showProjectDetails" :visible="projectDetailsVisible"></project-details>
     </transition>
 
     <transition name="trans-name">
@@ -61,43 +59,42 @@ export default class App extends Vue {
   @State("projects") projects: Array<any>;
   @State("currentProject") currentProject: any;
 
-  @Mutation(MutationTypes.LOAD_PROJECTS)
-  loadProject: (projects: Array<Object>) => void;
-
   @Mutation(MutationTypes.SET_CURRENT_PROJECT)
   setCurrentProject: (project: Object) => void;
 
+  private sliderActive: boolean = true;
   private transitioning: boolean = false;
   private showProjectDetails: boolean = false;
+  private projectSliderVisible: boolean = false;
   private projectDetailsVisible: boolean = false;
 
   get Modernizr(): any {
     return ModernizrObject;
   }
 
-  get sliderActive(): boolean {
-    return this.currentProject.id === undefined;
-  }
-
   created() {
-    this.loadProject(jsonData);
-    if (this.$router.currentRoute.name === "project") {
-      this.gotoProject(this.$router.currentRoute.params.id);
+    if (this.$router.currentRoute.path.indexOf("project") > -1) {
+      this.gotoProject(this.$router.currentRoute.name!);
       this.projectDetailsVisible = true;
+    } else {
+      this.projectSliderVisible = true;
     }
   }
 
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
-    if (to.name === "project") {
-      this.gotoProject(to.params.id);
+    console.log(to);
+    
+    if (to.path.indexOf("project") > -1) {
+      this.gotoProject(to.name);
     } else if (to.name != "contact"){
       this.showProjectDetails = false;
     }
   }
 
   @Watch("currentProject")
-  onProjectChanged(to: any, from: any): void {    
+  onProjectChanged(val: any, old: any): void {
+    this.sliderActive = this.currentProject.id === undefined;
   }
 
   gotoProject(projectId: string): void {
@@ -106,6 +103,7 @@ export default class App extends Vue {
   }
 
   onTransitionBeforeEnter(el: HTMLElement) {
+    this.projectSliderVisible = false;
     this.transitioning = true;
   }
   onTransitionAfterEnter(el: HTMLElement) {
@@ -114,12 +112,15 @@ export default class App extends Vue {
   }
 
   onTransitionBeforeLeave(el: HTMLElement) {
+    this.projectSliderVisible = true;
     this.transitioning = true;
   }
 
   onTransitionAfterLeave(el: HTMLElement) {
     this.projectDetailsVisible = false;
     this.transitioning = false;
+    this.setCurrentProject({});
+    
   }
 
   getProjectFromId(projectId: string): any {
@@ -153,6 +154,8 @@ export default class App extends Vue {
   top: 5%;
 }
 .app {
+  position: relative;
+  overflow-x: hidden;
   &--transitioning {
     overflow: hidden;
     height: 100%;
@@ -193,33 +196,36 @@ export default class App extends Vue {
   width: 100%;
 }
 
-.trans-slider-enter-active, .trans-slider-leave-active {
-  @include transition(all .5s ease-out);
+.trans-name-enter-active, .trans-name-leave-active, .project-slider-container {
+  @include transition(all 0.3s ease-out);
   @include transform(scale(1));
   @include opacity(1);
+
+  /*.projects-slider-canvas-titles .grid-x .cell {
+    @include transition(all 0.3s ease-out);
+  }*/
 }
-.trans-slider-enter, .trans-slider-leave-to {
+.trans-name-enter, .trans-name-leave-to, .project-slider-container.inactive  {
   @include opacity(0);
-  @include transform(scale(0.7));
+  @include transform(scale(0.8));
+
+  /*.projects-slider-canvas-titles .grid-x .cell {
+    margin-top: -110%;
+    margin-left: 25%;
+  }*/
+  
 }
 
 .trans-project-enter-active, .trans-project-leave-active {
-  @include transition(all .5s ease-out);
+  pointer-events: none;
+  @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
+  @include transform-origin(center 50vh);
   @include transform(scale(1));
   @include opacity(1);
 }
 .trans-project-enter, .trans-project-leave-to {
   @include opacity(0);
-  @include transform(scale(1.4));
+  @include transform(scale(1.2));
 }
 
-.trans-name-enter-active, .trans-name-leave-active {
-  @include transition(all .5s ease);
-  @include transform(translateY(0));
-  @include opacity(1);
-}
-.trans-name-enter, .trans-name-leave-to {
-  @include transform(translateY(-50px));
-  @include opacity(0);
-}
 </style>

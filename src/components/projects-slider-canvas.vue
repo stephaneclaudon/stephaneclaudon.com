@@ -1,7 +1,7 @@
 <template>
   <div id="projects-slider-canvas" class="projects-slider-canvas">
     <div id="videosContainer">
-      <video id="video" playsinline loop muted autoplay>
+      <video id="video" playsinline loop muted autoplay preload="none">
         <source :src="getVideoPath()" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+    <pagination class="pagination" :page-count="projects.length" :current-index="currentIndex"></pagination> 
   </div>
 </template>
 
@@ -29,13 +30,16 @@ import {
   Watch
 } from "vue-property-decorator";
 import * as MutationTypes from "../store/mutation-types";
+import * as ModernizrObject from "modernizr";
 import * as PIXI from "pixi.js";
 import PixiSliderVideoContainer from "../components-ts/PixiSliderVideoContainer";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
+import Pagination from "./pagination.vue";
 
 @Component({
   components: {
-    ProjectsSliderItemTitle
+    ProjectsSliderItemTitle,
+    Pagination
   }
 })
 export default class ProjectsSliderCanvas extends Vue {
@@ -48,7 +52,8 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-  @Prop() sliderActive: boolean;
+  @State("sliderCurrentProjectId") currentSliderIndex: number;
+  @Prop() active: boolean;
   
   created() {
     
@@ -76,11 +81,13 @@ export default class ProjectsSliderCanvas extends Vue {
     this.pixiApp.renderer.view.style["touch-action"] = "auto";
     this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener("playing", this.onVideoStartPlaying, false);
+    this.videoElement.addEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.load();
   }
 
-  onVideoStartPlaying(): void {
-    this.videoElement.removeEventListener("playing", this.onVideoStartPlaying, false);
+  onVideoLoaded(): void {
+    this.videoElement.removeEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.play();
     this.initProjects();
   }
 
@@ -101,8 +108,9 @@ export default class ProjectsSliderCanvas extends Vue {
     this.sliderIsMoving = true;
   }
   
-  onSliderTransitionUpdate(posX: number): void {
+  onSliderTransitionUpdate(posX: number, percent: number): void {
     (<HTMLElement>this.titlesContainerElement).style.left = posX + "px";
+    (<HTMLElement>this.titlesContainerElement).style.setProperty(ModernizrObject.prefixedCSS("filter"), "brightness(" + (1 - percent * 2) + ")")
   }
 
   onSliderTransitionEnd(index: number): void {
@@ -111,20 +119,26 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onProjectClicked(projectIndex: number): void {
-    this.$router.push({ name: 'project', params: { id: this.projects[projectIndex].id }})
+    this.$router.push('/project/' + this.projects[projectIndex].id);
   }
 
   isCurrentIndex(index: number): boolean {
     return this.currentIndex === index;
   }
 
-  @Watch('sliderActive')
+  @Watch('active')
   onSliderStateChanged(val: boolean, oldVal: boolean) {
     if(val) {
       this.pixiApp.ticker.start();
     } else {
       this.pixiApp.ticker.stop();
     }
+  }
+
+  @Watch('currentSliderIndex')
+  onSliderIndexChanged(index: number, oldIndex: number) {
+    this.projectsContainer.goToProjectIndex(index);
+    this.currentIndex = index;
   }
 
   initTitles(): void {
@@ -145,8 +159,8 @@ export default class ProjectsSliderCanvas extends Vue {
   @import "../style/main.scss";
 
   #videosContainer {
-    visibility: hidden;
     position: fixed;
+    opacity: 0.5;
     video {
       position: absolute;
       width: 100%;
@@ -194,5 +208,14 @@ export default class ProjectsSliderCanvas extends Vue {
         }
       }
     }
+  }
+
+  .pagination {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    height: 10vh;
+    width: 100%;
   }
 </style>

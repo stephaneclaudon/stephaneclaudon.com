@@ -6,31 +6,45 @@
     -o-transition: $args;
     transition: $args;
 }
+
 // generic transform
 @mixin transform($transforms) {
     -moz-transform: $transforms;
-      -o-transform: $transforms;
-     -ms-transform: $transforms;
- -webkit-transform: $transforms;
-       transform: $transforms;
+    -o-transform: $transforms;
+    -ms-transform: $transforms;
+    -webkit-transform: $transforms;
+    transform: $transforms;
 }
+
+// generic transform-origin
+@mixin transform-origin($transforms) {
+    -moz-transform-origin: $transforms;
+    -o-transform-origin: $transforms;
+    -ms-transform-origin: $transforms;
+    -webkit-transform-origin: $transforms;
+    transform-origin: $transforms;
+}
+
 // rotate
 @mixin rotate ($deg) {
-@include transform(rotate(#{$deg}deg));
+    @include transform(rotate(#{$deg}deg));
 }
 
 // scale
 @mixin scale($scale) {
-  @include transform(scale($scale));
-} 
+    @include transform(scale($scale));
+}
+
 // translate
 @mixin translate ($x, $y) {
-@include transform(translate($x, $y));
+    @include transform(translate($x, $y));
 }
+
 // skew
 @mixin skew ($x, $y) {
-@include transform(skew(#{$x}deg, #{$y}deg));
+    @include transform(skew(#{$x}deg, #{$y}deg));
 }
+
 //transform origin
 @mixin transform-origin ($origin) {
     moz-transform-origin: $origin;
@@ -43,27 +57,32 @@
 @mixin horizontal-gradient($from, $to, $stop: 100%) {
     /* fallback/image non-cover color */
     background-color: $from;
-  
     /* Firefox 3.6+ */
     background-image: -moz-linear-gradient(left, $from 0%, $to $stop);
-  
     /* Safari 4+, Chrome 1+ */
     background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, $from), color-stop($stop, $to));
-  
     /* Safari 5.1+, Chrome 10+ */
     background-image: -webkit-linear-gradient(left, $from 0%, $to $stop);
-  
     /* Opera 11.10+ */
     background-image: -o-linear-gradient(left, $from 0%, $to $stop);
-  
     /* IE10+ */
     background: -ms-linear-gradient(left, $from 0%, $to $stop);
-  
     /* Standard */
     background: linear-gradient(to right, $from 0%, $to $stop);
-  
     /* IE6-9 */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from', endColorstr='$to',GradientType=1 );
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from', endColorstr='$to', GradientType=1);
+}
+
+@mixin vertical-gradient($startColor: #555, $endColor: #333, $start: 100%, $stop: 100%) {
+    background-color: $startColor;
+    background-image: -moz-linear-gradient(top, $startColor $start, $endColor $stop); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop($start, $startColor), color-stop($stop, $endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, $startColor $start, $endColor $stop); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, $startColor $start, $endColor $stop); // Opera 11.10
+    background: -ms-linear-gradient(top, $startColor $start, $endColor $stop); // IE10
+    background: linear-gradient(top, $startColor $start, $endColor $stop); // The standard
+    /* IE6-9 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor', GradientType=1);
 }
 
 @mixin animation ($delay, $duration, $animation, $direction: forward, $fillmode: forwards) {
@@ -72,18 +91,35 @@
     -webkit-animation-name: $animation;
     -webkit-animation-fill-mode: $fillmode;
     -webkit-animation-direction: $direction;
-
     -moz-animation-delay: $delay;
     -moz-animation-duration: $duration;
     -moz-animation-name: $animation;
     -moz-animation-fill-mode: $fillmode;
     -moz-animation-direction: $direction;
-
+    -ms-animation-delay: $delay;
+    -ms-animation-duration: $duration;
+    -ms-animation-name: $animation;
+    -ms-animation-fill-mode: $fillmode;
+    -ms-animation-direction: $direction;
     animation-delay: $delay;
     animation-duration: $duration;
     animation-name: $animation;
     animation-fill-mode: $fillmode;
     animation-direction: $direction;
+}
+
+@mixin animation-delay ($delay) {
+    -webkit-animation-delay: $delay;
+    -moz-animation-delay: $delay;
+    -ms-animation-delay: $delay;
+    animation-delay: $delay;
+}
+
+@mixin animation-duration ($duration) {
+    -webkit-animation-duration: $duration;
+    -moz-animation-duration: $duration;
+    -ms-animation-duration: $duration;
+    animation-duration: $duration;
 }
 
 @mixin opacity($opacity) {
@@ -92,11 +128,18 @@
     filter: alpha(opacity=$opacity-ie); //IE8
 }
 
-//transform origin
 @mixin animation-timing-function ($animation-timing-function) {
     moz-animation-timing-function: $animation-timing-function;
     -o-animation-timing-function: $animation-timing-function;
     -ms-animation-timing-function: $animation-timing-function;
     -webkit-animation-timing-function: $animation-timing-function;
     animation-timing-function: $animation-timing-function;
+}
+
+@mixin filter($filter: blur(5px)) {
+	-webkit-filter: unquote($filter);
+	-moz-filter: unquote($filter);
+	-o-filter: unquote($filter);
+	-ms-filter: unquote($filter);
+	filter: unquote($filter);
 }

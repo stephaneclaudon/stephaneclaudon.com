@@ -1,7 +1,8 @@
 console.log("--------------------------");
 module.exports = {
   options: [
-    "setClasses"
+    "setClasses",
+    "prefixedCSS"
   ],
   "feature-detects": [
     "test/canvas"
