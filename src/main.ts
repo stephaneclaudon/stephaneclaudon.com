@@ -102,27 +102,30 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-let vueApp: Vue = new Vue({
-  el: document.querySelector('#app') as Element,
-  components: { App },
-  router,
-  store: new Vuex.Store({
-    state: state,
-    getters,
-    mutations
-  }),
-  render(h) {
-    return h('App')
-  }
-})
 
-let stats: Stats = new Stats();
-stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-stats.dom.style.cssText = 'position:fixed;bottom:0;right:0;cursor:pointer;opacity:0.9;z-index:10000';
-document.body.appendChild(stats.dom);
-function animate() {
-  stats.begin();
-  stats.end();
-  requestAnimationFrame(animate);
-}
-requestAnimationFrame(animate);
+setTimeout(() => {
+  let vueApp: Vue = new Vue({
+    el: document.querySelector('#app') as Element,
+    components: {App},
+    router,
+    store: new Vuex.Store({ 
+      state: new State(),
+      getters,
+      mutations
+    }),
+    render (h) {
+      return h('App')
+    }
+  })
+  
+  let stats: Stats = new Stats();
+  stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+  stats.dom.style.cssText = 'position:fixed;bottom:0;right:0;cursor:pointer;opacity:0.9;z-index:10000';
+  document.body.appendChild( stats.dom );
+  function animate() {
+    stats.begin();
+    stats.end();
+    requestAnimationFrame( animate );
+  }
+  requestAnimationFrame( animate );
+}, 500);

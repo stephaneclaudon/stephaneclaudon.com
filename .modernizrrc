@@ -1,4 +1,4 @@
-console.log("--------------------------");
+console.log("----------- MODERNIZR ---------------");
 module.exports = {
   options: [
     "setClasses",

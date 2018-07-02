@@ -4,11 +4,14 @@ const copyWebpackPlugin = require('copy-webpack-plugin')
 const writeFilePlugin = require('write-file-webpack-plugin')
 
 let config = {
-  entry: './src/main.ts',
+  entry: {
+    preloader: './src/preloader.ts',
+    main: './src/main.ts'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: 'dist',
-    filename: 'main.js'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['.js', '.ts', '.vue', '.json'],
@@ -71,6 +74,7 @@ let config = {
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
     new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new copyWebpackPlugin([{ from: './src/shaders', to: 'assets/shaders' }]),
+    new copyWebpackPlugin([{ from: './src/lib/preloadjs.min.js', to: 'lib/preloadjs.min.js' }]),
     new writeFilePlugin()
   ]
 }
