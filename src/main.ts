@@ -109,7 +109,7 @@ setTimeout(() => {
     components: {App},
     router,
     store: new Vuex.Store({ 
-      state: new State(),
+      state: state,
       getters,
       mutations
     }),

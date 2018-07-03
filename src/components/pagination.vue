@@ -92,7 +92,7 @@ ol.ol-4 {
   top: 50%;
   left: 50%;
   width: 117px;
-  overflow-x: hidden;
+  overflow: hidden;
   margin-left: -$border-indicator-width/2 - 1px;
   margin-top: -$border-indicator-width/2 - 1px;
   @include transition(all 0.3s ease-out);
