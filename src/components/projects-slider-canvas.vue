@@ -160,7 +160,7 @@ export default class ProjectsSliderCanvas extends Vue {
 
   #videosContainer {
     position: fixed;
-    opacity: 0.5;
+    @include opacity(0);
     video {
       position: absolute;
       width: 100%;
