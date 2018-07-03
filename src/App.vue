@@ -83,8 +83,6 @@ export default class App extends Vue {
 
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
-    console.log(to);
-    
     if (to.path.indexOf("project") > -1) {
       this.gotoProject(to.name);
     } else if (to.name != "contact"){
