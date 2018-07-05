@@ -1,5 +1,5 @@
 <template>
-  <div class="project-details grid-x">
+  <div class="project-details grid-x" :class="{'aftertransition': visible}">
     <div class="project-details-header" :style="headerBackgroundImage">
       <div class="project-details-header-overlay"></div>
       <router-link class="project-details-back-button" :to="{ name: 'home' }">
@@ -57,12 +57,24 @@ import Gallery from "./gallery.vue";
 export default class ProjectDetails extends Vue {
   @State("currentProject") currentProject: any;
   @Prop() visible: boolean;
+  currentScroll: number;
+
+  mounted(): void {
+    window.addEventListener('scroll', this.onWindowScroll);
+  }
+
+  onWindowScroll(): void {
+    this.currentScroll = window.pageYOffset;
+  }
 
   get headerBackgroundImage(): string {
+    console.log(this.currentScroll);
+    
     return (
       'background-image: url("/dist/assets/img/' +
       this.currentProject.id +
-      '@2x.jpg");'
+      '@2x.jpg");' +
+      ' background-position: center ' + this.currentScroll * 0.5 + 'px;'
     );
   }
 }
@@ -77,6 +89,10 @@ export default class ProjectDetails extends Vue {
   width: 100%;
   min-height: 100%;
   padding-bottom: 3em;
+
+  &.aftertransition {
+    position: relative;
+  }
 
   &-header {
     background-repeat: no-repeat;
