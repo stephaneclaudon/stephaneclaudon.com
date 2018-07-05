@@ -130,8 +130,10 @@ export default class ProjectsSliderCanvas extends Vue {
   onSliderStateChanged(val: boolean, oldVal: boolean) {
     if(val) {
       this.pixiApp.ticker.start();
+      this.videoElement.play();
     } else {
       this.pixiApp.ticker.stop();
+      this.videoElement.pause();
     }
   }
 
