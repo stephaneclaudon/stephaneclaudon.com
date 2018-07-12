@@ -4,7 +4,8 @@ import jsonData from "./assets/data/data.json";
 var preloader = new createjs.LoadQueue(),
   $loaderScreen: HTMLElement = document.getElementById('loader')!,
   $state: HTMLElement = document.getElementById('loader-state')!,
-  $progressbar: HTMLElement = document.getElementById('progressbar')!;
+  $progressbar: HTMLElement = document.getElementById('progressbar')!,
+  $progressbarContainer: HTMLElement = document.getElementById('progressbar-container')!;
 
 var myAssets: Array<string> = [];
 myAssets.push("/dist/assets/loops/all-projects-mobile-low.mp4");
@@ -27,12 +28,18 @@ preloader.loadManifest(myAssets);
 
 function onProgressPreloader(e: any) {
   var perc = Math.round(e.progress * 100);
+  var scalePerc = 1 + (perc*0.01*0.25);
   $state.innerHTML = perc + "";
   $progressbar.setAttribute("width", perc + "%");
-  console.log(perc + '%');
+  $progressbarContainer.setAttribute("style", "-webkit-transform: scale(" + scalePerc + "); -ms-transform: scale(" + scalePerc + "); transform: scale(" + scalePerc + ");");
 }
 
 function onCompletePreloader(e: any) {
   console.log("onCompletePreloader");
+}
+//@ts-ignore
+window.onAppMounted = function() {
+  console.log("onAppMounted");
   $loaderScreen.className = $loaderScreen.className + " hidden"; 
+
 }

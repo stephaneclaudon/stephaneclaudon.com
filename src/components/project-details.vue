@@ -1,13 +1,13 @@
 <template>
   <div class="project-details grid-x" :class="{'aftertransition': visible}">
-    <div class="project-details-header" :style="headerBackgroundImage">
+    <div class="project-details-header" :style="headerBackgroundStyle">
       <div class="project-details-header-overlay"></div>
       <router-link class="project-details-back-button" :to="{ name: 'home' }">
         <close-button></close-button>
       </router-link>
       <div class="grid-x align-middle project-details-header-text">
         <div class="cell small-10 small-offset-1">
-          <projects-slider-item-title class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
+          <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
           <!--<h1 class="project-details-header--client">{{ currentProject.client }}</h1>
           <h2 class="project-details-header--title">{{ currentProject.title }}</h2>-->
         </div>
@@ -58,24 +58,28 @@ export default class ProjectDetails extends Vue {
   @State("currentProject") currentProject: any;
   @Prop() visible: boolean;
   currentScroll: number;
+  headerBackgroundImage: string;
+  headerBackgroundStyle: string = "";
+  headerTitleStyle: string = "";
 
   mounted(): void {
     window.addEventListener('scroll', this.onWindowScroll);
+    this.headerBackgroundImage = 'background-image: url("/dist/assets/img/' + this.currentProject.id + '@3x.jpg");';
+    this.onWindowScroll();
   }
 
   onWindowScroll(): void {
     this.currentScroll = window.pageYOffset;
+    this.setHeaderStyle();
   }
 
-  get headerBackgroundImage(): string {
-    console.log(this.currentScroll);
-    
-    return (
-      'background-image: url("/dist/assets/img/' +
-      this.currentProject.id +
-      '@2x.jpg");' +
-      ' background-position: center ' + this.currentScroll * 0.5 + 'px;'
-    );
+  setHeaderStyle(): void {
+    this.headerBackgroundStyle = this.headerBackgroundImage + ' background-position: center ' + this.currentScroll * 0.7 + 'px;';
+    this.headerTitleStyle = 'margin-top: ' + this.currentScroll * 0.9 + 'px;';
+  }
+
+  beforeDestroy(): void {
+    window.removeEventListener('scroll', this.onWindowScroll);
   }
 }
 </script>

@@ -81,6 +81,11 @@ export default class App extends Vue {
     }
   }
 
+  mounted(): void {
+    //@ts-ignore
+    window.onAppMounted(); //ugly i know... declaration in preloader.ts
+  }
+
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
     if (to.path.indexOf("project") > -1) {
