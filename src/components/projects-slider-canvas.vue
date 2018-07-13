@@ -154,6 +154,10 @@ export default class ProjectsSliderCanvas extends Vue {
     }
     (<HTMLElement>this.titlesContainerElement).style.width = containerWidth + "px";
   }
+
+  beforeDestroy(): void {
+    this.videoElement.removeEventListener('loadeddata', this.onVideoLoaded);
+  }
 }
 </script>
 

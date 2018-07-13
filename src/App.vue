@@ -1,5 +1,5 @@
 <template>
-  <div class="app grid-container full" :class="{'app--transitioning': transitioning}">
+  <div id="main" class="app grid-container full" :class="cssClasses">
 
     <div class="project-slider-container" :class="{'inactive': !projectSliderVisible}">
       <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="projectSliderVisible"></projects-slider-canvas>
@@ -81,6 +81,11 @@ export default class App extends Vue {
     }
   }
 
+  mounted(): void {
+    //@ts-ignore
+    window.onAppMounted(); //ugly i know... declaration in preloader.ts
+  }
+
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
     if (to.path.indexOf("project") > -1) {
@@ -128,6 +133,13 @@ export default class App extends Vue {
       }
     }
   }
+
+  get cssClasses(): Array<string> {
+    return [
+      this.transitioning?'app--transitioning':'',
+      this.$router.currentRoute.name!
+    ]
+  }
 }
 </script>
 
@@ -151,10 +163,11 @@ export default class App extends Vue {
   position: absolute;
   top: 5%;
 }
-.app {
+#main {
   position: relative;
   overflow-x: hidden;
-  &--transitioning {
+  height: auto;
+  &.app--transitioning, &.home {
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -190,6 +203,7 @@ export default class App extends Vue {
 }
 
 .project-slider-container {
+  position: absolute;
   height: 100%;
   width: 100%;
 }
