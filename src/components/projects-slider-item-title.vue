@@ -20,13 +20,15 @@ export default class ProjectsSliderItem extends Vue {
   projectArrayTitle: Array<string> = [];
   titleComputed: boolean = false;
   inited: boolean = false;
-  
+
   @Prop() project: any;
   @Prop() projectIndex: number;
-  @Prop({ default: false }) alive: boolean;
+  @Prop({ default: false })
+  alive: boolean;
 
   mounted() {
-    this.projectArrayTitle = Utils.lineBreaksToArray(this.$refs.innerfake as Element); 
+    this.projectArrayTitle = Utils.lineBreaksToArray(this.$refs
+      .innerfake as Element);
     this.titleComputed = true;
   }
 }
@@ -38,6 +40,8 @@ $titleAnimationDuration: 0.75s;
 $titleAnimationMultilineDelay: 0.15s;
 
 .projects-slider-item__title {
+  
+
   .title--inner,
   .title--innerfake {
     position: relative;
@@ -114,13 +118,13 @@ $titleAnimationMultilineDelay: 0.15s;
         }
       }
     }
-
   }
   .title--outer:not(:last-child) .title--inner::before {
     border-bottom: solid 1px $black;
   }
   .title--outer:first-child {
-    .title--innerfake, .title--inner {
+    .title--innerfake,
+    .title--inner {
       font-size: 1.5em;
       span {
         @include roboto-light;
@@ -132,18 +136,49 @@ $titleAnimationMultilineDelay: 0.15s;
         @include horizontal-gradient(#bbbbbb, #fdfbfb);
       }
     }
-  } 
+  }
   @for $i from 0 through 10 {
     .title--outer:nth-child(#{$i}) .title--inner {
       span {
-        @include animation(#{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5}, 0.01s, textAnim);
+        @include animation(
+          #{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5},
+          0.01s,
+          textAnim
+        );
       }
       &::before {
-        @include animation(#{$i * $titleAnimationMultilineDelay+$titleAnimationDuration * 0.5}, 0.01s, gradientBG);
+        @include animation(
+          #{$i * $titleAnimationMultilineDelay + $titleAnimationDuration * 0.5},
+          0.01s,
+          gradientBG
+        );
       }
       &::after {
-        @include animation(#{$i * $titleAnimationMultilineDelay}, $titleAnimationDuration, blackBG);
+        @include animation(
+          #{$i * $titleAnimationMultilineDelay},
+          $titleAnimationDuration,
+          blackBG
+        );
       }
+    }
+  }
+
+  /* Large and up */
+  @media screen and (min-width: 64em) {
+    font-size: 3em;
+    text-align: center;
+
+    .title--inner {
+      padding: 0;
+    }
+
+    .title--outer:first-child .title--inner {
+      color: $white;
+    }
+
+    .title--inner::before, .title--inner::after, .title--outer::before, .title--outer::after, .title--outer:first-child .title--inner::before, .title--outer:first-child .title--inner::after  {
+      border-bottom: none;
+      background: none;
     }
   }
 }

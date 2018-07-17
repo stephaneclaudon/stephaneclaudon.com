@@ -9,7 +9,7 @@
     <canvas id="pixiElement"></canvas>
     <div id="projects-slider-canvas-titles" class="projects-slider-canvas-titles" ref="sliderTitlesContainer">
       <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id">
-            <div class="cell small-9 small-offset-1">
+            <div class="cell small-10 small-offset-1 large-8 large-offset-2">
               <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
             </div>
         </div>
@@ -211,6 +211,10 @@ export default class ProjectsSliderCanvas extends Vue {
         text-align: left;
         .cell {
           margin-top: 35%;
+          /* Large and up */
+          @media screen and (min-width: 64em) {
+            margin-top: 0;
+          }
         }
       }
     }

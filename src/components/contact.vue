@@ -39,36 +39,41 @@ export default class ContactBox extends Vue {
 
   @Emit()
   open(): void {
-    this.$router.push('/contact');
+    this.$router.push("/contact");
   }
 
   @Emit()
   close(): void {
-    window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/home');
+    window.history.length > 1
+      ? this.$router.go(-1)
+      : this.$router.push("/home");
   }
 
-  @Watch('$route')
+  @Watch("$route")
   onRouteChanged(to: any, from: any): void {
-    if(from.name != to.name && ( from.name === 'contact' || to.name === 'contact')) {
+    if (
+      from.name != to.name &&
+      (from.name === "contact" || to.name === "contact")
+    ) {
       this.toggle();
     }
   }
 
   created(): void {
-    if(this.$router.currentRoute.name === "contact") {
+    if (this.$router.currentRoute.name === "contact") {
       this.toggle();
     }
   }
 
   toggle() {
     this.opened = !this.opened;
-      if (!this.opened) {
-        setTimeout(() => {
-          this.hidden = true;
-        }, 500);
-      } else {
-        this.hidden = false;
-      }
+    if (!this.opened) {
+      setTimeout(() => {
+        this.hidden = true;
+      }, 500);
+    } else {
+      this.hidden = false;
+    }
   }
 }
 </script>
@@ -88,8 +93,12 @@ export default class ContactBox extends Vue {
   @include transform(rotate(-90deg));
   @include transform-origin(35% 53% 0px);
   @keyframes contactToggle {
-    from {@include opacity(0);}
-    to {@include opacity(1);}
+    from {
+      @include opacity(0);
+    }
+    to {
+      @include opacity(1);
+    }
   }
   @include animation(0.25s, 1s, contactToggle);
   animation-timing-function: ease-out;
@@ -106,6 +115,13 @@ export default class ContactBox extends Vue {
   position: fixed;
   bottom: 5%;
   width: 100%;
+
+  .cell {
+    /* Large and up */
+    @media screen and (min-width: 64em) {
+      margin-left: 50px;
+    }
+  }
 }
 .contact {
   width: 100%;
@@ -132,7 +148,9 @@ export default class ContactBox extends Vue {
     height: 33%;
     bottom: 0px;
     @include transform(translate3d(0px, 100%, 0px));
-    @include transition(transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1) 0ms);
+    @include transition(
+      transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1) 0ms
+    );
     text-align: center;
 
     &__social {

@@ -90,7 +90,7 @@ export default class App extends Vue {
   onRouteChanged(to: any, from: any): void {
     if (to.path.indexOf("project") > -1) {
       this.gotoProject(to.name);
-    } else if (to.name != "contact"){
+    } else if (to.name != "contact") {
       this.showProjectDetails = false;
     }
   }
@@ -123,7 +123,6 @@ export default class App extends Vue {
     this.projectDetailsVisible = false;
     this.transitioning = false;
     this.setCurrentProject({});
-    
   }
 
   getProjectFromId(projectId: string): any {
@@ -136,9 +135,9 @@ export default class App extends Vue {
 
   get cssClasses(): Array<string> {
     return [
-      this.transitioning?'app--transitioning':'',
+      this.transitioning ? "app--transitioning" : "",
       this.$router.currentRoute.name!
-    ]
+    ];
   }
 }
 </script>
@@ -162,12 +161,20 @@ export default class App extends Vue {
 .name-wrapper {
   position: absolute;
   top: 5%;
+
+  /* Large and up */
+  @media screen and (min-width: 64em) {
+    top: 50px;
+    left: 50px;
+    margin-left: 0;
+  }
 }
 #main {
   position: relative;
   overflow-x: hidden;
   height: auto;
-  &.app--transitioning, &.home {
+  &.app--transitioning,
+  &.home {
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -208,7 +215,9 @@ export default class App extends Vue {
   width: 100%;
 }
 
-.trans-name-enter-active, .trans-name-leave-active, .project-slider-container {
+.trans-name-enter-active,
+.trans-name-leave-active,
+.project-slider-container {
   @include transition(all 0.3s ease-out);
   @include transform(scale(1));
   @include opacity(1);
@@ -217,7 +226,9 @@ export default class App extends Vue {
     @include transition(all 0.3s ease-out);
   }*/
 }
-.trans-name-enter, .trans-name-leave-to, .project-slider-container.inactive  {
+.trans-name-enter,
+.trans-name-leave-to,
+.project-slider-container.inactive {
   @include opacity(0);
   @include transform(scale(0.8));
 
@@ -225,19 +236,19 @@ export default class App extends Vue {
     margin-top: -110%;
     margin-left: 25%;
   }*/
-  
 }
 
-.trans-project-enter-active, .trans-project-leave-active {
+.trans-project-enter-active,
+.trans-project-leave-active {
   pointer-events: none;
   @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
   @include transform-origin(center 50vh);
   @include transform(scale(1));
   @include opacity(1);
 }
-.trans-project-enter, .trans-project-leave-to {
+.trans-project-enter,
+.trans-project-leave-to {
   @include opacity(0);
   @include transform(scale(1.2));
 }
-
 </style>
