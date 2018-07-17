@@ -170,6 +170,9 @@ $titleAnimationMultilineDelay: 0.15s;
 
     .title--inner {
       padding: 0;
+      span {
+        visibility: visible;
+      }
     }
 
     .title--outer:first-child .title--inner {
@@ -177,7 +180,7 @@ $titleAnimationMultilineDelay: 0.15s;
     }
 
     .title--inner::before, .title--inner::after, .title--outer::before, .title--outer::after, .title--outer:first-child .title--inner::before, .title--outer:first-child .title--inner::after  {
-      border-bottom: none;
+      border-bottom: none !important;
       background: none;
     }
   }
