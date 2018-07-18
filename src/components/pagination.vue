@@ -1,8 +1,8 @@
 <template>
-    <div class="page page-4">
-        <span class="border-indicator">
+    <div class="page">
+        <span class="border-indicator" :class="'active-' + currentIndex">
         </span>
-        <ol class="ol-4" :class="'active-' + currentIndex">
+        <ol :class="'active-' + currentIndex">
           <li v-for="index in pageCount" :key="index" class="circle" @click="goToIndex(index - 1)"></li>
         </ol>
     </div>
@@ -25,8 +25,6 @@ export default class Pagination extends Vue {
   setCurrentSliderIndex: (index: number) => void;
 
   goToIndex( index: number ): void {
-    console.log(index);
-    
     this.setCurrentSliderIndex(index);
   }
 
@@ -34,7 +32,7 @@ export default class Pagination extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import "../style/mixins.scss";
 
 $circle-width: 10px;
 $one-width-multiplier: 1.6;
@@ -48,12 +46,6 @@ $circle-margin: 4px;
 
 .page {
   display: flex;
-  ol:not(.ol-4) {
-    list-style: none;
-    padding: 0;
-    margin: auto;
-    position: relative;
-  }
 }
 
 .circle {
@@ -68,6 +60,10 @@ $circle-margin: 4px;
 }
 
 
+@mixin move-circles-4 ($step) {
+  margin-left: ($step * ($circle-width + $circle-margin * 2)) + 1px ;
+}
+
 .border-indicator {
   position: absolute;
   width: $border-indicator-width;
@@ -75,31 +71,33 @@ $circle-margin: 4px;
   border-radius: 50%;
   border: 1px solid white;
   top: 50%;
-  left: 50%;
-  margin-top: -$border-indicator-width/2;
-  margin-left: -$border-indicator-width/2;
-}
-
-@mixin move-circles-4 ($step) {
-  margin-left: -($step * ($circle-width + $circle-margin * 2)) - ($border-indicator-width/2 + 1) ;
-}
-
-ol.ol-4 {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 117px;
-  overflow: hidden;
-  margin-left: -$border-indicator-width/2 - 1px;
   margin-top: -$border-indicator-width/2 - 1px;
+  margin-left: 1px;
+
+
   @include transition(all 0.3s ease-out);
 
   @for $i from 0 through 10 {
     &.active-#{$i} {
       @include move-circles-4 ($i);
+      .circle:nth-child(#{$i+1}) {
+        background-color: $full-opacity-color;
+      }
+    }
+  }
+}
+
+
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  @include transition(all 0.3s ease-out);
+
+  @for $i from 0 through 10 {
+    &.active-#{$i} {
       .circle:nth-child(#{$i+1}) {
         background-color: $full-opacity-color;
       }

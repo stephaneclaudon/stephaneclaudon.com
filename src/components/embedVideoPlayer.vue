@@ -110,7 +110,7 @@ export default class EmbedVideoPlayer extends Vue {
 </script>
 
 <style lang="scss">
-@import "../style/main.scss";
+@import "../style/mixins.scss";
 
 .video-player {
   width: 100%;

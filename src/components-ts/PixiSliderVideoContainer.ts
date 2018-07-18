@@ -104,22 +104,25 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onDragStart(event: any): void {
-        this.off("pointerdown", this.onDragStart);
-        this.on("pointerup", this.onDragEnd);
-        this.on("pointerupoutside", this.onDragEnd);
-        this.on("pointermove", this.onDragUpdate);
+        //Make sure it's left button
+        if(event.data.button === 0) {
+            this.off("pointerdown", this.onDragStart);
+            this.on("pointerup", this.onDragEnd);
+            this.on("pointerupoutside", this.onDragEnd);
+            this.on("pointermove", this.onDragUpdate);
 
-        this._onDragStartEvent.dispatch();
-        this.domVideoElement.pause();
-        this.onAnimationUpdate();
-        this.dragTween.kill();
-        this.dragData = event.data;
-        let position = this.dragData.getLocalPosition(this);
-        this.pivot.set(position.x, position.y);
-        this.position.set(this.dragData.global.x, this.dragData.global.y);
-        this.beforeDragPosX = this.position.x;
-        this.dragAmount = 0;
-        this.updateZOrder();
+            this._onDragStartEvent.dispatch();
+            this.domVideoElement.pause();
+            this.onAnimationUpdate();
+            this.dragTween.kill();
+            this.dragData = event.data;
+            let position = this.dragData.getLocalPosition(this);
+            this.pivot.set(position.x, position.y);
+            this.position.set(this.dragData.global.x, this.dragData.global.y);
+            this.beforeDragPosX = this.position.x;
+            this.dragAmount = 0;
+            this.updateZOrder();
+        }
     }
 
     private onDragEnd(event: any): void {

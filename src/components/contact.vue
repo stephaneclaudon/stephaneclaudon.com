@@ -1,28 +1,24 @@
 <template>
   <div class="contact-wrapper">
-    <div class="grid-x">
-      <div class="cell small-10 small-offset-1">
-        <div class="toggle noselect" v-on:click="open()">Contact</div>
-      </div>
+    <div class="toggle noselect small-offset-1" v-on:click="open()">Contact</div>
       
-      <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">
-        <div class="contact-overlay" v-on:click="close()"></div>
-        <div class="contact-content grid-x align-center-middle">
-          <div class="cell">
-            <ul class="contact-content__social grid-x align-center">
-                <li class="cell small-2">
-                  <a href=""><i class="icon icon-facebook"></i></a>
-                </li>
-                <li class="cell small-2">
-                  <a href=""><i class="icon icon-vimeo"></i></a>
-                </li>
-                <li class="cell small-2">
-                  <a href=""><i class="icon icon-instagram"></i></a>
-                </li>
-            </ul>
-            <div class="contact-content__phone"><a href="tel:+336000000">+336000000</a></div>
-            <div class="contact-content__mail"><a href="mailto:hello@toto.com">hello@toto.com</a></div>
-          </div>
+    <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">
+      <div class="contact-overlay" v-on:click="close()"></div>
+      <div class="contact-content grid-x align-center-middle">
+        <div class="cell">
+          <ul class="contact-content__social grid-x align-center">
+              <li class="cell small-2">
+                <a href=""><i class="icon icon-facebook"></i></a>
+              </li>
+              <li class="cell small-2">
+                <a href=""><i class="icon icon-vimeo"></i></a>
+              </li>
+              <li class="cell small-2">
+                <a href=""><i class="icon icon-instagram"></i></a>
+              </li>
+          </ul>
+          <div class="contact-content__phone"><a href="tel:+336000000">+336000000</a></div>
+          <div class="contact-content__mail"><a href="mailto:hello@toto.com">hello@toto.com</a></div>
         </div>
       </div>
     </div>
@@ -79,7 +75,9 @@ export default class ContactBox extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import "../style/fonts.scss";
+@import "../style/mixins.scss";
+@import "../style/variables.scss";
 
 .toggle {
   display: inline-block;
@@ -116,7 +114,7 @@ export default class ContactBox extends Vue {
   bottom: 5%;
   width: 100%;
 
-  .cell {
+  .toggle {
     /* Large and up */
     @media screen and (min-width: 64em) {
       margin-left: 50px;

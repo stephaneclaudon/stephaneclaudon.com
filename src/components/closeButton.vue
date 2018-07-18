@@ -22,9 +22,8 @@ export default class CloseButton extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
-
-
+  @import "../style/mixins.scss";
+  
   .outer {
     line-height: 1;
     vertical-align: middle;

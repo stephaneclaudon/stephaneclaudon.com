@@ -23,7 +23,7 @@ export default class OtherProjects extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import "../style/variables.scss";
 
 .other-title {
   color: $grey;

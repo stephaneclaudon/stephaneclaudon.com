@@ -162,7 +162,7 @@ export default class ProjectsSliderCanvas extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  @import "../style/main.scss";
+@import "../style/mixins.scss";
 
   #videosContainer {
     position: fixed;
@@ -222,10 +222,9 @@ export default class ProjectsSliderCanvas extends Vue {
 
   .pagination {
     position: absolute;
-    bottom: 0;
-    transform: translateX(-50%);
+    bottom: 5%;
     left: 50%;
-    height: 10vh;
-    width: 100%;
+    @include transform(translateX(-50%));
+    height: 18px;
   }
 </style>

@@ -90,7 +90,8 @@ export default class ProjectsSliderItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import '../style/mixins.scss';
+@import '../style/variables.scss';
 
 .html-video-wrapper {
   height: 100%;

@@ -84,7 +84,8 @@ export default class ProjectDetails extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import "../style/mixins.scss";
+@import "../style/variables.scss";
 
 .project-details {
   position: absolute;

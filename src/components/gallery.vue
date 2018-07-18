@@ -40,7 +40,7 @@ export default class Gallery extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/main.scss";
+@import "../style/variables.scss";
 .gallery {
   overflow: hidden;
   width: 100%;
