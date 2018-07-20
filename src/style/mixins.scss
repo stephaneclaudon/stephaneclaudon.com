@@ -85,7 +85,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor', GradientType=1);
 }
 
-@mixin animation ($delay, $duration, $animation, $direction: forward, $fillmode: forwards) {
+@mixin animation ($delay, $duration, $animation, $direction: normal, $fillmode: forwards) {
     -webkit-animation-delay: $delay;
     -webkit-animation-duration: $duration;
     -webkit-animation-name: $animation;

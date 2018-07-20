@@ -5,6 +5,7 @@ module.exports = {
     "prefixedCSS"
   ],
   "feature-detects": [
-    "test/canvas"
+    "test/canvas",
+    "test/hiddenscroll"
   ]
 };

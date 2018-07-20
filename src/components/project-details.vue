@@ -1,5 +1,5 @@
 <template>
-  <div class="project-details grid-x" :class="{'aftertransition': visible}">
+  <div class="project-details grid-x" :class="{'aftertransition': visible, 'fakescrollbar': transitioning && !Modernizr.hiddenscroll}">
     <div class="project-details-header" :style="headerBackgroundStyle">
       <div class="project-details-header-overlay"></div>
       <router-link class="project-details-back-button" :to="{ name: 'home' }">
@@ -37,6 +37,7 @@
 </template>
 
 <script lang="ts">
+import * as ModernizrObject from "modernizr";
 import { State, Mutation } from "vuex-class";
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import OtherProjects from "../components/other-projects.vue";
@@ -44,6 +45,7 @@ import EmbedVideoPlayer from "../components/embedVideoPlayer.vue";
 import CloseButton from "../components/closeButton.vue";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 import Gallery from "./gallery.vue";
+
 
 @Component({
   components: {
@@ -57,10 +59,15 @@ import Gallery from "./gallery.vue";
 export default class ProjectDetails extends Vue {
   @State("currentProject") currentProject: any;
   @Prop() visible: boolean;
+  @Prop() transitioning: boolean;
   currentScroll: number;
   headerBackgroundImage: string;
   headerBackgroundStyle: string = "";
   headerTitleStyle: string = "";
+
+  get Modernizr(): any {
+    return ModernizrObject;
+  }
 
   mounted(): void {
     window.addEventListener('scroll', this.onWindowScroll);
@@ -97,6 +104,11 @@ export default class ProjectDetails extends Vue {
 
   &.aftertransition {
     position: relative;
+  }
+
+  &.fakescrollbar {
+    width: auto;
+    margin-right: 16px;
   }
 
   &-header {

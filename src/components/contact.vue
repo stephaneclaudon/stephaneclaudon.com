@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-wrapper">
+  <div class="contact-wrapper small-offset-1">
     <div class="toggle noselect small-offset-1" v-on:click="open()">Contact</div>
       
     <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">
@@ -86,6 +86,8 @@ export default class ContactBox extends Vue {
   font-size: 0.8em;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+  cursor: pointer;
+  @include transition(color 0.2s);
   @include opacity(0);
   @include roboto-black;
   @include transform(rotate(-90deg));
@@ -101,25 +103,36 @@ export default class ContactBox extends Vue {
   @include animation(0.25s, 1s, contactToggle);
   animation-timing-function: ease-out;
 
+  &:hover {
+    color: $light-grey;
+    &::after {
+      border-color: $light-grey;
+    }
+  }
+
   &::after {
     content: "";
     display: block;
     width: 100%;
     border-bottom: solid 1px $white;
     margin-top: 5px;
+    @include transition(border-color 0.2s);
   }
 }
 .contact-wrapper {
   position: fixed;
   bottom: 5%;
-  width: 100%;
+  width: auto;
 
-  .toggle {
-    /* Large and up */
-    @media screen and (min-width: 64em) {
+  /* Large and up */
+  @media screen and (min-width: 64em) {
+    margin-left: 0;
+    .toggle {
       margin-left: 50px;
     }
   }
+
+  
 }
 .contact {
   width: 100%;

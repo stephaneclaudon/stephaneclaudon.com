@@ -7,7 +7,7 @@
     </div>
 
     <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
-      <project-details v-if="showProjectDetails" :visible="projectDetailsVisible"></project-details>
+      <project-details v-if="showProjectDetails" :visible="projectDetailsVisible" :transitioning="transitioning"></project-details>
     </transition>
 
     <transition name="trans-name">

@@ -104,8 +104,8 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onDragStart(event: any): void {
-        //Make sure it's left button
-        if(event.data.button === 0) {
+        //Make sure it's left button on mouse pointer
+        if(event.data.pointerType !== "mouse" || (event.data.pointerType === "mouse" && event.data.button === 0)) {
             this.off("pointerdown", this.onDragStart);
             this.on("pointerup", this.onDragEnd);
             this.on("pointerupoutside", this.onDragEnd);
