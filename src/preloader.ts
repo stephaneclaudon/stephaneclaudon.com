@@ -1,4 +1,8 @@
 import jsonData from "./assets/data/data.json";
+import Global from "./Global";
+
+let GlobalInstance = new Global();
+GlobalInstance.setMediaPath();
 
 //@ts-ignore
 var preloader = new createjs.LoadQueue(),
@@ -8,15 +12,15 @@ var preloader = new createjs.LoadQueue(),
   $progressbarContainer: HTMLElement = document.getElementById('progressbar-container')!;
 
 var myAssets: Array<string> = [];
-myAssets.push("/dist/assets/loops/all-projects-mobile-low.mp4");
-myAssets.push("/dist/assets/fonts/icomoon.eot?juz7kf");
-myAssets.push("/dist/assets/fonts/icomoon.eot?juz7kf#iefix");
-myAssets.push("/dist/assets/fonts/icomoon.ttf?juz7kf");
-myAssets.push("/dist/assets/fonts/icomoon.woff?juz7kf");
-myAssets.push("/dist/assets/fonts/icomoon.svg?juz7kf#icomoon");
+myAssets.push(process.mediaPath + "loops/all-projects-mobile-low.mp4");
+myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf");
+myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf#iefix");
+myAssets.push(process.mediaPath + "fonts/icomoon.ttf?juz7kf");
+myAssets.push(process.mediaPath + "fonts/icomoon.woff?juz7kf");
+myAssets.push(process.mediaPath + "fonts/icomoon.svg?juz7kf#icomoon");
 
 for (let index = 0; index < jsonData.length; index++) {
-  myAssets.push("/dist/assets/img/" + jsonData[index].id + "@3x.jpg");
+  myAssets.push(process.mediaPath + "img/" + jsonData[index].id + "@3x.jpg");
 }
 
 myAssets.push("/dist/main.js");

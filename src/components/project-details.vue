@@ -5,8 +5,8 @@
       <router-link class="project-details-back-button" :to="{ name: 'home' }">
         <close-button></close-button>
       </router-link>
-      <div class="grid-x align-middle project-details-header-text">
-        <div class="cell small-10 small-offset-1">
+      <div class="grid-x align-center-middle project-details-header-text">
+        <div class="cell small-10">
           <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
           <!--<h1 class="project-details-header--client">{{ currentProject.client }}</h1>
           <h2 class="project-details-header--title">{{ currentProject.title }}</h2>-->
@@ -71,7 +71,7 @@ export default class ProjectDetails extends Vue {
 
   mounted(): void {
     window.addEventListener('scroll', this.onWindowScroll);
-    this.headerBackgroundImage = 'background-image: url("/dist/assets/img/' + this.currentProject.id + '@3x.jpg");';
+    this.headerBackgroundImage = 'background-image: url("' + process.mediaPath + 'img/' + this.currentProject.id + '@3x.jpg");';
     this.onWindowScroll();
   }
 

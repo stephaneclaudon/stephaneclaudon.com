@@ -19,7 +19,7 @@ import ImageSrc from "./image.vue";
 export default class Gallery extends Vue {
   @State("currentProject") currentProject: any;
   @Prop() loadimages: boolean;
-  private imagePath: string = "/dist/assets/img/";
+  private imagePath: string = process.mediaPath + "img/";
 
   getImageSrc(imageIndex: number): Array<string> {
     let srcs: Array<string> = [

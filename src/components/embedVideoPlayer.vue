@@ -39,7 +39,7 @@ export default class EmbedVideoPlayer extends Vue {
   private height: number = 0;
   private style: string = "";
 
-  private imagePath: string = "/dist/assets/img/";
+  private imagePath: string = process.mediaPath + "img/";
 
   mounted() {
     this.isMounted = true;

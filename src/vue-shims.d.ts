@@ -7,3 +7,10 @@ declare module "*.json" {
     const value: any;
     export default value;
 }
+
+declare var process: {
+    env: {
+        NODE_ENV: string
+    },
+    mediaPath: string
+}

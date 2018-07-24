@@ -51,7 +51,7 @@ export default class ProjectsSliderItem extends Vue {
   }
 
   getVideoPath(): String {
-    return "/dist/assets/loops/" + this.project.id + "-mobile.mp4";
+    return process.mediaPath + "loops/" + this.project.id + "-mobile.mp4";
   }
 
   mounted() {

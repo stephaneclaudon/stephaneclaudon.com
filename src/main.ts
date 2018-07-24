@@ -8,7 +8,10 @@ import mutations from './store/mutations'
 //@ts-ignore
 import Stats from './lib/stats.min.js'
 import jsonData from "./assets/data/data.json";
+import Global from "./Global";
 
+let GlobalInstance = new Global();
+GlobalInstance.setMediaPath();
 
 Vue.use(Vuex);
 Vue.use(VueRouter);

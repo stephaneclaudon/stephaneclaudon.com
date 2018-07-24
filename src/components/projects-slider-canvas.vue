@@ -8,9 +8,12 @@
     </div>
     <canvas id="pixiElement"></canvas>
     <div id="projects-slider-canvas-titles" class="projects-slider-canvas-titles" ref="sliderTitlesContainer">
-      <div class="grid-x align-middle" v-for="(project, index) in projects" :key="project.id">
-            <div class="cell small-10 small-offset-1 large-8 large-offset-2">
+      <div class="grid-x align-center-middle" v-for="(project, index) in projects" :key="project.id">
+            <div class="cell small-10 large-8">
               <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
+            </div>
+            <div class="cell small-10 large-8">
+              {{ project.description }}
             </div>
         </div>
     </div>
@@ -66,7 +69,7 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   getVideoPath(): String {
-    return "/dist/assets/loops/all-projects-mobile-low.mp4";
+    return process.mediaPath + "loops/all-projects-mobile-low.mp4";
   }
 
   initPIXI() {
@@ -199,22 +202,25 @@ export default class ProjectsSliderCanvas extends Vue {
     }*/
 
     &-titles {
-      pointer-events: none;
+      /*pointer-events: none;*/
       position: absolute;
-      height: 100%;
+      height: 75%;
       width: 100%;
+
+      /* Large and up */
+          @media screen and (min-width: 64em) {
+            height: 100%;
+          }
 
       .grid-x {
         height: 100%;
         width: 100%;
         float: left;
         text-align: left;
+        justify-content: center;
+        align-content: flex-end;
         .cell {
-          margin-top: 35%;
-          /* Large and up */
-          @media screen and (min-width: 64em) {
-            margin-top: 0;
-          }
+          
         }
       }
     }

@@ -30,7 +30,7 @@ export default class AppPIXI extends Vue {
       //"https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/awpc%403x.jpg"
       //"https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/nautilus%403x.jpg"
       "https://raw.githubusercontent.com/stephaneclaudon/stephaneclaudon.com/master/src/assets/img/quattro2%403x.jpg"
-      //"/dist/assets/img/pixel.jpg"
+      //process.mediaPath + "img/pixel.jpg"
     );
     this.sprite.anchor.set(0.5);
     this.sprite.x = this.pixiApp.screen.width / 2;
