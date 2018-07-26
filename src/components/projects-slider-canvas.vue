@@ -12,7 +12,7 @@
             <div class="cell small-10 large-8">
               <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
             </div>
-            <div class="cell small-10 large-8">
+            <div class="cell small-10 large-8 projects-slider-canvas-titles--description align-text-center">
               {{ project.description }}
             </div>
         </div>
@@ -202,16 +202,17 @@ export default class ProjectsSliderCanvas extends Vue {
     }*/
 
     &-titles {
-      /*pointer-events: none;*/
+      pointer-events: none;
       position: absolute;
       height: 75%;
       width: 100%;
 
-      /* Large and up */
-          @media screen and (min-width: 64em) {
-            height: 100%;
-          }
-
+      
+      &--description {
+        display: none;
+        font-size: 1.1em;
+        margin-top: 1em;
+      }
       .grid-x {
         height: 100%;
         width: 100%;
@@ -219,8 +220,20 @@ export default class ProjectsSliderCanvas extends Vue {
         text-align: left;
         justify-content: center;
         align-content: flex-end;
-        .cell {
-          
+        align-items: flex-end;
+      }
+
+      /* Large and up */
+      @media screen and (min-width: 64em) {
+        height: 100%;
+
+        .grid-x {
+          align-content: center;
+          align-items: center;
+        }
+
+        &--description {
+          display: block;
         }
       }
     }
