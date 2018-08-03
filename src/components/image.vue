@@ -32,20 +32,29 @@ export default class ImageSrc extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "../style/mixins.scss";
 .image {
     position: relative;
     display: block;
     height: 100%;
-    .loader {
-        display: block;
-        position: absolute;
-        z-index: 10;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-    img {
+    picture {
         height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .loader {
+            display: block;
+            position: absolute;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+        img {
+            height: 100%;
+        }
     }
+    
 }
 </style>

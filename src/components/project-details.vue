@@ -1,38 +1,49 @@
 <template>
   <div class="project-details grid-x" :class="{'aftertransition': visible, 'fakescrollbar': transitioning && !Modernizr.hiddenscroll}">
-    <div class="project-details-header" :style="headerBackgroundStyle">
-      <div class="project-details-header-overlay"></div>
-      <router-link class="project-details-back-button" :to="{ name: 'home' }">
-        <close-button></close-button>
-      </router-link>
-      <div class="grid-x align-center-middle project-details-header-text">
-        <div class="cell small-10">
-          <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
-          <!--<h1 class="project-details-header--client">{{ currentProject.client }}</h1>
-          <h2 class="project-details-header--title">{{ currentProject.title }}</h2>-->
-        </div>
-      </div>   
-    </div>
 
-    <div class="project-details-description cell small-10 small-offset-1">
-      <p>{{ currentProject.description }}</p>
-    </div>
-
-    <div class="cell small-10 small-offset-1">
-      <div class="grid-x">
-        <gallery class="project-details-gallery" :loadimages="visible"></gallery>
+    <div class="cell small-12 large-6">
+      <div class="project-details-header" :style="headerBackgroundStyle">
+        <div class="project-details-header-overlay"></div>
+        <router-link class="project-details-back-button" :to="{ name: 'home' }">
+          <close-button></close-button>
+        </router-link>
+        <div class="grid-x align-center-middle project-details-header-text">
+          <div class="cell small-10">
+            <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
+            <div class="project-details-header-text--description">
+              <p>{{ currentProject.description }}</p>
+            </div>
+            <div class="project-details-header-text--credits cell small-10 align-text-center">
+              <h2>Credits</h2>
+              <p v-html="currentProject.credits"></p>
+              <div class="project-details-credits-date">{{ currentProject.date }}</div>
+            </div>
+          </div>
+        </div>   
       </div>
     </div>
-      
-    <embed-video-player class="cell small-10 small-offset-1 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
-    <div class="project-details-credits cell small-10 small-offset-1">
-      <h2>Credits</h2>
-      <p v-html="currentProject.credits"></p>
-      <div class="align-text-center project-details-credits-date">{{ currentProject.date }}</div>
+    <div class="cell small-12 large-6">
+      <div class="grid-x project-details--right">
+        <div class="project-details-description cell small-10 small-offset-1">
+          <p>{{ currentProject.description }}</p>
+        </div>
+
+        <div class="cell small-10 small-offset-1 large-12 large-offset-0">
+          <div class="grid-x">
+            <gallery class="project-details-gallery" :loadimages="visible"></gallery>
+          </div>
+        </div>
+          
+        <embed-video-player class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
+
+        <div class="project-details-credits cell small-10 small-offset-1">
+          <h2>Credits</h2>
+          <p v-html="currentProject.credits"></p>
+          <div class="project-details-credits-date">{{ currentProject.date }}</div>
+        </div>
+      </div>
     </div>
-
-    <!--<other-projects></other-projects>-->
   </div>
 </template>
 
@@ -45,7 +56,6 @@ import EmbedVideoPlayer from "../components/embedVideoPlayer.vue";
 import CloseButton from "../components/closeButton.vue";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 import Gallery from "./gallery.vue";
-
 
 @Component({
   components: {
@@ -70,8 +80,13 @@ export default class ProjectDetails extends Vue {
   }
 
   mounted(): void {
-    window.addEventListener('scroll', this.onWindowScroll);
-    this.headerBackgroundImage = 'background-image: url("' + process.mediaPath + 'img/' + this.currentProject.id + '@3x.jpg");';
+    //window.addEventListener("scroll", this.onWindowScroll);
+    this.headerBackgroundImage =
+      'background-image: url("' +
+      process.mediaPath +
+      "img/" +
+      this.currentProject.id +
+      '@3x.jpg");';
     this.onWindowScroll();
   }
 
@@ -81,12 +96,16 @@ export default class ProjectDetails extends Vue {
   }
 
   setHeaderStyle(): void {
-    this.headerBackgroundStyle = this.headerBackgroundImage + ' background-position: center ' + this.currentScroll * 0.7 + 'px;';
-    this.headerTitleStyle = 'margin-top: ' + this.currentScroll * 0.9 + 'px;';
+    this.headerBackgroundStyle =
+      this.headerBackgroundImage +
+      " background-position: center " +
+      this.currentScroll * 0.7 +
+      "px;";
+    this.headerTitleStyle = "margin-top: " + this.currentScroll * 0.9 + "px;";
   }
 
   beforeDestroy(): void {
-    window.removeEventListener('scroll', this.onWindowScroll);
+    window.removeEventListener("scroll", this.onWindowScroll);
   }
 }
 </script>
@@ -102,6 +121,15 @@ export default class ProjectDetails extends Vue {
   min-height: 100%;
   padding-bottom: 3em;
 
+  /* Large and up */
+  @media screen and (min-width: 64em) {
+    &--right {
+      display: flex;
+      align-content: center;
+      align-items: center;
+    }
+  }
+  
   &.aftertransition {
     position: relative;
   }
@@ -128,10 +156,13 @@ export default class ProjectDetails extends Vue {
       top: 0;
       width: 100%;
       height: 100%;
-      @include vertical-gradient(transparent, $black, 30%, 100%);
+      @include vertical-gradient(transparent, black, 30%, 100%);
     }
     &-text {
       height: 100%;
+      z-index: 2;
+      position: relative;
+
       &--title {
         text-align: center;
 
@@ -154,6 +185,16 @@ export default class ProjectDetails extends Vue {
           }
         }
       }
+      &--description {
+        display: none;
+        color: $white;
+        text-align: center;
+        font-size: 1.5em;
+        margin-top: 2em;
+      }
+      &--credits {
+        padding: 4em 0;
+      }
     }
     &--client,
     &--title {
@@ -166,6 +207,28 @@ export default class ProjectDetails extends Vue {
     }
     &--title {
       font-size: 2.5em;
+    }
+
+    /* Large and up */
+    @media screen and (min-width: 64em) {
+      position: fixed;
+      height: 100%;
+      width: 50%;
+      padding-top: 0em;
+
+      &-overlay {
+        @include vertical-gradient(
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 1),
+          30%,
+          100%
+        );
+      }
+
+      &-text--description,
+      &-text--credits {
+        display: block;
+      }
     }
   }
 
@@ -185,14 +248,18 @@ export default class ProjectDetails extends Vue {
   }
   &-gallery {
     margin: 2em 0;
+    @media screen and (min-width: 64em) {
+      margin: 0;
+    }
   }
 
   &-video {
   }
 
-  &-credits, &-description {
+  &-header-text--credits,
+  &-credits,
+  &-description {
     color: $grey;
-    padding: 2em 0;
     font-size: 1.2em;
 
     h2 {
@@ -205,9 +272,18 @@ export default class ProjectDetails extends Vue {
       word-wrap: break-word;
       line-height: 1.3em;
     }
-    
+
     &-date {
       padding: 2em 0;
+    }
+  }
+
+  &-credits,
+  &-description {
+    padding: 2em 0;
+    /* Large and up */
+    @media screen and (min-width: 64em) {
+      display: none;
     }
   }
 
