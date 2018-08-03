@@ -105,7 +105,6 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-
 setTimeout(() => {
   let vueApp: Vue = new Vue({
     el: document.querySelector('#app') as Element,

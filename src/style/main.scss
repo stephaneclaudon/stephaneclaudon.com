@@ -28,6 +28,11 @@ body {
 a, a:hover, a:visited {
   color: inherit;
   text-decoration: none;
+  @include transition(color 0.2s ease-out);
+}
+
+a:hover {
+  color: $white;
 }
 
 .align-text-left {

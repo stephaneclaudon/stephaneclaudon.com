@@ -28,7 +28,7 @@
 
     <div class="project-details-credits cell small-10 small-offset-1">
       <h2>Credits</h2>
-      <p>{{ currentProject.credits }}</p>
+      <p v-html="currentProject.credits"></p>
       <div class="align-text-center project-details-credits-date">{{ currentProject.date }}</div>
     </div>
 
@@ -201,11 +201,11 @@ export default class ProjectDetails extends Vue {
       margin: 0 0 2em 0;
     }
     p {
-      white-space: pre-wrap;
+      white-space: pre-line;
       word-wrap: break-word;
       line-height: 1.3em;
     }
-
+    
     &-date {
       padding: 2em 0;
     }
