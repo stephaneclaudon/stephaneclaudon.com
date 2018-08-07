@@ -193,7 +193,7 @@ export default class ProjectDetails extends Vue {
         margin-top: 2em;
       }
       &--credits {
-        padding: 4em 0;
+        padding: 4em 0 0 0;
       }
     }
     &--client,
