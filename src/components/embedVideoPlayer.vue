@@ -4,7 +4,7 @@
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
-      <image-src :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible"></image-src>
+      <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible"></image-src>
       <span class="video-player-play-button">
         <span></span>
       </span>
@@ -50,7 +50,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   loadIframe(): void {
-   this.loadVideoPlayer = true;
+   // his.loadVideoPlayer = true;
   }
 
   setDimensions(): void {
@@ -93,7 +93,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   iframeLoaded(): void {
-    this.showVideoPlayer = !this.showVideoPlayer;
+    // this.showVideoPlayer = !this.showVideoPlayer;
   }
 
   serializeURLParameters(params: any): string {
@@ -138,6 +138,11 @@ export default class EmbedVideoPlayer extends Vue {
       }
     }
 
+    &__image {
+      width: 100%;
+      height: 100%;
+    }
+    
     img {
       height: 100%;
       width: auto;

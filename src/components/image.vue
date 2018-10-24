@@ -21,9 +21,12 @@ import Loader from "./loader.vue";
 })
 export default class ImageSrc extends Vue {
   private loading: boolean = true;
-  @Prop() srcs: Array<string>;
-  @Prop() title: string;
-  @Prop() loadimage: boolean;
+  @Prop()
+  srcs: Array<string>;
+  @Prop()
+  title: string;
+  @Prop()
+  loadimage: boolean;
 
   loaded(): void {
     this.loading = false;
@@ -34,27 +37,27 @@ export default class ImageSrc extends Vue {
 <style lang="scss" scoped>
 @import "../style/mixins.scss";
 .image {
-    position: relative;
-    display: block;
+  position: relative;
+  display: block;
+  height: 100%;
+  picture {
     height: 100%;
-    picture {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .loader {
-            display: block;
-            position: absolute;
-            z-index: 10;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
-        }
-        img {
-            height: 100%;
-        }
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      height: 100%;
     }
-    
+  }
+  .loader {
+    display: block;
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
 }
 </style>

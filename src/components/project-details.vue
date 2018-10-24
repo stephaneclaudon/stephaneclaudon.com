@@ -1,5 +1,5 @@
 <template>
-  <div class="project-details grid-x" :class="{'aftertransition': visible, 'fakescrollbar': transitioning && !Modernizr.hiddenscroll}">
+  <div class="project-details grid-x" ref="projectDetails" :class="{'aftertransition': visible, 'fakescrollbar': transitioning && !Modernizr.hiddenscroll}">
 
     <div class="cell small-12 large-6">
       <div class="project-details-header" :style="headerBackgroundStyle">
@@ -88,6 +88,9 @@ export default class ProjectDetails extends Vue {
       this.currentProject.id +
       '@3x.jpg");';
     this.onWindowScroll();
+    setInterval(() => {
+      // console.log((this.$refs.projectDetails as any).clientHeight);
+    }, 500)
   }
 
   onWindowScroll(): void {
@@ -123,6 +126,8 @@ export default class ProjectDetails extends Vue {
 
   /* Large and up */
   @media screen and (min-width: 64em) {
+    padding-bottom: 0;
+    height: 100%;
     &--right {
       display: flex;
       align-content: center;
@@ -156,7 +161,7 @@ export default class ProjectDetails extends Vue {
       top: 0;
       width: 100%;
       height: 100%;
-      @include vertical-gradient(transparent, black, 30%, 100%);
+      @include vertical-gradient(transparent, $black, 30%, 100%);
     }
     &-text {
       height: 100%;
@@ -193,6 +198,7 @@ export default class ProjectDetails extends Vue {
         margin-top: 2em;
       }
       &--credits {
+        display: none;
         padding: 4em 0 0 0;
       }
     }
