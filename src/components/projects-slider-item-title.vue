@@ -7,6 +7,10 @@
           </span>
         </h1>
 
+        <div class="align-text-center">
+          <link-button class="link" :title="'view work'"></link-button>
+        </div>
+
         <div v-if="!titleComputed" class="title--innerfake"><span ref="innerfake" :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
     </div>
 </template>
@@ -14,8 +18,13 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import Utils from "../utils/Utils";
+import LinkButton from "./link-button.vue";
 
-@Component
+@Component({
+  components: {
+    LinkButton
+  }
+})
 export default class ProjectsSliderItem extends Vue {
   projectArrayTitle: Array<string> = [];
   titleComputed: boolean = false;
@@ -42,8 +51,10 @@ $titleAnimationDuration: 0.75s;
 $titleAnimationMultilineDelay: 0.15s;
 
 .projects-slider-item__title {
+  .link {
+    pointer-events: fill;
+  }
   
-
   .title--inner,
   .title--innerfake {
     position: relative;
