@@ -16,6 +16,13 @@
     transform: $transforms;
 }
 
+// box sizing
+@mixin box-sizing($boxsizing) {
+  box-sizing: $boxsizing;
+  -moz-box-sizing: $boxsizing;
+  -webkit-box-sizing: $boxsizing;
+}
+
 // generic transform-origin
 @mixin transform-origin($transforms) {
     -moz-transform-origin: $transforms;

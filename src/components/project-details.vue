@@ -9,7 +9,7 @@
         </router-link>
         <div class="grid-x align-center-middle project-details-header-text">
           <div class="cell small-10">
-            <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false"></projects-slider-item-title>
+            <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false" :link="false"></projects-slider-item-title>
             <div class="project-details-header-text--description">
               <p>{{ currentProject.description }}</p>
             </div>

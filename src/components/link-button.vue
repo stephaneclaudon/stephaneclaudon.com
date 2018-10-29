@@ -1,7 +1,8 @@
 <template>
-  <a href="" class="button button-outer">
+  <router-link :to="to" class="button button-outer">
+    <span class="button-bg"></span>
     <span class="button-inner">{{ title }}</span>
-  </a>
+  </router-link>
 </template>
 
 <script lang="ts">
@@ -14,13 +15,17 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class LinkButton extends Vue {
   @Prop()
   title: string
+
+  @Prop()
+  to: string
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../style/mixins.scss";
-$border-width: 1px;
-$border-du: 0.3s;
+@import '../style/fonts.scss';
+$border-width: 2px;
+$border-du: 400ms;
 
 @mixin button-border-animation ($ease-height, $ease-width) {
   position: absolute;
@@ -29,7 +34,7 @@ $border-du: 0.3s;
   width: 0%;
   height: 0%;
   background-color: white;
-  transition: height $border-du ease-out $ease-height, width $border-du ease-out $ease-width;
+  @include transition(height $ease-height cubic-bezier(0.165, 0.84, 0.44, 1), width $ease-width cubic-bezier(0.165, 0.84, 0.44, 1))
 }
 
 .button {
@@ -37,15 +42,14 @@ $border-du: 0.3s;
   position: relative;
   text-align: center;
   text-transform: uppercase;
-  font-size: 0.5em;
   
   &:focus {
     outline: 0;
   }
 
-  &:hover {
+  &:hover, &.active {
     .button-inner {
-      color: rgba(255,255,255, 1);
+      color: rgba(0,0,0, 1);
     }
 
     &::before, .button-inner::before {
@@ -55,6 +59,28 @@ $border-du: 0.3s;
     &::after, .button-inner::after {
       width: 100%;
     }
+
+    .button-bg {
+      @include opacity(1);
+      @include transform(scaleX(1) scaleY(1));
+    }
+  }
+
+  &-bg {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    display: block;
+    background-color: white;
+    top: $border-width * 2;
+    bottom: $border-width * 2;
+    left: $border-width * 2;
+    right: $border-width * 2;
+    @include box-sizing(border-box);
+    @include transform(scaleX(0.9625) scaleY(0.869565));
+    @include opacity(0); 
+    @include transition(opacity $border-du cubic-bezier(0.165, 0.84, 0.44, 1), transform $border-du cubic-bezier(0.165, 0.84, 0.44, 1));
+
   }
 
   
@@ -78,12 +104,14 @@ $border-du: 0.3s;
   }
   
   &-inner {
+    font-size: 0.4em;
+    @include roboto-black;
     background-color: transparent;
     cursor: pointer;
-    padding: 1em 2em;
+    padding: 1.4em 3em;
     display: inline-block;
     border: $border-width solid rgba(255,255,255, 0.5);
-    color: rgba(255,255,255, 0.5);
+    color: rgba(255,255,255, 1);
     transition: color $border-du;
     &::before, &::after {
       top: 0;

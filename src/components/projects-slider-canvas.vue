@@ -10,10 +10,7 @@
     <div id="projects-slider-canvas-titles" class="projects-slider-canvas-titles" ref="sliderTitlesContainer">
       <div class="grid-x align-center-middle" v-for="(project, index) in projects" :key="project.id">
             <div class="cell small-10 large-8">
-              <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving"></projects-slider-item-title>
-            </div>
-            <div class="cell small-10 large-8 projects-slider-canvas-titles--description align-text-center">
-              {{ project.description }}
+              <projects-slider-item-title :project="project" :project-index="index" :alive="isCurrentIndex(index)" :moving="sliderIsMoving" :link="true"></projects-slider-item-title>
             </div>
         </div>
     </div>
@@ -207,12 +204,6 @@ export default class ProjectsSliderCanvas extends Vue {
       height: 75%;
       width: 100%;
 
-      
-      &--description {
-        display: none;
-        font-size: 1.1em;
-        margin-top: 1em;
-      }
       .grid-x {
         height: 100%;
         width: 100%;
@@ -230,10 +221,6 @@ export default class ProjectsSliderCanvas extends Vue {
         .grid-x {
           align-content: center;
           align-items: center;
-        }
-
-        &--description {
-          display: block;
         }
       }
     }

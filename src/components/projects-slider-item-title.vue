@@ -7,8 +7,12 @@
           </span>
         </h1>
 
-        <div class="align-text-center">
-          <link-button class="link" :title="'view work'"></link-button>
+        <div v-if="link" class="projects-slider-item__title--description align-text-center">
+          {{ project.description }}
+        </div>
+
+        <div v-if="link" class="align-text-center">
+          <link-button class="projects-slider-item__title--link" :title="'view work'" :to="'/project/' + project.id"></link-button>
         </div>
 
         <div v-if="!titleComputed" class="title--innerfake"><span ref="innerfake" :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
@@ -30,6 +34,7 @@ export default class ProjectsSliderItem extends Vue {
   titleComputed: boolean = false;
   inited: boolean = false;
 
+  @Prop() link: boolean;
   @Prop() project: any;
   @Prop() projectIndex: number;
   @Prop({ default: false })
@@ -51,8 +56,10 @@ $titleAnimationDuration: 0.75s;
 $titleAnimationMultilineDelay: 0.15s;
 
 .projects-slider-item__title {
-  .link {
+  &--link {
     pointer-events: fill;
+    margin: 2em 0;
+    z-index: 999;
   }
   
   .title--inner,
@@ -176,6 +183,12 @@ $titleAnimationMultilineDelay: 0.15s;
     }
   }
 
+  &--description {
+    display: none;
+    font-size: 0.5em;
+    margin-top: 1em;
+  }
+
   /* Large and up */
   @media screen and (min-width: 64em) {
     font-size: 3em;
@@ -195,6 +208,10 @@ $titleAnimationMultilineDelay: 0.15s;
     .title--inner::before, .title--inner::after, .title--outer::before, .title--outer::after, .title--outer:first-child .title--inner::before, .title--outer:first-child .title--inner::after  {
       border-bottom: none !important;
       background: none;
+    }
+
+    &--description {
+      display: block;
     }
   }
 }
