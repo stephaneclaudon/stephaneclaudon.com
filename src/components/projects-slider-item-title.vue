@@ -11,8 +11,8 @@
           {{ project.description }}
         </div>
 
-        <div v-if="link" class="align-text-center">
-          <link-button class="projects-slider-item__title--link" :title="'view work'" :to="'/project/' + project.id"></link-button>
+        <div v-if="link" class="align-text-center projects-slider-item__title--link">
+          <link-button class="link-button" :class="{'visible': !moving && alive}" :title="'view work'" :to="'/project/' + project.id"></link-button>
         </div>
 
         <div v-if="!titleComputed" class="title--innerfake"><span ref="innerfake" :id="project.id" :class="projectIndex"><span>{{ project.client   + " \n"}}</span> <br /><span>{{ project.title }}</span></span></div>
@@ -39,6 +39,8 @@ export default class ProjectsSliderItem extends Vue {
   @Prop() projectIndex: number;
   @Prop({ default: false })
   alive: boolean;
+  @Prop({ default: false })
+  moving: boolean;
 
   mounted() {
     this.projectArrayTitle = Utils.lineBreaksToArray(this.$refs
@@ -57,9 +59,17 @@ $titleAnimationMultilineDelay: 0.15s;
 
 .projects-slider-item__title {
   &--link {
-    pointer-events: fill;
-    margin: 2em 0;
-    z-index: 999;
+    text-align: left;
+    .link-button {
+      pointer-events: fill;
+      margin: 2em 0 0 0;
+      z-index: 999;
+      @include opacity(0);
+      @include transition(opacity 750ms ease-out 0.1s);
+      &.visible {
+        @include opacity(1);
+      }
+    }
   }
   
   .title--inner,
@@ -212,6 +222,11 @@ $titleAnimationMultilineDelay: 0.15s;
 
     &--description {
       display: block;
+    }
+
+    &--link {
+      text-align: center;
+      font-size: 0.4em;
     }
   }
 }

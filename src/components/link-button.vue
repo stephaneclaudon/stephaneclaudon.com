@@ -104,7 +104,6 @@ $border-du: 400ms;
   }
   
   &-inner {
-    font-size: 0.4em;
     @include roboto-black;
     background-color: transparent;
     cursor: pointer;

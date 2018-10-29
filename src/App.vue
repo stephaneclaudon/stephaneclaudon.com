@@ -12,10 +12,10 @@
 
     <transition name="trans-name">
       <div v-show="!showProjectDetails" class="name-wrapper small-offset-1">
-        <div class="main-name">
+        <router-link to="/" class="main-name">
           <div class="main-name__first">Stéphane</div>
           <div class="main-name__last">CLAUDON</div>
-        </div>
+        </router-link>
       </div>
     </transition>
     
@@ -184,6 +184,7 @@ export default class App extends Vue {
 
 .main {
   &-name {
+    display: block;
     @include opacity(0);
     @keyframes mainName {
       from {
