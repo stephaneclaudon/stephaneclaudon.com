@@ -39,7 +39,6 @@ import ContactBox from "./components/contact.vue";
 import ProjectsSlider from "./components/projects-slider.vue";
 import ProjectsSliderCanvas from "./components/projects-slider-canvas.vue";
 import ProjectDetails from "./components/project-details.vue";
-import jsonData from "./assets/data/data.json";
 import * as MutationTypes from "./store/mutation-types";
 
 import * as ModernizrObject from "modernizr";

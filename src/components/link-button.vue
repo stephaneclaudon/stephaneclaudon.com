@@ -107,7 +107,7 @@ $border-du: 400ms;
     @include roboto-black;
     background-color: transparent;
     cursor: pointer;
-    padding: 1.4em 3em;
+    padding: 1.335em 2em;
     display: inline-block;
     border: $border-width solid rgba(255,255,255, 0.5);
     color: rgba(255,255,255, 1);
@@ -116,6 +116,13 @@ $border-du: 400ms;
       top: 0;
 			left: 0;
 			z-index: 1;
+    }
+  }
+
+  /* Medium and up */
+  @media screen and (min-width: 40em) {
+    &-inner {
+      padding: 1.4em 3em;
     }
   }
 }

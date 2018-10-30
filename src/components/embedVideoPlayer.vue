@@ -50,7 +50,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   loadIframe(): void {
-   // his.loadVideoPlayer = true;
+   this.loadVideoPlayer = true;
   }
 
   setDimensions(): void {
@@ -93,7 +93,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   iframeLoaded(): void {
-    // this.showVideoPlayer = !this.showVideoPlayer;
+    this.showVideoPlayer = !this.showVideoPlayer;
   }
 
   serializeURLParameters(params: any): string {

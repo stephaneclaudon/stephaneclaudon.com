@@ -17,7 +17,7 @@ Vue.use(Vuex);
 Vue.use(VueRouter);
 
 const state = new State();
-state.projects = jsonData;
+state.projects = jsonData.projects;
 
 let routes: Array<any> = [];
 routes.push(

@@ -19,14 +19,14 @@ myAssets.push(process.mediaPath + "fonts/icomoon.ttf?juz7kf");
 myAssets.push(process.mediaPath + "fonts/icomoon.woff?juz7kf");
 myAssets.push(process.mediaPath + "fonts/icomoon.svg?juz7kf#icomoon");
 
-for (let index = 0; index < jsonData.length; index++) {
-  myAssets.push(process.mediaPath + "img/" + jsonData[index].id + "@3x.jpg");
+for (let index = 0; index < jsonData.projects.length; index++) {
+  myAssets.push(process.mediaPath + "img/" + jsonData.projects[index].id + "@3x.jpg");
 }
 
 myAssets.push("/dist/main.js");
 
-preloader.on("progress", onProgressPreloader);    // on progress listener  
-preloader.on("complete", onCompletePreloader);    // on complete listener  
+preloader.on("progress", onProgressPreloader);
+preloader.on("complete", onCompletePreloader);
 preloader.loadManifest(myAssets);
 
 
@@ -45,5 +45,4 @@ function onCompletePreloader(e: any) {
 window.onAppMounted = function() {
   console.log("onAppMounted");
   $loaderScreen.className = $loaderScreen.className + " hidden"; 
-
 }

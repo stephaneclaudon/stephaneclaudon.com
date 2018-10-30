@@ -62,7 +62,7 @@ $titleAnimationMultilineDelay: 0.15s;
     text-align: left;
     .link-button {
       pointer-events: fill;
-      margin: 2em 0 0 0;
+      margin: 4px 0 0 0;
       z-index: 999;
       @include opacity(0);
       @include transition(opacity 750ms ease-out 0.1s);
@@ -195,16 +195,15 @@ $titleAnimationMultilineDelay: 0.15s;
 
   &--description {
     display: none;
-    font-size: 0.5em;
     margin-top: 1em;
   }
 
   /* Large and up */
   @media screen and (min-width: 64em) {
-    font-size: 3em;
     text-align: center;
 
     .title--inner {
+      font-size: 6em;
       padding: 0;
       span {
         visibility: visible;
@@ -212,6 +211,7 @@ $titleAnimationMultilineDelay: 0.15s;
     }
 
     .title--outer:first-child .title--inner {
+      font-size: 3em;
       color: $white;
     }
 
@@ -221,12 +221,15 @@ $titleAnimationMultilineDelay: 0.15s;
     }
 
     &--description {
+      font-size: 1.5em;
       display: block;
     }
 
     &--link {
       text-align: center;
-      font-size: 0.4em;
+      .link-button {
+        margin: 6em 0 0 0;
+      }
     }
   }
 }

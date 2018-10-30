@@ -1,5 +1,5 @@
 <template>
-  <div class="project-details grid-x" ref="projectDetails" :class="{'aftertransition': visible, 'fakescrollbar': transitioning && !Modernizr.hiddenscroll}">
+  <div class="project-details grid-x" ref="projectDetails" :class="{'aftertransition': visible}">
 
     <div class="cell small-12 large-6">
       <div class="project-details-header" :style="headerBackgroundStyle">
@@ -139,11 +139,6 @@ export default class ProjectDetails extends Vue {
     position: relative;
   }
 
-  &.fakescrollbar {
-    width: auto;
-    margin-right: 16px;
-  }
-
   &-header {
     background-repeat: no-repeat;
     background-size: cover;
@@ -254,6 +249,7 @@ export default class ProjectDetails extends Vue {
   }
   &-gallery {
     margin: 2em 0;
+    /* large and up */
     @media screen and (min-width: 64em) {
       margin: 0;
     }
