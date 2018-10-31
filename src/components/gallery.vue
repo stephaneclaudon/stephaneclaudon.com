@@ -1,18 +1,19 @@
 <template>
-    <div class="gallery grid-x">
-      <div class="cell large-12">
-        <image-src class="gallery-large-view" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
-      </div>
-      <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:mouseover="setCurrentPicture(index)" v-on:pointerdown="setCurrentPicture(index)">
-        <image-src :srcs="getImageSrc(index)" :title="currentProject.title" :loadimage="loadimages"></image-src>
-      </div>
+  <div class="gallery grid-x">
+    <div class="cell large-12" v-on:mousemove="onMouseMove($event)">
+      <image-src class="gallery-large-view" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
     </div>
+    <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:mouseover="setCurrentPicture(index)" v-on:pointerdown="setCurrentPicture(index)">
+      <image-src :srcs="getImageSrc(index)" :title="currentProject.title" :loadimage="loadimages"></image-src>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { State } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
+import Utils from "../utils/Utils";
 
 @Component({
   components: {
@@ -48,6 +49,14 @@ export default class Gallery extends Vue {
   setCurrentPicture(index: number): void {
     this.currentImageSrc = this.getImageSrc(index);
   }
+
+  onMouseMove(event: MouseEvent): void {
+    var target : HTMLElement = (event.target as HTMLElement).offsetParent as HTMLElement
+    var parentDimensions = target.getBoundingClientRect();
+    var xPosition = event.clientX - parentDimensions.left;
+    var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)
+    this.setCurrentPicture(imgIndex + 1);
+  }
 }
 </script>
 
@@ -74,7 +83,7 @@ export default class Gallery extends Vue {
   /* Large and up */
   @media screen and (min-width: 64em) {
     &-large-view {
-      height: 20.70vw !important;
+      /* height: 20.70vw !important; */
       display: block;
       .image {
         height: auto !important;
@@ -86,9 +95,7 @@ export default class Gallery extends Vue {
       }
     }
     &-cell {
-      height: 100px !important;
-      width: 100px !important;
-      border: none !important;
+      display: none;
     }
   }
 }

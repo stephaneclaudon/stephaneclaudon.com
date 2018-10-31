@@ -171,7 +171,7 @@ export default class App extends Vue {
 #main {
   position: relative;
   overflow-x: hidden;
-  height: auto;
+  height: 100%;
   &.app--transitioning,
   &.home {
     overflow: hidden;

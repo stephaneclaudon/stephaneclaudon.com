@@ -29,9 +29,9 @@
           <p>{{ currentProject.description }}</p>
         </div>
 
-        <div class="cell small-10 small-offset-1 large-12 large-offset-0">
-          <div class="grid-x">
-            <gallery class="project-details-gallery" :loadimages="visible"></gallery>
+        <div class="cell small-10 small-offset-1 large-12 large-offset-0 flex-fill-height">
+          <div class="grid-x project-details-gallery">
+            <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
           </div>
         </div>
           
@@ -132,6 +132,7 @@ export default class ProjectDetails extends Vue {
       display: flex;
       align-content: center;
       align-items: center;
+
     }
   }
   
@@ -233,6 +234,19 @@ export default class ProjectDetails extends Vue {
     }
   }
 
+  &--right {
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > * {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
   &-back-button {
     position: absolute;
     top: 2em;
@@ -248,10 +262,15 @@ export default class ProjectDetails extends Vue {
     margin-left: -6px;
   }
   &-gallery {
-    margin: 2em 0;
+    &__item {
+      margin: 2em 0;
+    }
     /* large and up */
     @media screen and (min-width: 64em) {
-      margin: 0;
+      flex: auto;
+      &__item {
+        margin: 0;
+      }
     }
   }
 
