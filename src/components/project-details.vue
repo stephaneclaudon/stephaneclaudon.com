@@ -29,10 +29,8 @@
           <p>{{ currentProject.description }}</p>
         </div>
 
-        <div class="cell small-10 small-offset-1 large-12 large-offset-0 flex-fill-height">
-          <div class="grid-x project-details-gallery">
-            <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
-          </div>
+        <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
+          <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
         </div>
           
         <embed-video-player class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
@@ -132,7 +130,6 @@ export default class ProjectDetails extends Vue {
       display: flex;
       align-content: center;
       align-items: center;
-
     }
   }
   
@@ -239,12 +236,6 @@ export default class ProjectDetails extends Vue {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-
-    > * {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
   }
 
   &-back-button {
@@ -262,13 +253,17 @@ export default class ProjectDetails extends Vue {
     margin-left: -6px;
   }
   &-gallery {
+
     &__item {
+      height: 100%;
       margin: 2em 0;
     }
     /* large and up */
     @media screen and (min-width: 64em) {
-      flex: auto;
+      flex-basis: inherit;
+      flex: 1;
       &__item {
+        flex: auto;
         margin: 0;
       }
     }

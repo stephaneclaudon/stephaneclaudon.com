@@ -4,9 +4,9 @@
             <source media="(max-width: 375px)" :srcset="srcs[0]">
             <source media="(max-width: 750px)" :srcset="srcs[1]">
             <source media="(max-width: 1242px)" :srcset="srcs[2]">
-            <img :src="srcs[2]" :alt="this.title" @load="loaded">
+            <img :src="srcs[2]" :alt="this.title" @load="onLoaded" :class="{'loaded': loaded}">
         </picture>
-        <loader v-if="loading" class="loader"></loader>
+        <loader v-if="loading && loader" class="loader"></loader>
     </span>
 </template>
 
@@ -21,15 +21,19 @@ import Loader from "./loader.vue";
 })
 export default class ImageSrc extends Vue {
   private loading: boolean = true;
+  private loaded: boolean = false;
   @Prop()
   srcs: Array<string>;
   @Prop()
   title: string;
   @Prop()
   loadimage: boolean;
+  @Prop()
+  loader: boolean;
 
-  loaded(): void {
+  onLoaded(): void {
     this.loading = false;
+    this.loaded = true;
   }
 }
 </script>
@@ -49,6 +53,11 @@ export default class ImageSrc extends Vue {
 
     img {
       height: 100%;
+      @include opacity(0);
+      @include transition(opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1));
+      &.loaded {
+        @include opacity(1);
+      }
     }
   }
   .loader {

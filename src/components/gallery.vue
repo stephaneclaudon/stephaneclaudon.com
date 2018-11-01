@@ -1,7 +1,7 @@
 <template>
   <div class="gallery grid-x">
-    <div class="cell large-12" v-on:mousemove="onMouseMove($event)">
-      <image-src class="gallery-large-view" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
+    <div class="gallery-large-view" v-on:mousemove="onMouseMove($event)">
+      <image-src class="gallery-large-view--image" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
     </div>
     <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:mouseover="setCurrentPicture(index)" v-on:pointerdown="setCurrentPicture(index)">
       <image-src :srcs="getImageSrc(index)" :title="currentProject.title" :loadimage="loadimages"></image-src>
@@ -54,7 +54,7 @@ export default class Gallery extends Vue {
     var target : HTMLElement = (event.target as HTMLElement).offsetParent as HTMLElement
     var parentDimensions = target.getBoundingClientRect();
     var xPosition = event.clientX - parentDimensions.left;
-    var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)
+    var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)    
     this.setCurrentPicture(imgIndex + 1);
   }
 }
@@ -67,7 +67,14 @@ export default class Gallery extends Vue {
   width: 100%;
   background-color: $white;
   &-large-view {
-    display: none;
+    width: 100%;
+    &--image {
+      display: none;
+      position: inherit;
+      img {
+        height: 100vh !important;
+      }
+    }
   }
   &-cell {
     height: 42vw;
@@ -83,16 +90,15 @@ export default class Gallery extends Vue {
   /* Large and up */
   @media screen and (min-width: 64em) {
     &-large-view {
-      /* height: 20.70vw !important; */
-      display: block;
-      .image {
-        height: auto !important;
-        width: 100% !important;
+      height: 100%;
+      &--image {
+        display: block;
+        img {
+          height: 100% !important;
+          width: auto !important;
+        }
       }
-      img {
-        height: auto !important;
-        width: 100% !important;
-      }
+      
     }
     &-cell {
       display: none;

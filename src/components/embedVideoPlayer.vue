@@ -1,10 +1,9 @@
 <template>
   <div class="video-player" :style="style">
-    
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
-      <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible"></image-src>
+      <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible" :loader="false"></image-src>
       <span class="video-player-play-button">
         <span></span>
       </span>
@@ -37,6 +36,7 @@ export default class EmbedVideoPlayer extends Vue {
   private videoRatio: number = 0;
   private width: number = 0;
   private height: number = 0;
+  private pcHeight: number = 0;
   private style: string = "";
 
   private imagePath: string = process.mediaPath + "img/";
@@ -56,10 +56,11 @@ export default class EmbedVideoPlayer extends Vue {
   setDimensions(): void {
     this.width = this.$el.getBoundingClientRect().width;
     this.height = this.width * this.videoRatio;
+    this.pcHeight = this.height / this.$el.parentElement!.getBoundingClientRect().height;
   }
   
   setStyle(): void {
-    this.style = "height: " + this.height + "px;";
+    this.style = "height: " + (this.pcHeight * 100) + "vh;";
   }
 
   getVideoPosterSrc(): Array<string> {
@@ -116,6 +117,20 @@ export default class EmbedVideoPlayer extends Vue {
   width: 100%;
   position: relative;
 
+  /* small and Medium only */
+  @media screen and (max-width: 63.9375em) {
+    /*height: auto !important;*/
+  }
+
+  &:hover {
+    .video-player-play-button {
+      @include transform(translateX(-50%) translateY(-50%) scale(1.2));
+    }
+    .video-player--poster__image {
+      @include opacity(0.7);
+    }
+  }
+
   iframe {
     position: absolute;
     top: 0;
@@ -123,6 +138,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   &--poster {
+    cursor: pointer;
     position: relative;
     height: 100%;
     overflow: hidden;
@@ -141,6 +157,7 @@ export default class EmbedVideoPlayer extends Vue {
     &__image {
       width: 100%;
       height: 100%;
+      @include transition(opacity 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
     }
     
     img {
@@ -157,14 +174,14 @@ export default class EmbedVideoPlayer extends Vue {
     z-index: 10;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    @include transform(translateX(-50%) translateY(-50%));
     box-sizing: content-box;
     display: block;
     width: 32px;
     height: 44px;
     border-radius: 50%;
     padding: 18px 20px 18px 28px;
-
+    @include transition(transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
     
     span {
       display: block;
@@ -179,7 +196,7 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   &-loader {
-    display: block;
+    display: none;
     position: absolute;
     z-index: 10;
     top: 50%;
