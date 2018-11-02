@@ -121,6 +121,7 @@ export default class ProjectDetails extends Vue {
   width: 100%;
   min-height: 100%;
   padding-bottom: 3em;
+  overflow: hidden;
 
   /* Large and up */
   @media screen and (min-width: 64em) {

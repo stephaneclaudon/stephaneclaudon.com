@@ -57,6 +57,9 @@ export default class EmbedVideoPlayer extends Vue {
     this.width = this.$el.getBoundingClientRect().width;
     this.height = this.width * this.videoRatio;
     this.pcHeight = this.height / this.$el.parentElement!.getBoundingClientRect().height;
+    if (document.documentElement.offsetWidth < 1024) {
+      this.pcHeight = this.height / document.documentElement.offsetHeight;
+    }
   }
   
   setStyle(): void {
