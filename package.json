@@ -28,9 +28,9 @@
     "vue-loader": "^14.1.1",
     "vue-slick": "^1.1.12",
     "vue-template-compiler": "^2.5.13",
-    "webpack": "^4.1.0",
+    "webpack": "^4.23.1",
     "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0",
+    "webpack-dev-server": "^3.1.10",
     "webpack-modernizr-loader": "^4.0.1",
     "write-file-webpack-plugin": "^4.2.0"
   },
