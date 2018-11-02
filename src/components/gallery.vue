@@ -1,15 +1,20 @@
 <template>
   <div class="gallery grid-x">
-    <div class="gallery-large-view" v-on:mousemove="onMouseMove($event)">
+    <div v-if="false" class="gallery-large-view" v-on:mousemove="onMouseMove($event)">
       <image-src class="gallery-large-view--image" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
     </div>
-    <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:mouseover="setCurrentPicture(index)" v-on:pointerdown="setCurrentPicture(index)">
+    <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:click="zoomOnPicture(index, $event)">
       <image-src :srcs="getImageSrc(index)" :title="currentProject.title" :loadimage="loadimages"></image-src>
+    </div>
+
+    <div class="gallery-zoom" :ref="'zoomContainer'" v-on:click="closeZoom()">
+      <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true"></image-src>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import * as ModernizrObject from "modernizr";
 import { State } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
@@ -25,8 +30,16 @@ export default class Gallery extends Vue {
   @Prop() loadimages: boolean;
   private imagePath: string = process.mediaPath + "img/";
   private currentImageSrc: Array<string> = [];
+  private currentImageZoomSrc: Array<string> = [];
+  private zoomImageIndex: number = -1;
+  private zoomContainer: HTMLElement;
+
+  get Modernizr(): any {
+    return ModernizrObject;
+  }
 
   mounted(): void {
+    this.zoomContainer = (this.$refs.zoomContainer as HTMLElement);
     this.currentImageSrc = this.getImageSrc(1);
   }
 
@@ -47,21 +60,45 @@ export default class Gallery extends Vue {
   }
 
   setCurrentPicture(index: number): void {
-    this.currentImageSrc = this.getImageSrc(index);
+    this.currentImageZoomSrc = this.getImageSrc(index);
+  }
+
+  zoomOnPicture(index: number, event: MouseEvent): void {
+    this.zoomImageIndex = index;
+    this.currentImageZoomSrc = this.getImageSrc(index);
+    
+    var target = (event.target as HTMLElement);
+
+    console.log(target.parentElement!.getBoundingClientRect().top, target.parentElement!.getBoundingClientRect().left);
+    
+    this.zoomContainer.style.width = target.parentElement!.clientWidth + 'px';
+    this.zoomContainer.style.height = target.parentElement!.clientHeight + 'px';
+    this.zoomContainer.style.top = target.parentElement!.getBoundingClientRect().top + 'px';
+    this.zoomContainer.style.left = target.parentElement!.getBoundingClientRect().left + 'px';
+
+    this.zoomContainer.className = this.zoomContainer.className + " active";
+  }
+
+  closeZoom(): void {
+    this.zoomContainer.className = this.zoomContainer.className.replace("active", "");
   }
 
   onMouseMove(event: MouseEvent): void {
-    var target : HTMLElement = (event.target as HTMLElement).offsetParent as HTMLElement
-    var parentDimensions = target.getBoundingClientRect();
-    var xPosition = event.clientX - parentDimensions.left;
-    var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)    
-    this.setCurrentPicture(imgIndex + 1);
+    if (!ModernizrObject.touchevents) {
+      var target : HTMLElement = (event.target as HTMLElement).offsetParent as HTMLElement
+      var parentDimensions = target.getBoundingClientRect();
+      var xPosition = event.clientX - parentDimensions.left;
+      var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)    
+      this.setCurrentPicture(imgIndex + 1);
+    }
   }
 }
 </script>
 
 <style lang="scss">
 @import "../style/variables.scss";
+@import "../style/mixins.scss";
+
 .gallery {
   overflow: hidden;
   width: 100%;
@@ -85,6 +122,7 @@ export default class Gallery extends Vue {
 
     img {
       height: 100%;
+      @include transition(transform 500ms ease-out);
     }
   }
   /* Large and up */
@@ -102,6 +140,23 @@ export default class Gallery extends Vue {
     }
     &-cell {
       display: none;
+    }
+  }
+
+  &-zoom {
+    overflow: hidden;
+    position: fixed;
+    z-index: 9;
+    visibility: hidden;
+    filter: brightness(2);
+    @include transition(all 300ms cubic-bezier(0.165, 0.84, 0.44, 1));
+
+    &.active {
+      width: 100% !important;
+      height: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      visibility: visible;
     }
   }
 }

@@ -6,6 +6,7 @@ module.exports = {
   ],
   "feature-detects": [
     "test/canvas",
-    "test/hiddenscroll"
+    "test/hiddenscroll",
+    "test/touchevents"
   ]
 };
