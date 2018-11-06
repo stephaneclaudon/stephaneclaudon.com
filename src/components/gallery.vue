@@ -7,9 +7,15 @@
       <image-src :srcs="getImageSrc(index)" :title="currentProject.title" :loadimage="loadimages"></image-src>
     </div>
 
-    <div class="gallery-zoom" :ref="'zoomContainer'" v-on:click="closeZoom()">
-      <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true"></image-src>
-    </div>
+    <transition
+      name="zoom-animation"
+      v-on:after-enter="zoomAfterEnter"
+      v-on:before-leave="zoomBeforeLeave"
+    >
+      <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="{'zoom-active': zoomActive}">
+        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true"></image-src>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -32,15 +38,16 @@ export default class Gallery extends Vue {
   private currentImageSrc: Array<string> = [];
   private currentImageZoomSrc: Array<string> = [];
   private zoomImageIndex: number = -1;
-  private zoomContainer: HTMLElement;
+  private zoomDomStyle: string = "";
+  private zoomActive: boolean = false;
 
   get Modernizr(): any {
     return ModernizrObject;
   }
 
   mounted(): void {
-    this.zoomContainer = (this.$refs.zoomContainer as HTMLElement);
     this.currentImageSrc = this.getImageSrc(1);
+    this.currentImageZoomSrc = this.getImageSrc(1);
   }
 
   getImageSrc(imageIndex: number): Array<string> {
@@ -66,21 +73,16 @@ export default class Gallery extends Vue {
   zoomOnPicture(index: number, event: MouseEvent): void {
     this.zoomImageIndex = index;
     this.currentImageZoomSrc = this.getImageSrc(index);
-    
     var target = (event.target as HTMLElement);
-
-    console.log(target.parentElement!.getBoundingClientRect().top, target.parentElement!.getBoundingClientRect().left);
-    
-    this.zoomContainer.style.width = target.parentElement!.clientWidth + 'px';
-    this.zoomContainer.style.height = target.parentElement!.clientHeight + 'px';
-    this.zoomContainer.style.top = target.parentElement!.getBoundingClientRect().top + 'px';
-    this.zoomContainer.style.left = target.parentElement!.getBoundingClientRect().left + 'px';
-
-    this.zoomContainer.className = this.zoomContainer.className + " active";
+    this.zoomDomStyle = '';
+    this.zoomDomStyle += 'width: ' + target.parentElement!.clientWidth + 'px;';
+    this.zoomDomStyle += 'height: ' + target.parentElement!.clientHeight + 'px;';
+    this.zoomDomStyle += 'top: ' + target.parentElement!.getBoundingClientRect().top + 'px;';
+    this.zoomDomStyle += 'left: ' + target.parentElement!.getBoundingClientRect().left + 'px;';
   }
 
   closeZoom(): void {
-    this.zoomContainer.className = this.zoomContainer.className.replace("active", "");
+    this.zoomImageIndex = -1;
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -91,6 +93,16 @@ export default class Gallery extends Vue {
       var imgIndex = Math.floor((xPosition / parentDimensions.width) * this.currentProject.gallerycount)    
       this.setCurrentPicture(imgIndex + 1);
     }
+  }
+
+  zoomAfterEnter(): void {
+    console.log('zoomAfterEnter');
+    this.zoomActive = true;
+  }
+
+  zoomBeforeLeave(): void {
+    console.log('zoomLeave');
+    this.zoomActive = false;
   }
 }
 </script>
@@ -148,16 +160,20 @@ export default class Gallery extends Vue {
     position: fixed;
     z-index: 9;
     visibility: hidden;
-    filter: brightness(2);
-    @include transition(all 300ms cubic-bezier(0.165, 0.84, 0.44, 1));
-
-    &.active {
-      width: 100% !important;
-      height: 100% !important;
-      top: 0 !important;
-      left: 0 !important;
-      visibility: visible;
+    
+    img {
     }
   }
+}
+.zoom-animation-enter-active, .zoom-animation-leave-active {
+  @include transition(all 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
+}
+
+.zoom-animation-enter-to, .zoom-active {
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  visibility: visible;
 }
 </style>
