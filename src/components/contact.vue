@@ -168,12 +168,13 @@ export default class ContactBox extends Vue {
     }
   }
 
-  /* Medium and up */
-  @media screen and (min-width: 40em) {
+  /* Large and up */
+  @media screen and (min-width: 64em) {
     .contact-content {
       font-size: 1.2em;
       height: auto;
       padding: 2em 0;
+      position: absolute;
     }
   }
 }
@@ -185,6 +186,8 @@ export default class ContactBox extends Vue {
   position: fixed;
   top: 0;
   left: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
 
   &-overlay {
     position: absolute;
@@ -196,13 +199,13 @@ export default class ContactBox extends Vue {
   }
   &-content {
     @include roboto-light;
-    position: absolute;
+    position: relative;
     background-color: $black;
     color: $white;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     bottom: 0px;
-    @include transform(translate3d(0px, 100%, 0px));
+    @include transform(translate3d(0px, 100vh, 0px));
     @include transition(
       transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1) 0ms
     );

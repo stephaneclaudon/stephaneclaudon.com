@@ -257,7 +257,15 @@ export default class ProjectDetails extends Vue {
 
     &__item {
       height: 100%;
-      margin: 2em 0;
+      margin: 2em 0 0 0;
+
+      &::after {
+        content: "";
+        width: 33%;
+        height: 1px;
+        border-top: solid 1px $grey;
+        margin: 2em auto 2em auto;
+      }
     }
     /* large and up */
     @media screen and (min-width: 64em) {
@@ -292,6 +300,11 @@ export default class ProjectDetails extends Vue {
 
     &-date {
       padding: 2em 0;
+      text-align: right;
+      /* Large and up */
+      @media screen and (min-width: 64em) {
+        text-align: inherit;
+      }
     }
   }
 

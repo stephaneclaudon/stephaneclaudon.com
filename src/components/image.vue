@@ -1,10 +1,10 @@
 <template>
     <span class="image" :class="{'loading': loading}">
-        <picture v-if="loadimage">
+        <picture v-if="loadimage" :class="{'loaded': loaded}">
             <source media="(max-width: 375px)" :srcset="srcs[0]">
             <source media="(max-width: 750px)" :srcset="srcs[1]">
             <source media="(max-width: 1242px)" :srcset="srcs[2]">
-            <img :src="srcs[2]" :alt="this.title" @load="onLoaded" :class="{'loaded': loaded}">
+            <img :src="srcs[2]" :alt="this.title" @load="onLoaded" :id="imgid">
         </picture>
         <loader v-if="loading && loader" class="loader"></loader>
     </span>
@@ -30,6 +30,8 @@ export default class ImageSrc extends Vue {
   loadimage: boolean;
   @Prop()
   loader: boolean;
+  @Prop()
+  imgid: string;
 
   onLoaded(): void {
     this.loading = false;
@@ -51,13 +53,14 @@ export default class ImageSrc extends Vue {
     align-items: center;
     justify-content: center;
 
+    @include opacity(0);
+    @include transition(opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1));
+    &.loaded {
+      @include opacity(1);
+    }
+
     img {
       height: 100%;
-      @include opacity(0);
-      @include transition(opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1));
-      &.loaded {
-        @include opacity(1);
-      }
     }
   }
   .loader {

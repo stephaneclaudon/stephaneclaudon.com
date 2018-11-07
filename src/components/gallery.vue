@@ -12,8 +12,8 @@
       v-on:after-enter="zoomAfterEnter"
       v-on:before-leave="zoomBeforeLeave"
     >
-      <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="{'zoom-active': zoomActive}">
-        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true"></image-src>
+      <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="{'zoom-active': zoomActive}" ref="zoomContainer">
+        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true" :imgid="'zoomImageElement'"></image-src>
       </div>
     </transition>
   </div>
@@ -25,6 +25,9 @@ import { State } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
 import Utils from "../utils/Utils";
+import { TweenLite, Power4 } from "gsap";
+//@ts-ignore
+import * as Draggable from "gsap/Draggable";
 
 @Component({
   components: {
@@ -36,10 +39,22 @@ export default class Gallery extends Vue {
   @Prop() loadimages: boolean;
   private imagePath: string = process.mediaPath + "img/";
   private currentImageSrc: Array<string> = [];
+
+
+  private zoomContainer: HTMLElement;
   private currentImageZoomSrc: Array<string> = [];
   private zoomImageIndex: number = -1;
   private zoomDomStyle: string = "";
   private zoomActive: boolean = false;
+
+  private dragData: any;
+  private dragMaxVelocity: number = 15;
+  private dragVelocity: number = 0;
+  private beforeDragPosX: number = 0;
+  private dragAmount: number = 0;
+  private dragDirection: number = 0;
+  private dragTween: TweenLite;
+  private draggableZoom: any;
 
   get Modernizr(): any {
     return ModernizrObject;
@@ -48,6 +63,8 @@ export default class Gallery extends Vue {
   mounted(): void {
     this.currentImageSrc = this.getImageSrc(1);
     this.currentImageZoomSrc = this.getImageSrc(1);
+    this.zoomContainer = this.$refs.zoomContainer as HTMLElement;
+    this.dragTween = new TweenLite(this, 0.1, {});
   }
 
   getImageSrc(imageIndex: number): Array<string> {
@@ -83,6 +100,8 @@ export default class Gallery extends Vue {
 
   closeZoom(): void {
     this.zoomImageIndex = -1;
+    TweenLite.set(this.draggableZoom.target, {clearProps:"transform"});
+    this.draggableZoom.kill();
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -97,6 +116,11 @@ export default class Gallery extends Vue {
 
   zoomAfterEnter(): void {
     this.zoomActive = true;
+    this.$nextTick(() => {
+      let zoomedImgElt: HTMLElement = document.getElementById('zoomImageElement')!;      
+      let bounds: any = {top: zoomedImgElt.offsetTop, left: zoomedImgElt.offsetLeft*2, width: zoomedImgElt.offsetWidth + Math.abs(zoomedImgElt.offsetLeft * 2), height: zoomedImgElt.offsetHeight}
+      this.draggableZoom = new Draggable(zoomedImgElt, {type:"x", edgeResistance:0.85, bounds: bounds, throwProps:false});
+    })
   }
 
   zoomBeforeLeave(): void {
@@ -112,7 +136,6 @@ export default class Gallery extends Vue {
 .gallery {
   overflow: hidden;
   width: 100%;
-  background-color: $white;
   &-large-view {
     width: 100%;
     display: none;
@@ -163,6 +186,8 @@ export default class Gallery extends Vue {
     
     img {
       min-height: 100%;
+      @include transition(transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
+      @include transform(translate3d(0, 0, 0));
     }
   }
 }
