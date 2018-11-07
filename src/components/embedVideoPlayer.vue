@@ -1,6 +1,7 @@
 <template>
   <div class="video-player" :style="style">
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
+    <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'youtube' && isMounted && visible" :src="youtubeURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
       <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible" :loader="false"></image-src>
@@ -91,6 +92,18 @@ export default class EmbedVideoPlayer extends Vue {
       title: "0",
       byline: "0",
       portrait: "0"
+    };
+    url += this.serializeURLParameters(options);
+    return url;
+  }
+
+  get youtubeURL(): string {
+    let url: string = "http://www.youtube.com/embed/";
+    url += this.videoId + "?";
+
+    let options: any = {
+      autoplay: "1",
+      origin: "http://stephaneclaudon.com"
     };
     url += this.serializeURLParameters(options);
     return url;

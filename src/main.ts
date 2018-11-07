@@ -19,6 +19,11 @@ Vue.use(VueRouter);
 const state = new State();
 state.projects = jsonData.projects;
 
+state.lang = navigator.language.split('-')[0];
+if (state.lang !== 'fr' && state.lang !== 'en') {
+  state.lang = 'en'
+}
+
 let routes: Array<any> = [];
 routes.push(
   {

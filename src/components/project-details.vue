@@ -11,12 +11,12 @@
           <div class="cell small-10">
             <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false" :link="false"></projects-slider-item-title>
             <div class="project-details-header-text--description">
-              <p>{{ currentProject.description }}</p>
+              <p>{{ currentProject['description' + lang] }}</p>
             </div>
             <div class="project-details-header-text--credits cell small-10 align-text-center">
               <h2>Credits</h2>
-              <p v-html="currentProject.credits"></p>
-              <div class="project-details-credits-date">{{ currentProject.date }}</div>
+              <p v-html="currentProject['credits' + lang]"></p>
+              <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
             </div>
           </div>
         </div>   
@@ -26,7 +26,7 @@
     <div class="cell small-12 large-6">
       <div class="grid-x project-details--right">
         <div class="project-details-description cell small-10 small-offset-1">
-          <p>{{ currentProject.description }}</p>
+          <p>{{ currentProject['description' + lang] }}</p>
         </div>
 
         <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
@@ -37,8 +37,8 @@
 
         <div class="project-details-credits cell small-10 small-offset-1">
           <h2>Credits</h2>
-          <p v-html="currentProject.credits"></p>
-          <div class="project-details-credits-date">{{ currentProject.date }}</div>
+          <p v-html="currentProject['credits' + lang]"></p>
+          <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
         </div>
       </div>
     </div>
@@ -65,6 +65,7 @@ import Gallery from "./gallery.vue";
   }
 })
 export default class ProjectDetails extends Vue {
+  @State("lang") lang: string;
   @State("currentProject") currentProject: any;
   @Prop() visible: boolean;
   @Prop() transitioning: boolean;
