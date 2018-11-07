@@ -1,6 +1,6 @@
 <template>
   <div class="gallery grid-x">
-    <div v-if="false" class="gallery-large-view" v-on:mousemove="onMouseMove($event)">
+    <div class="gallery-large-view" v-on:mousemove="onMouseMove($event)">
       <image-src class="gallery-large-view--image" :srcs="currentImageSrc" :title="currentProject.title" :loadimage="true"></image-src>
     </div>
     <div class="gallery-cell cell" v-for="index in currentProject.gallerycount" :key="index" :class="getGridClasses(index)" v-on:click="zoomOnPicture(index, $event)">
@@ -67,7 +67,7 @@ export default class Gallery extends Vue {
   }
 
   setCurrentPicture(index: number): void {
-    this.currentImageZoomSrc = this.getImageSrc(index);
+    this.currentImageSrc = this.getImageSrc(index);
   }
 
   zoomOnPicture(index: number, event: MouseEvent): void {
@@ -158,10 +158,11 @@ export default class Gallery extends Vue {
   &-zoom {
     overflow: hidden;
     position: fixed;
-    z-index: 9;
+    z-index: 99;
     visibility: hidden;
     
     img {
+      min-height: 100%;
     }
   }
 }
