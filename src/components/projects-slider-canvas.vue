@@ -87,7 +87,7 @@ export default class ProjectsSliderCanvas extends Vue {
 
   onVideoLoaded(): void {
     this.videoElement.removeEventListener("loadeddata", this.onVideoLoaded, false);
-    this.videoElement.play();
+    this.toggleSliderUpdate(this.active);
     this.initProjects();
   }
 
@@ -128,7 +128,11 @@ export default class ProjectsSliderCanvas extends Vue {
 
   @Watch('active')
   onSliderStateChanged(val: boolean, oldVal: boolean) {
-    if(val) {
+    this.toggleSliderUpdate(val);
+  }
+
+  toggleSliderUpdate(active: boolean): void {
+    if(active) {
       this.pixiApp.ticker.start();
       this.videoElement.play();
     } else {

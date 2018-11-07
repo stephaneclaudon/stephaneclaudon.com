@@ -96,12 +96,10 @@ export default class Gallery extends Vue {
   }
 
   zoomAfterEnter(): void {
-    console.log('zoomAfterEnter');
     this.zoomActive = true;
   }
 
   zoomBeforeLeave(): void {
-    console.log('zoomLeave');
     this.zoomActive = false;
   }
 }
@@ -117,6 +115,7 @@ export default class Gallery extends Vue {
   background-color: $white;
   &-large-view {
     width: 100%;
+    display: none;
     &--image {
       display: none;
       position: inherit;
@@ -141,6 +140,7 @@ export default class Gallery extends Vue {
   @media screen and (min-width: 64em) {
     &-large-view {
       height: 100%;
+      display: block;
       &--image {
         display: block;
         img {
