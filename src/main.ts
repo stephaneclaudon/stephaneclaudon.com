@@ -105,10 +105,24 @@ router.beforeEach((to, from, next) => {
     return tag;
   })
     // Add the meta tags to the document head.
-    .forEach((tag: any) => document.head.appendChild(tag));
+    .forEach((tag: any) => document.head!.appendChild(tag));
 
   next();
 });
+
+Vue.directive('check-internal-link', {
+  inserted: function (el) {
+    el.addEventListener('click', (event) => {
+      let target: Element = event.target as Element;
+      if (target.tagName === 'A' && target.getAttribute('target') !== '_blank') {
+        event.preventDefault();
+        event.stopPropagation();
+        router.push(target.getAttribute('href')!);
+        return false;
+      }
+    })
+  }
+})
 
 setTimeout(() => {
   let vueApp: Vue = new Vue({

@@ -8,7 +8,7 @@
         </h1>
 
         <div v-if="link" class="projects-slider-item__title--description align-text-center">
-          {{ project.description }}
+          {{ project['description' + lang] }}
         </div>
 
         <div v-if="link" class="align-text-center projects-slider-item__title--link">
@@ -23,6 +23,7 @@
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import Utils from "../utils/Utils";
 import LinkButton from "./link-button.vue";
+import { State } from "vuex-class";
 
 @Component({
   components: {
@@ -34,6 +35,7 @@ export default class ProjectsSliderItem extends Vue {
   titleComputed: boolean = false;
   inited: boolean = false;
 
+  @State("lang") lang: string;
   @Prop() link: boolean;
   @Prop() project: any;
   @Prop() projectIndex: number;

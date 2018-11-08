@@ -15,7 +15,7 @@
             </div>
             <div class="project-details-header-text--credits cell small-10 align-text-center">
               <h2>Credits</h2>
-              <p v-html="currentProject['credits' + lang]"></p>
+              <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
               <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
             </div>
           </div>
@@ -37,7 +37,7 @@
 
         <div class="project-details-credits cell small-10 small-offset-1">
           <h2>Credits</h2>
-          <p v-html="currentProject['credits' + lang]"></p>
+          <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
           <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
         </div>
       </div>

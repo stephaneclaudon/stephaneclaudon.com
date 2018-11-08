@@ -44,9 +44,9 @@
           <div class="contact-content__mail"><a href="mailto:hello@toto.com">hello@toto.com</a></div>
         </div>
 
-        <router-link class="contact-content__back-button" :to="{ name: 'home' }">
+        <div class="contact-content__back-button" v-on:click="close()">
           <close-button></close-button>
-        </router-link>
+        </div>
 
       </div>
     </div>
@@ -166,15 +166,12 @@ export default class ContactBox extends Vue {
     .toggle {
       margin-left: 50px;
     }
-  }
-
-  /* Large and up */
-  @media screen and (min-width: 64em) {
     .contact-content {
       font-size: 1.2em;
       height: auto;
-      padding: 2em 0;
+      min-height: auto;
       position: absolute;
+      padding: 2em 0;
     }
   }
 }
@@ -186,8 +183,12 @@ export default class ContactBox extends Vue {
   position: fixed;
   top: 0;
   left: 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  
+  /* Until Large */
+  @media screen and (max-width: 63.9999em) {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 
   &-overlay {
     position: absolute;
