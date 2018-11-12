@@ -1,8 +1,10 @@
 import jsonData from "./assets/data/data.json";
 import Global from "./Global";
+import * as ModernizrObject from "modernizr";
 
 let GlobalInstance = new Global();
 GlobalInstance.setMediaPath();
+GlobalInstance.setViewportSize();
 
 //@ts-ignore
 var preloader = new createjs.LoadQueue(),
@@ -12,7 +14,11 @@ var preloader = new createjs.LoadQueue(),
   $progressbarContainer: HTMLElement = document.getElementById('progressbar-container')!;
 
 var myAssets: Array<string> = [];
-myAssets.push(process.mediaPath + "loops/all-projects-mobile-low.mp4");
+let videoFileName: string = "loops/all-projects-";
+videoFileName += (GlobalInstance.getViewportWidth() > 1024) ? "desktop-3600" : "mobile-640";
+videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
+myAssets.push(process.mediaPath + videoFileName);
+
 myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf");
 myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf#iefix");
 myAssets.push(process.mediaPath + "fonts/icomoon.ttf?juz7kf");
@@ -28,7 +34,6 @@ myAssets.push("/dist/main.js");
 preloader.on("progress", onProgressPreloader);
 preloader.on("complete", onCompletePreloader);
 preloader.loadManifest(myAssets);
-
 
 function onProgressPreloader(e: any) {
   var perc = Math.round(e.progress * 100);

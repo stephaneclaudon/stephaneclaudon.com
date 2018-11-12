@@ -12,6 +12,7 @@ import Global from "./Global";
 
 let GlobalInstance = new Global();
 GlobalInstance.setMediaPath();
+GlobalInstance.setViewportSize();
 
 Vue.use(Vuex);
 Vue.use(VueRouter);

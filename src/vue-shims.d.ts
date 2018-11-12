@@ -10,7 +10,8 @@ declare module "*.json" {
 
 declare var process: {
     env: {
-        NODE_ENV: string
+      NODE_ENV: string
     },
-    mediaPath: string
+    mediaPath: string,
+    viewportSize: any
 }

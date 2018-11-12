@@ -61,12 +61,16 @@ export default class ProjectsSliderCanvas extends Vue {
 
   mounted() {
     console.log("Init ProjectsSliderCanvas");
-    this.initTitles();
+    // this.updateTitlesSize();
+    this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
     this.initPIXI();
   }
 
   getVideoPath(): String {
-    return process.mediaPath + "loops/all-projects-mobile-low.mp4";
+    let videoFileName: string = "loops/all-projects-";    
+    videoFileName += (process.viewportSize.width > 1024) ? "desktop-3600" : "mobile-640";
+    videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
+    return process.mediaPath + videoFileName;
   }
 
   initPIXI() {
@@ -80,9 +84,18 @@ export default class ProjectsSliderCanvas extends Vue {
     //@ts-ignore
     this.pixiApp.renderer.view.style["touch-action"] = "auto";
     this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
+    this.pixiApp.renderer.autoResize = true;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
     this.videoElement.addEventListener("loadeddata", this.onVideoLoaded, false);
     this.videoElement.load();
+    
+    window.addEventListener('resize', this.onResize);
+  }
+
+  onResize(e: Event) : void {
+    this.pixiApp.renderer.resize(process.viewportSize.width, process.viewportSize.height);
+    this.projectsContainer.resizeTextures();
+    // this.updateTitlesSize();
   }
 
   onVideoLoaded(): void {
@@ -109,8 +122,9 @@ export default class ProjectsSliderCanvas extends Vue {
   }
   
   onSliderTransitionUpdate(posX: number, percent: number): void {
-    (<HTMLElement>this.titlesContainerElement).style.left = posX + "px";
-    (<HTMLElement>this.titlesContainerElement).style.setProperty(ModernizrObject.prefixedCSS("filter"), "brightness(" + (1 - percent * 2) + ")")
+    // (<HTMLElement>this.titlesContainerElement).style.left = posX + "px";
+    (<HTMLElement>this.titlesContainerElement).style.setProperty(ModernizrObject.prefixedCSS("transform"), "translateX(" + posX + "px)");
+    (<HTMLElement>this.titlesContainerElement).style.setProperty(ModernizrObject.prefixedCSS("filter"), "brightness(" + (1 - percent * 2) + ")");
   }
 
   onSliderTransitionEnd(index: number): void {
@@ -147,8 +161,7 @@ export default class ProjectsSliderCanvas extends Vue {
     this.currentIndex = index;
   }
 
-  initTitles(): void {
-    this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
+  updateTitlesSize(): void {
     let allTitles: HTMLCollection = this.titlesContainerElement.children as HTMLCollection;
     let containerWidth: number = 0;
     for (let index = 0; index < allTitles.length; index++) {
