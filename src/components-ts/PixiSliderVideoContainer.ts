@@ -70,6 +70,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
       //this.initShader();
       this.currentProjectIndex = 0;
       this.projectIndexToGo = 0;
+      this.updateScreensRenderability();
       this.createDragAndDropFor();
     }
 
@@ -178,16 +179,24 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         } else {
             this.position.x = newPos;
         }
-        this.updateNeighborScale();
+        this.updateCurrentScreenScale();
+        this.updateScreensRenderability();
     }
 
-    private updateNeighborScale(): void {
+    private updateCurrentScreenScale(): void {
         if ((this.currentProjectIndex > 0 && this.currentProjectIndex < this.lastProjectIndex) || (this.dragDirection === 1 && this.currentProjectIndex === 0) || (this.dragDirection === -1 && this.currentProjectIndex === this.lastProjectIndex)) {
           let newScale: number = (1 - (this.dragAmount / this.screenWidth) * 0.5) * this.videoItemList[this.currentProjectIndex].originalScale.x; 
           this.videoItemList[this.currentProjectIndex].scale.set(newScale);
           this.videoItemList[this.currentProjectIndex].position.x = (this.screenWidth * 0.5 + this.currentProjectIndex * this.screenWidth) + (this.dragAmount * this.dragDirection * 0.7);
           this.videoItemList[this.currentProjectIndex].alpha = 1 - ((this.dragAmount / (this.screenWidth * 0.5)));
         }
+    }
+
+    private updateScreensRenderability() : void {
+      for (var i = 0; i < this.projectsCount; i++) {
+        let renderable: boolean = (i === this.currentProjectIndex || (this.dragAmount * this.dragDirection > 0 && i === this.currentProjectIndex + 1) || (this.dragAmount * this.dragDirection < 0 && i === this.currentProjectIndex - 1));
+        this.videoItemList[i].renderable = renderable;
+      }
     }
 
     private finishDrag() {
@@ -223,6 +232,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private onTweenEnded = () => {
         this.on("pointerdown", this.onDragStart);
         cancelAnimationFrame(this.animationRequestId);
+        this.updateScreensRenderability();
     }
 
     private updateZOrder(): void {
@@ -265,6 +275,9 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     public goToProjectIndex(index: number): void {
         this.off("pointerdown", this.onDragStart);
         this.projectIndexToGo = index;
+        for (var i = 0; i < this.projectsCount; i++) {
+          this.videoItemList[i].renderable = (i >= Math.min(this.currentProjectIndex, this.projectIndexToGo)) && (i <= Math.max(this.currentProjectIndex, this.projectIndexToGo));
+        }
         this.executeTween();
     }
 }

@@ -109,23 +109,22 @@ $titleAnimationMultilineDelay: 0.15s;
       position: absolute;
       display: block;
       top: -1px;
-      right: 100%;
-      bottom: -1px;
+      right: 0%;
+      bottom: 0px;
       left: -1%;
       content: "";
       background: $black;
+      @include transform(translateX(-100%));
 
       @keyframes blackBG {
         0% {
-          right: 100%;
+          @include transform(translateX(-100%));
         }
         50% {
-          right: 0%;
-          left: -1%;
+          @include transform(translateX(0%));
         }
         100% {
-          right: 0%;
-          left: 100%;
+          @include transform(translateX(100%));
         }
       }
       @include animation-timing-function(cubic-bezier(0.55, 0, 0.28, 1));
