@@ -2,7 +2,7 @@
   <div id="projects-slider-canvas" class="projects-slider-canvas">
     <div id="videosContainer">
       <video id="video" playsinline loop muted autoplay preload="none">
-        <source :src="getVideoPath()" type="video/mp4">
+        <source :src="getVideoPath()" :type="getVideoType()">
         Your browser does not support the video tag.
       </video>
     </div>
@@ -71,6 +71,10 @@ export default class ProjectsSliderCanvas extends Vue {
     videoFileName += (process.viewportSize.width > 1024) ? "desktop-3600" : "mobile-640";
     videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
     return process.mediaPath + videoFileName;
+  }
+
+  getVideoType(): String {
+    return (ModernizrObject.video.webm) ? "video/webm" : "video/mp4";
   }
 
   initPIXI() {
