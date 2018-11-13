@@ -219,11 +219,11 @@ export default class ProjectsSliderCanvas extends Vue {
       pointer-events: none;
       position: absolute;
       height: 75%;
-      width: 100%;
+      width: 500vw;
 
       .grid-x {
         height: 100%;
-        width: 100%;
+        width: 100vw;
         float: left;
         text-align: left;
         justify-content: center;

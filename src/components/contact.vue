@@ -207,9 +207,7 @@ export default class ContactBox extends Vue {
     min-height: 100%;
     bottom: 0px;
     @include transform(translate3d(0px, 100vh, 0px));
-    @include transition(
-      transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1) 0ms
-    );
+    @include transition(transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1) 0ms);
     text-align: center;
     
     &__profile {

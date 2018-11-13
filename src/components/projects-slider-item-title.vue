@@ -7,11 +7,11 @@
           </span>
         </h1>
 
-        <div v-if="link" class="projects-slider-item__title--description align-text-center">
+        <div v-if="link && alive && titleComputed" class="projects-slider-item__title--description align-text-center">
           {{ project['description' + lang] }}
         </div>
 
-        <div v-if="link" class="align-text-center projects-slider-item__title--link">
+        <div v-if="link && alive && titleComputed" class="align-text-center projects-slider-item__title--link">
           <link-button class="link-button" :class="{'visible': !moving && alive}" :title="'view work'" :to="'/project/' + project.id"></link-button>
         </div>
 
@@ -67,7 +67,7 @@ $titleAnimationMultilineDelay: 0.15s;
       margin: 4px 0 0 0;
       z-index: 999;
       @include opacity(0);
-      @include transition(opacity 750ms ease-out 0.1s);
+      @include transition(opacity 500ms ease-out 0.1s);
       &.visible {
         @include opacity(1);
       }

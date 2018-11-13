@@ -61,7 +61,7 @@ $circle-margin: 4px;
 
 
 @mixin move-circles-4 ($step) {
-  margin-left: ($step * ($circle-width + $circle-margin * 2)) + 1px ;
+  @include transform(translateX(($step * ($circle-width + $circle-margin * 2))))
 }
 
 .border-indicator {
@@ -75,7 +75,7 @@ $circle-margin: 4px;
   margin-left: 1px;
 
 
-  @include transition(all 0.3s ease-out);
+  @include transition(transform 0.3s ease-out);
 
   @for $i from 0 through 10 {
     &.active-#{$i} {
@@ -94,7 +94,7 @@ ol {
   margin: 0;
   overflow: hidden;
 
-  @include transition(all 0.3s ease-out);
+  @include transition(background-color 0.3s ease-out);
 
   @for $i from 0 through 10 {
     &.active-#{$i} {

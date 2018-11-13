@@ -218,24 +218,15 @@ export default class App extends Vue {
 .trans-name-enter-active,
 .trans-name-leave-active,
 .project-slider-container {
-  @include transition(all 0.3s ease-out);
+  @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
   @include transform(scale(1));
   @include opacity(1);
-
-  /*.projects-slider-canvas-titles .grid-x .cell {
-    @include transition(all 0.3s ease-out);
-  }*/
 }
 .trans-name-enter,
 .trans-name-leave-to,
 .project-slider-container.inactive {
   @include opacity(0);
   @include transform(scale(0.8));
-
-  /*.projects-slider-canvas-titles .grid-x .cell {
-    margin-top: -110%;
-    margin-left: 25%;
-  }*/
 }
 
 .trans-project-enter-active,
