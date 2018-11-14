@@ -2,7 +2,7 @@
   <div id="main" class="app grid-container full" :class="cssClasses">
 
     <div class="project-slider-container" :class="{'inactive': !projectSliderVisible}">
-      <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="projectSliderVisible"></projects-slider-canvas>
+      <projects-slider-canvas v-if="Modernizr.canvas" class="project-slider-canvas" :active="projectSliderVisible && !transitioning"></projects-slider-canvas>
       <projects-slider v-else class="project-slider"></projects-slider>
     </div>
 

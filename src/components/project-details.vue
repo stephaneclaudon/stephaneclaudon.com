@@ -2,7 +2,8 @@
   <div class="project-details grid-x" ref="projectDetails" :class="{'aftertransition': visible}">
 
     <div class="cell small-12 large-6">
-      <div class="project-details-header" :style="headerBackgroundStyle">
+      <div class="project-details-header">
+        <div class="project-details-header-bg" :style="headerBackgroundStyle"></div>
         <div class="project-details-header-overlay"></div>
         <router-link class="project-details-back-button" :to="{ name: 'home' }">
           <close-button></close-button>
@@ -140,22 +141,27 @@ export default class ProjectDetails extends Vue {
   }
 
   &-header {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     padding-top: 5em;
     padding-bottom: 5em;
     height: 30vh;
     width: 100%;
     position: relative;
+    overflow: hidden;
 
-    &-overlay {
+    &-bg, &-overlay {
       z-index: 1;
       position: absolute;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
+    }
+
+    &-overlay {
+      z-index: 2;
       @include vertical-gradient(transparent, $black, 30%, 100%);
     }
     &-text {
@@ -217,9 +223,13 @@ export default class ProjectDetails extends Vue {
       width: 50%;
       padding-top: 0em;
 
+      &-bg {
+        @include filter(blur(20px));
+      }
+
       &-overlay {
         @include vertical-gradient(
-          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.2),
           rgba(0, 0, 0, 1),
           30%,
           100%

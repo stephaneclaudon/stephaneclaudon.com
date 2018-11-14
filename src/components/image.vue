@@ -59,9 +59,6 @@ export default class ImageSrc extends Vue {
       @include opacity(1);
     }
 
-    img {
-      height: 100%;
-    }
   }
   .loader {
     display: block;

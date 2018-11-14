@@ -69,9 +69,9 @@ export default class Gallery extends Vue {
 
   getImageSrc(imageIndex: number): Array<string> {
     let srcs: Array<string> = [
-      this.imagePath + this.currentProject.id + "/" + imageIndex + "@3x.jpg",
-      this.imagePath + this.currentProject.id + "/" + imageIndex + "@3x.jpg",
-      this.imagePath + this.currentProject.id + "/" + imageIndex + "@3x.jpg"
+      this.imagePath + this.currentProject.id + "/" + imageIndex + ".jpg",
+      this.imagePath + this.currentProject.id + "/" + imageIndex + ".jpg",
+      this.imagePath + this.currentProject.id + "/" + imageIndex + ".jpg"
     ];
     return srcs;
   }
@@ -158,6 +158,11 @@ export default class Gallery extends Vue {
       height: 100%;
       @include transition(transform 500ms ease-out);
     }
+
+    &.small-12 img{
+      width: 100%;
+      height: auto;
+    }
   }
   /* Large and up */
   @media screen and (min-width: 64em) {
@@ -185,6 +190,7 @@ export default class Gallery extends Vue {
     visibility: hidden;
     
     img {
+      height: 100%;
       min-height: 100%;
       @include transition(transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
       @include transform(translate3d(0, 0, 0));
