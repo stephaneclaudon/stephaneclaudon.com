@@ -61,7 +61,6 @@ export default class ProjectsSliderCanvas extends Vue {
 
   mounted() {
     console.log("Init ProjectsSliderCanvas");
-    // this.updateTitlesSize();
     this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
     this.initPIXI();
   }
@@ -99,7 +98,6 @@ export default class ProjectsSliderCanvas extends Vue {
   onResize(e: Event) : void {
     this.pixiApp.renderer.resize(process.viewportSize.width, process.viewportSize.height);
     this.projectsContainer.resizeTextures();
-    // this.updateTitlesSize();
   }
 
   onVideoLoaded(): void {
@@ -163,17 +161,6 @@ export default class ProjectsSliderCanvas extends Vue {
   onSliderIndexChanged(index: number, oldIndex: number) {
     this.projectsContainer.goToProjectIndex(index);
     this.currentIndex = index;
-  }
-
-  updateTitlesSize(): void {
-    let allTitles: HTMLCollection = this.titlesContainerElement.children as HTMLCollection;
-    let containerWidth: number = 0;
-    for (let index = 0; index < allTitles.length; index++) {
-      let title: Element = allTitles[index];
-      (<HTMLElement>title).style.width = title.clientWidth + "px";
-      containerWidth += title.clientWidth;
-    }
-    (<HTMLElement>this.titlesContainerElement).style.width = containerWidth + "px";
   }
 
   beforeDestroy(): void {

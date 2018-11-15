@@ -12,8 +12,8 @@
       v-on:after-enter="zoomAfterEnter"
       v-on:before-leave="zoomBeforeLeave"
     >
-      <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="{'zoom-active': zoomActive}" ref="zoomContainer">
-        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true" :imgid="'zoomImageElement'"></image-src>
+      <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="getZoomClass()" ref="zoomContainer">
+        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true" :imgid="'zoomImageElement'" :style="zoomImageDomStyle"></image-src>
       </div>
     </transition>
   </div>
@@ -44,7 +44,9 @@ export default class Gallery extends Vue {
   private zoomContainer: HTMLElement;
   private currentImageZoomSrc: Array<string> = [];
   private zoomImageIndex: number = -1;
+  private zoomDomClass: string = "";
   private zoomDomStyle: string = "";
+  private zoomImageDomStyle: string = "";
   private zoomActive: boolean = false;
 
   private dragData: any;
@@ -83,6 +85,10 @@ export default class Gallery extends Vue {
     return classes;
   }
 
+  getZoomClass(): string {
+    return ((this.zoomActive)?'zoom-active ':'') + this.zoomDomClass;
+  }
+
   setCurrentPicture(index: number): void {
     this.currentImageSrc = this.getImageSrc(index);
   }
@@ -91,11 +97,23 @@ export default class Gallery extends Vue {
     this.zoomImageIndex = index;
     this.currentImageZoomSrc = this.getImageSrc(index);
     var target = (event.target as HTMLElement);
+    let targetSize: any = {width: target!.clientWidth, height: target!.clientHeight};
+    let targetContainerSize: any = {width: target.parentElement!.clientWidth, height: target.parentElement!.clientHeight};
     this.zoomDomStyle = '';
-    this.zoomDomStyle += 'width: ' + target.parentElement!.clientWidth + 'px;';
-    this.zoomDomStyle += 'height: ' + target.parentElement!.clientHeight + 'px;';
+    this.zoomDomStyle += 'width: ' + targetContainerSize.width + 'px;';
+    this.zoomDomStyle += 'height: ' + targetContainerSize.height + 'px;';
     this.zoomDomStyle += 'top: ' + target.parentElement!.getBoundingClientRect().top + 'px;';
     this.zoomDomStyle += 'left: ' + target.parentElement!.getBoundingClientRect().left + 'px;';
+
+    // If large image
+    this.zoomDomClass = (targetContainerSize.width / targetContainerSize.height > 1.5) ? 'large' : 'small';
+    //handle screen ratio
+    this.zoomDomClass += (window.innerWidth < window.innerHeight) ? ' portrait' : ' landscape';
+
+    this.zoomImageDomStyle = ModernizrObject.prefixedCSS('transform') + ': scale(' + (targetSize.height / targetContainerSize.height) + ');';
+
+    console.log(targetSize.height / targetContainerSize.height);
+    
   }
 
   closeZoom(): void {
@@ -188,13 +206,18 @@ export default class Gallery extends Vue {
     position: fixed;
     z-index: 99;
     visibility: hidden;
-    
-    img {
-      height: 100%;
-      min-height: 100%;
+
+    .image {
       @include transition(transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
-      @include transform(translate3d(0, 0, 0));
+
+      img {
+        height: 100%;
+        min-height: 100%;
+        @include transition(transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1));
+        @include transform(translate3d(0, 0, 0));
+      }
     }
+    
   }
 }
 .zoom-animation-enter-active, .zoom-animation-leave-active {
@@ -207,5 +230,9 @@ export default class Gallery extends Vue {
   top: 0 !important;
   left: 0 !important;
   visibility: visible;
+
+  .image {
+    @include transform(scale(1) !important);
+  }
 }
 </style>

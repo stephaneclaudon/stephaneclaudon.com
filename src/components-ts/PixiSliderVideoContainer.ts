@@ -12,7 +12,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private _onDragEndEvent = new SimpleEventDispatcher<number>();
     private _onDragUpdateEvent = new EventDispatcher<number, number>();
 
-    private animationRequestId: number;
+    private animationRequestId: any;
 
     private dragData: any;
     private dragMaxVelocity: number = 15;
@@ -141,7 +141,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
             this._onDragStartEvent.dispatch();
             this.domVideoElement.pause();
-            this.onAnimationUpdate();
             this.dragTween.kill();
             this.dragData = event.data;
             let position = this.dragData.getLocalPosition(this);
@@ -181,6 +180,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         }
         this.updateCurrentScreenScale();
         this.updateScreensRenderability();
+        if (!this.animationRequestId) this.onAnimationUpdate();
     }
 
     private updateCurrentScreenScale(): void {
@@ -232,6 +232,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     private onTweenEnded = () => {
         this.on("pointerdown", this.onDragStart);
         cancelAnimationFrame(this.animationRequestId);
+        this.animationRequestId = undefined;
         this.updateScreensRenderability();
     }
 

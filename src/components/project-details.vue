@@ -8,7 +8,7 @@
         <router-link class="project-details-back-button" :to="{ name: 'home' }">
           <close-button></close-button>
         </router-link>
-        <div class="grid-x align-center-middle project-details-header-text">
+        <div v-if="visible" class="grid-x align-center-middle project-details-header-text">
           <div class="cell small-10">
             <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false" :link="false"></projects-slider-item-title>
             <div class="project-details-header-text--description">
@@ -80,7 +80,6 @@ export default class ProjectDetails extends Vue {
   }
 
   mounted(): void {
-    //window.addEventListener("scroll", this.onWindowScroll);
     this.headerBackgroundImage =
       'background-image: url("' +
       process.mediaPath +
@@ -88,9 +87,6 @@ export default class ProjectDetails extends Vue {
       this.currentProject.id +
       '@3x.jpg");';
     this.onWindowScroll();
-    setInterval(() => {
-      // console.log((this.$refs.projectDetails as any).clientHeight);
-    }, 500)
   }
 
   onWindowScroll(): void {
