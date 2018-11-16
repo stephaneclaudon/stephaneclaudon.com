@@ -9,7 +9,10 @@ const mutations: MutationTree<any> = {
     state.currentProject = project;
   },
   [MutationTypes.SLIDER_SET_CURRENT_PROJECT_ID](state, projectId: number): void {
-    state.sliderCurrentProjectId = projectId;
+    state.currentSliderProjectId = projectId;
+  },
+  [MutationTypes.SLIDER_SET_GOTO_PROJECT_ID](state, projectId: number): void {
+    state.sliderGotoProjectId = projectId;
   },
   [MutationTypes.SLIDER_SET_IS_MOVING](state, moving: boolean): void {
     state.sliderIsMoving = moving;

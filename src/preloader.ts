@@ -14,12 +14,11 @@ var preloader = new createjs.LoadQueue(),
   $progressbarContainer: HTMLElement = document.getElementById('progressbar-container')!;
 
 var myAssets: Array<string> = [];
-/*
-let videoFileName: string = "loops/all-projects-";
-videoFileName += (GlobalInstance.getViewportWidth() > 1024) ? "desktop-3600" : "mobile-640";
-videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
-myAssets.push(process.mediaPath + videoFileName);
-*/
+// let videoFileName: string = "loops/all-projects-";
+// videoFileName += (GlobalInstance.getViewportWidth() > 1024) ? "desktop-3600" : "mobile-640";
+// videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
+// myAssets.push(process.mediaPath + videoFileName);
+
 myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf");
 myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf#iefix");
 myAssets.push(process.mediaPath + "fonts/icomoon.ttf?juz7kf");

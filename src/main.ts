@@ -2,9 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import App from './App.vue'
-import { State } from './store/state'
-import getters from './store/getters'
-import mutations from './store/mutations'
+import store from './store'
 //@ts-ignore
 import Stats from './lib/stats.min.js'
 import jsonData from "./assets/data/data.json";
@@ -17,12 +15,11 @@ GlobalInstance.setViewportSize();
 Vue.use(Vuex);
 Vue.use(VueRouter);
 
-const state = new State();
-state.projects = jsonData.projects;
+store.state.projects = jsonData.projects;
 
-state.lang = navigator.language.split('-')[0];
-if (state.lang !== 'fr' && state.lang !== 'en') {
-  state.lang = 'en'
+store.state.lang = navigator.language.split('-')[0];
+if (store.state.lang !== 'fr' && store.state.lang !== 'en') {
+  store.state.lang = 'en'
 }
 
 let routes: Array<any> = [];
@@ -46,22 +43,22 @@ routes.push(
   { path: '/contact', name: 'contact', component: App }
 );
 
-for (let index = 0; index < state.projects.length; index++) {
+for (let index = 0; index < store.state.projects.length; index++) {
   routes.push(
     {
-      path: '/project/' + state.projects[index].id,
-      name: state.projects[index].id,
+      path: '/project/' + store.state.projects[index].id,
+      name: store.state.projects[index].id,
       component: App,
       meta: {
-        title: state.projects[index].client + " - " + state.projects[index].title,
+        title: store.state.projects[index].client + " - " + store.state.projects[index].title,
         metaTags: [
           {
             name: 'description',
-            content: state.projects[index].description
+            content: store.state.projects[index].description
           },
           {
             property: 'og:description',
-            content: state.projects[index].description
+            content: store.state.projects[index].description
           }
         ]
       }
@@ -130,11 +127,7 @@ setTimeout(() => {
     el: document.querySelector('#app') as Element,
     components: {App},
     router,
-    store: new Vuex.Store({ 
-      state: state,
-      getters,
-      mutations
-    }),
+    store: store,
     render (h) {
       return h('App')
     }

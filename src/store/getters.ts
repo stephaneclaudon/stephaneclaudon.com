@@ -12,8 +12,13 @@ export function projects (state: State): Array<Object> {
 }
 
 // return slider current project id
-export function sliderCurrentProjectId (state: State): number {
-    return state.sliderCurrentProjectId
+export function currentSliderProjectId (state: State): number {
+    return state.currentSliderProjectId
+}
+
+// return slider goto project id
+export function sliderGotoProjectId (state: State): number {
+    return state.sliderGotoProjectId
 }
 
 // return if slider is moving

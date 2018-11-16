@@ -45,6 +45,7 @@ import * as ModernizrObject from "modernizr";
 import { TweenLite, Power2 } from "gsap";
 //@ts-ignore
 import "gsap/ScrollToPlugin";
+import { currentSliderProjectId } from "./store/getters";
 
 @Component({
   components: {
@@ -57,11 +58,11 @@ import "gsap/ScrollToPlugin";
 export default class App extends Vue {
   @State("projects") projects: Array<any>;
   @State("currentProject") currentProject: any;
+  @State("currentSliderProjectId") currentSliderProjectId: any;
 
   @Mutation(MutationTypes.SET_CURRENT_PROJECT)
-  setCurrentProject: (project: Object) => void;
+  commitCurrentProject: (project: Object) => void;
 
-  private sliderActive: boolean = true;
   private transitioning: boolean = false;
   private showProjectDetails: boolean = false;
   private projectSliderVisible: boolean = false;
@@ -73,10 +74,12 @@ export default class App extends Vue {
 
   created() {
     if (this.$router.currentRoute.path.indexOf("project") > -1) {
-      this.gotoProject(this.$router.currentRoute.name!);
+      this.setCurrentProject(this.getProjectFromId(this.$router.currentRoute.name!));
+      this.showProjectDetails = true;
       this.projectDetailsVisible = true;
     } else {
       this.projectSliderVisible = true;
+      this.setCurrentProject(this.projects[0]);
     }
   }
 
@@ -88,20 +91,16 @@ export default class App extends Vue {
   @Watch("$route")
   onRouteChanged(to: any, from: any): void {
     if (to.path.indexOf("project") > -1) {
-      this.gotoProject(to.name);
+      this.setCurrentProject(this.getProjectFromId(to.name!));
+      this.showProjectDetails = true;
     } else if (to.name != "contact") {
       this.showProjectDetails = false;
     }
   }
 
-  @Watch("currentProject")
-  onProjectChanged(val: any, old: any): void {
-    this.sliderActive = this.currentProject.id === undefined;
-  }
-
-  gotoProject(projectId: string): void {
-    this.showProjectDetails = true;
-    this.setCurrentProject(this.getProjectFromId(projectId));
+  @Watch("currentSliderProjectId")
+  onCurrentSliderProjectIdChanged(projectIndex: any, oldProjectId: any): void {
+    this.setCurrentProject(this.getProjectFromIndex(projectIndex));
   }
 
   onTransitionBeforeEnter(el: HTMLElement) {
@@ -121,7 +120,13 @@ export default class App extends Vue {
   onTransitionAfterLeave(el: HTMLElement) {
     this.projectDetailsVisible = false;
     this.transitioning = false;
-    this.setCurrentProject({});
+
+    let currentSliderProject: any = this.getProjectFromIndex(this.currentSliderProjectId);
+    this.setCurrentProject(currentSliderProject);
+  }
+
+  setCurrentProject(project: any): void {
+    if (this.currentProject.id !== project.id) this.commitCurrentProject(project);
   }
 
   getProjectFromId(projectId: string): any {
@@ -130,6 +135,10 @@ export default class App extends Vue {
         return this.projects[index];
       }
     }
+  }
+
+  getProjectFromIndex(projectIindex: number): any {
+    return this.projects[projectIindex];
   }
 
   get cssClasses(): Array<string> {

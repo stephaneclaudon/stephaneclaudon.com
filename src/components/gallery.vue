@@ -63,10 +63,14 @@ export default class Gallery extends Vue {
   }
 
   mounted(): void {
-    this.currentImageSrc = this.getImageSrc(1);
-    this.currentImageZoomSrc = this.getImageSrc(1);
     this.zoomContainer = this.$refs.zoomContainer as HTMLElement;
     this.dragTween = new TweenLite(this, 0.1, {});
+    if (this.currentProject.id) this.currentImageSrc = this.getImageSrc(1);
+  }
+
+  @Watch("currentProject")
+  onProjectChanged(val: any, old: any): void {
+    this.currentImageSrc = this.getImageSrc(1);
   }
 
   getImageSrc(imageIndex: number): Array<string> {
@@ -110,10 +114,7 @@ export default class Gallery extends Vue {
     //handle screen ratio
     this.zoomDomClass += (window.innerWidth < window.innerHeight) ? ' portrait' : ' landscape';
 
-    this.zoomImageDomStyle = ModernizrObject.prefixedCSS('transform') + ': scale(' + (targetSize.height / targetContainerSize.height) + ');';
-
-    console.log(targetSize.height / targetContainerSize.height);
-    
+    this.zoomImageDomStyle = ModernizrObject.prefixedCSS('transform') + ': scale(' + (targetSize.height / targetContainerSize.height) + ');';    
   }
 
   closeZoom(): void {

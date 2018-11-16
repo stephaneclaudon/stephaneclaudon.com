@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import PixelSortingFilter from '../shaders/pixelsorting/PixelSortingFilter';
 import PixiSliderVideoItem from './PixiSliderVideoItem';
 import { TweenLite, Power4 } from "gsap";
+import store from "../store"
 //@ts-ignore
 import * as PixiPlugin from "gsap/PixiPlugin";
 
@@ -234,6 +235,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         cancelAnimationFrame(this.animationRequestId);
         this.animationRequestId = undefined;
         this.updateScreensRenderability();
+        store.commit('SLIDER_SET_CURRENT_PROJECT_ID', this.currentProjectIndex);
     }
 
     private updateZOrder(): void {

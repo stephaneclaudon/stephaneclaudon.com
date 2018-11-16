@@ -4,7 +4,7 @@
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'youtube' && isMounted && visible" :src="youtubeURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
-      <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="project.title" :loadimage="visible" :loader="false"></image-src>
+      <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="currentProject.title" :loadimage="true" :loader="false"></image-src>
       <span class="video-player-play-button">
         <span></span>
       </span>
@@ -26,7 +26,7 @@ import Loader from "./loader.vue";
   }
 })
 export default class EmbedVideoPlayer extends Vue {
-  @State("currentProject") project: any;
+  @State("currentProject") currentProject: any;
   @Prop() plateform: string;
   @Prop() videoId: string;
   @Prop() visible: boolean;
@@ -45,7 +45,16 @@ export default class EmbedVideoPlayer extends Vue {
   mounted() {
     this.isMounted = true;
     this.showVideoPlayer = false;
-    this.videoRatio = (this.project.videoheight / this.project.videowidth);
+    if (this.currentProject.id) this.updateSize();
+  }
+
+  @Watch("currentProject")
+  onProjectChanged(val: any, old: any): void {
+    this.updateSize();
+  }
+
+  updateSize(): void {
+    this.videoRatio = (this.currentProject.videoheight / this.currentProject.videowidth);
     this.setDimensions();
     this.setStyle();
   }
@@ -69,17 +78,11 @@ export default class EmbedVideoPlayer extends Vue {
 
   getVideoPosterSrc(): Array<string> {
     let srcs: Array<string> = [
-      this.imagePath + this.project.id + "@1x.jpg",
-      this.imagePath + this.project.id + "@2x.jpg",
-      this.imagePath + this.project.id + "@3x.jpg",
+      this.imagePath + this.currentProject.id + "@1x.jpg",
+      this.imagePath + this.currentProject.id + "@2x.jpg",
+      this.imagePath + this.currentProject.id + "@3x.jpg",
     ];
     return srcs;
-  }
-
-  @Watch("visible")
-  onVisibilityChange(): void {
-    this.setDimensions();
-    this.setStyle();
   }
 
   get vimeoURL(): string {

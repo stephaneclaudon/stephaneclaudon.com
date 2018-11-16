@@ -52,7 +52,7 @@ export default class ProjectsSliderCanvas extends Vue {
   sliderIsMoving: boolean = false;
 
   @State("projects") projects: Array<any>;
-  @State("sliderCurrentProjectId") currentSliderIndex: number;
+  @State("sliderGotoProjectId") sliderGotoProjectId: number;
   @Prop() active: boolean;
   
   created() {
@@ -157,8 +157,8 @@ export default class ProjectsSliderCanvas extends Vue {
     }
   }
 
-  @Watch('currentSliderIndex')
-  onSliderIndexChanged(index: number, oldIndex: number) {
+  @Watch('sliderGotoProjectId')
+  onSliderGotoProjectIdChanged(index: number, oldIndex: number) {
     this.projectsContainer.goToProjectIndex(index);
     this.currentIndex = index;
   }

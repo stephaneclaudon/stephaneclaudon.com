@@ -4,7 +4,7 @@ export default class Global {
       if (process.env.NODE_ENV === 'development') {
         process.mediaPath = '/dist/assets/';
       } else {
-        process.mediaPath = 'http://d1ukd4l0fsog5x.cloudfront.net/';
+        process.mediaPath = '/v1/dist/assets/';
       }
     }
   }

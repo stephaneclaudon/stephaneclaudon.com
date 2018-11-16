@@ -47,9 +47,8 @@
 </template>
 
 <script lang="ts">
-import * as ModernizrObject from "modernizr";
 import { State, Mutation } from "vuex-class";
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import OtherProjects from "../components/other-projects.vue";
 import EmbedVideoPlayer from "../components/embedVideoPlayer.vue";
 import CloseButton from "../components/closeButton.vue";
@@ -75,42 +74,36 @@ export default class ProjectDetails extends Vue {
   headerBackgroundStyle: string = "";
   headerTitleStyle: string = "";
 
-  get Modernizr(): any {
-    return ModernizrObject;
+  mounted(): void {
+    this.onProjectChanged(null, null);
   }
 
-  mounted(): void {
+  @Watch("currentProject")
+  onProjectChanged(val: any, old: any): void {
     this.headerBackgroundImage =
       'background-image: url("' +
       process.mediaPath +
       "img/" +
       this.currentProject.id +
       '@3x.jpg");';
-    this.onWindowScroll();
-  }
-
-  onWindowScroll(): void {
-    this.currentScroll = window.pageYOffset;
-    this.setHeaderStyle();
-  }
-
-  setHeaderStyle(): void {
-    this.headerBackgroundStyle =
-      this.headerBackgroundImage +
-      " background-position: center " +
-      this.currentScroll * 0.7 +
-      "px;";
-    this.headerTitleStyle = "margin-top: " + this.currentScroll * 0.9 + "px;";
-  }
-
-  beforeDestroy(): void {
-    window.removeEventListener("scroll", this.onWindowScroll);
+    this.headerBackgroundStyle = this.headerBackgroundImage;
   }
 }
 </script>
 <style lang="scss" scoped>
 @import "../style/mixins.scss";
 @import "../style/variables.scss";
+
+@keyframes slideAndFadeEntry {
+  from {
+    @include transform(translateY(-2em));
+    @include opacity(0);
+  }
+  to {
+    @include transform(translateY(0));
+    @include opacity(1);
+  }
+}
 
 .project-details {
   position: absolute;
@@ -154,6 +147,11 @@ export default class ProjectDetails extends Vue {
       top: 0;
       width: 100%;
       height: 100%;
+    }
+
+    &-bg {
+      background-position: center;
+      background-size: cover;
     }
 
     &-overlay {
@@ -221,20 +219,26 @@ export default class ProjectDetails extends Vue {
 
       &-bg {
         @include filter(blur(20px));
+        @include transform(scale(1.2));
       }
 
       &-overlay {
-        @include vertical-gradient(
-          rgba(0, 0, 0, 0.2),
-          rgba(0, 0, 0, 1),
-          30%,
-          100%
-        );
+        @include background(rgba(0, 0, 0, 0.8));
       }
 
       &-text--description,
       &-text--credits {
         display: block;
+        @include opacity(0);
+        @include animation-timing-function(cubic-bezier(0.165, 0.84, 0.44, 1));
+      }
+
+      &-text--description {
+        @include animation(0.5s, 1s, slideAndFadeEntry);
+      }
+
+      &-text--credits {
+        @include animation(0.75s, 1s, slideAndFadeEntry);
       }
     }
   }

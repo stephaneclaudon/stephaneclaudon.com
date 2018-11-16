@@ -59,6 +59,17 @@ export default class ProjectsSliderItem extends Vue {
 $titleAnimationDuration: 0.75s;
 $titleAnimationMultilineDelay: 0.15s;
 
+@keyframes slideAndFadeEntry {
+  from {
+    @include transform(translateY(-2em));
+    @include opacity(0);
+  }
+  to {
+    @include transform(translateY(0));
+    @include opacity(1);
+  }
+}
+
 .projects-slider-item__title {
   &--link {
     text-align: left;
@@ -66,12 +77,10 @@ $titleAnimationMultilineDelay: 0.15s;
       pointer-events: fill;
       margin: 4px 0 0 0;
       z-index: 999;
-      @include opacity(0);
-      @include transition(opacity 500ms ease-out 0.1s);
-      &.visible {
-        @include opacity(1);
-      }
     }
+    @include opacity(0);
+    @include animation-timing-function(cubic-bezier(0.165, 0.84, 0.44, 1));
+    @include animation(1s, 1s, slideAndFadeEntry);
   }
   
   .title--inner,
@@ -124,7 +133,7 @@ $titleAnimationMultilineDelay: 0.15s;
           @include transform(translateX(0%));
         }
         100% {
-          @include transform(translateX(100%));
+          @include transform(translateX(101%));
         }
       }
       @include animation-timing-function(cubic-bezier(0.55, 0, 0.28, 1));
@@ -206,9 +215,6 @@ $titleAnimationMultilineDelay: 0.15s;
     .title--inner {
       font-size: 6em;
       padding: 0;
-      span {
-        visibility: visible;
-      }
     }
 
     .title--outer:first-child .title--inner {
@@ -216,14 +222,24 @@ $titleAnimationMultilineDelay: 0.15s;
       color: $white;
     }
 
-    .title--inner::before, .title--inner::after, .title--outer::before, .title--outer::after, .title--outer:first-child .title--inner::before, .title--outer:first-child .title--inner::after  {
+    .title--inner::before, .title--outer::before, .title--outer:first-child .title--inner::before  {
       border-bottom: none !important;
       background: none;
+    }
+
+    .title--inner::after, .title--outer::after, .title--outer:first-child .title--inner::after  {
+      background: white;
+    }
+
+    &--description, &--link {
+      @include opacity(0);
+      @include animation-timing-function(cubic-bezier(0.165, 0.84, 0.44, 1));
     }
 
     &--description {
       font-size: 1.5em;
       display: block;
+      @include animation(1s, 1s, slideAndFadeEntry);
     }
 
     &--link {
@@ -231,7 +247,10 @@ $titleAnimationMultilineDelay: 0.15s;
       .link-button {
         margin: 6em 0 0 0;
       }
+      @include animation(1.5s,  1s, slideAndFadeEntry);
     }
+
+    
   }
 }
 </style>

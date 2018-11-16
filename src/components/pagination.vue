@@ -21,11 +21,11 @@ export default class Pagination extends Vue {
   @Prop() pageCount: number;
   @Prop() currentIndex: number;
 
-  @Mutation(MutationTypes.SLIDER_SET_CURRENT_PROJECT_ID)
-  setCurrentSliderIndex: (index: number) => void;
+  @Mutation(MutationTypes.SLIDER_SET_GOTO_PROJECT_ID)
+  setSliderGotoIndex: (index: number) => void;
 
   goToIndex( index: number ): void {
-    this.setCurrentSliderIndex(index);
+    this.setSliderGotoIndex(index);
   }
 
 }
