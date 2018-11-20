@@ -52,17 +52,20 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
       this.projectsCount = projects.length;
       this.dragTween = new TweenLite(this, 0.1, {});
 
-      this.videoTexture = PIXI.Texture.fromVideo(domVideoElement);
-      this.videoTextureSize = new PIXI.Point(this.videoTexture.width, this.videoTexture.height);
+      this.videoTexture = PIXI.Texture.fromVideo(this.domVideoElement);
+      this.videoTextureSize = new PIXI.Point(this.domVideoElement.videoWidth, this.domVideoElement.videoHeight);
       this.videoTextureRatio = this.videoTextureSize.x / this.videoTextureSize.y;
       (<PIXI.VideoBaseTexture>this.videoTexture.baseTexture).autoPlay = true;
       (<PIXI.VideoBaseTexture>this.videoTexture.baseTexture).autoUpdate = true;
       this.initScreenSizes();
 
+      console.log(this.videoTexture.baseTexture);
+      
+
       for (var i = 0; i < projects.length; i++) {
-          let frame: PIXI.Rectangle = this.getVideoTextureRect(i);
+          let frame: PIXI.Rectangle = this.getVideoTextureRect(i);          
           let projectTexture = new PIXI.Texture(this.videoTexture.baseTexture, frame);
-          let projectSprite = new PixiSliderVideoItem(i, projectTexture, this.screenWidth, this.screenHeight);
+          let projectSprite = new PixiSliderVideoItem(i, projectTexture, this.screenWidth, this.screenHeight);          
           this.addChild(projectSprite);
           this.videoItemList.push(projectSprite);
       }
@@ -107,7 +110,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
 
       this.screenTextureWidth = (this.videoTextureRatio > 1) ? (this.videoTextureSize.x / this.projectsCount) : this.videoTextureSize.x;
       this.screenTextureHeight = (this.videoTextureRatio > 1) ? this.videoTextureSize.y : (this.videoTextureSize.y / this.projectsCount);
-      this.mediaRatio = this.screenTextureWidth / this.screenTextureHeight;
+      this.mediaRatio = this.screenTextureWidth / this.screenTextureHeight;      
     }
 
     private updateTexturesFrame(): void {

@@ -40,6 +40,7 @@ import ProjectsSlider from "./components/projects-slider.vue";
 import ProjectsSliderCanvas from "./components/projects-slider-canvas.vue";
 import ProjectDetails from "./components/project-details.vue";
 import * as MutationTypes from "./store/mutation-types";
+import Utils from "./utils/Utils";
 
 import * as ModernizrObject from "modernizr";
 import { TweenLite, Power2 } from "gsap";
@@ -77,9 +78,11 @@ export default class App extends Vue {
       this.setCurrentProject(this.getProjectFromId(this.$router.currentRoute.name!));
       this.showProjectDetails = true;
       this.projectDetailsVisible = true;
+      Utils.setBodyClass('project-details');
     } else {
       this.projectSliderVisible = true;
       this.setCurrentProject(this.projects[0]);
+      Utils.setBodyClass(this.$router.currentRoute.name!);
     }
   }
 
@@ -93,8 +96,12 @@ export default class App extends Vue {
     if (to.path.indexOf("project") > -1) {
       this.setCurrentProject(this.getProjectFromId(to.name!));
       this.showProjectDetails = true;
-    } else if (to.name != "contact") {
+      Utils.setBodyClass('project-details');
+    } else if (to.name === "home") {
       this.showProjectDetails = false;
+      Utils.setBodyClass('home');
+    } else if (to.name === "contact") {
+      Utils.setBodyClass('contact');
     }
   }
 
@@ -152,6 +159,12 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import "./style/main.scss";
+
+body {
+  &.home {
+    /* position: fixed; */
+  }
+}
 
 .project-slider {
   @include opacity(0);

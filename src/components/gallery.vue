@@ -112,7 +112,7 @@ export default class Gallery extends Vue {
     // If large image
     this.zoomDomClass = (targetContainerSize.width / targetContainerSize.height > 1.5) ? 'large' : 'small';
     //handle screen ratio
-    this.zoomDomClass += (window.innerWidth < window.innerHeight) ? ' portrait' : ' landscape';
+    this.zoomDomClass += (process.viewportSize.width < process.viewportSize.widthheight) ? ' portrait' : ' landscape';
 
     this.zoomImageDomStyle = ModernizrObject.prefixedCSS('transform') + ': scale(' + (targetSize.height / targetContainerSize.height) + ');';    
   }

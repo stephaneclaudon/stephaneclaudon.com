@@ -77,7 +77,9 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   initPIXI() {
-    this.pixiApp = new PIXI.Application(window.innerWidth, window.innerHeight, {
+    console.log(process.viewportSize);
+    
+    this.pixiApp = new PIXI.Application(process.viewportSize.width, process.viewportSize.height, {
       backgroundColor: 0x0f0f0f,
       antialias: false,
       transparent: false,
@@ -89,7 +91,7 @@ export default class ProjectsSliderCanvas extends Vue {
     this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
     this.pixiApp.renderer.autoResize = true;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.addEventListener("canplaythrough", this.onVideoLoaded, false);
     this.videoElement.load();
     
     window.addEventListener('resize', this.onResize);
@@ -101,15 +103,15 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onVideoLoaded(): void {
-    this.videoElement.removeEventListener("loadeddata", this.onVideoLoaded, false);
+    this.videoElement.removeEventListener("canplaythrough", this.onVideoLoaded, false);
     this.toggleSliderUpdate(this.active);
     this.initProjects();
   }
 
   initProjects() {
     let bg = new PIXI.Sprite();
-    bg.width = window.innerWidth;
-    bg.height = window.innerHeight;
+    bg.width = process.viewportSize.width;
+    bg.height = process.viewportSize.height;
     this.pixiApp.stage.addChild(bg);
     this.projectsContainer = new PixiSliderVideoContainer(this.pixiApp, this.projects, this.videoElement);
     this.projectsContainer.onDragStartEvent.subscribe(this.onSliderTransitionStart);

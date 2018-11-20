@@ -1,6 +1,8 @@
 <template>
-  <div class="contact-wrapper small-offset-1">
-    <div class="toggle noselect small-offset-1" v-on:click="open()">Contact</div>
+  <div class="contact-wrapper">
+    <div class="toggle noselect" v-on:click="open()">
+      <div class="toggle-content">Contact</div>
+    </div>
       
     <div class="contact" v-bind:class="{ opened: opened, hidden: hidden }">
       <div class="contact-overlay" v-on:click="close()"></div>
@@ -115,18 +117,25 @@ export default class ContactBox extends Vue {
 @import "../style/variables.scss";
 
 .toggle {
+  position: fixed;
+  left: 8.3333%;
+  bottom: 5%;
+  width: auto;
+  z-index: 999;
   display: inline-block;
   height: 50px;
   background-size: 73px 16px;
   font-size: 0.8em;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
   cursor: pointer;
+  @include transform-origin(0% 0% 0px);
+  @include transform(rotate(-90deg) translateX(-50px) translateY(-50%));
   @include transition(color 0.2s);
   @include opacity(0);
   @include roboto-black;
-  @include transform(rotate(-90deg));
-  @include transform-origin(35% 53% 0px);
   @keyframes contactToggle {
     from {
       @include opacity(0);
@@ -140,18 +149,24 @@ export default class ContactBox extends Vue {
 
   &:hover {
     color: $light-grey;
-    &::after {
-      border-color: $light-grey;
+
+    &-content {
+      &::after {
+        border-color: $light-grey;
+      }
     }
   }
 
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    border-bottom: solid 1px $white;
-    margin-top: 5px;
-    @include transition(border-color 0.2s);
+  &-content {
+    @include transform(translateY(50%));
+    &::after {
+      content: "";
+      display: block;
+      width: 100%;
+      border-bottom: solid 1px $white;
+      margin-top: 5px;
+      @include transition(border-color 0.2s);
+    }
   }
 }
 .contact-wrapper {

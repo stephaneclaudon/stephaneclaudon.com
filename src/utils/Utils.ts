@@ -28,4 +28,34 @@ export default class Utils {
         
         return currentTitleArray;
     }
+
+
+    static toggleBodyClass(className: string): void {
+      let element: HTMLElement = document.body;
+      if (element.classList) {
+        element.classList.toggle(className);
+      } else {
+        var classes = element.className.split(' ');
+        var existingIndex = classes.indexOf(className);
+      
+        if (existingIndex >= 0)
+          classes.splice(existingIndex, 1);
+        else
+          classes.push(className);
+      
+          element.className = classes.join(' ');
+      }
+    }
+
+    static setBodyClass(className: string): void {
+      let element: HTMLElement = document.body;
+      if (element.classList) {
+        for (let index = 0; index < element.classList.length; index++) {
+          element.classList.remove(element.classList.item(index)!)
+        }
+        element.classList.add(className);
+      } else {
+        element.className = className;
+      }
+    }
 }
