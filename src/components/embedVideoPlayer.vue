@@ -1,5 +1,5 @@
 <template>
-  <div class="video-player" :style="style">
+  <div class="video-player" :style="cssStyle">
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'youtube' && isMounted && visible" :src="youtubeURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     
@@ -38,9 +38,10 @@ export default class EmbedVideoPlayer extends Vue {
   private width: number = 0;
   private height: number = 0;
   private pcHeight: number = 0;
-  private style: string = "";
+  private cssStyle: string = "";
 
   private imagePath: string = process.mediaPath + "img/";
+  private containerSize: any;
 
   mounted() {
     this.isMounted = true;
@@ -54,7 +55,6 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   updateSize(): void {
-    this.videoRatio = (this.currentProject.videoheight / this.currentProject.videowidth);
     this.setDimensions();
     this.setStyle();
   }
@@ -64,16 +64,20 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   setDimensions(): void {
-    this.width = this.$el.getBoundingClientRect().width;
-    this.height = this.width * this.videoRatio;
-    this.pcHeight = this.height / this.$el.parentElement!.getBoundingClientRect().height;
-    if (document.documentElement.offsetWidth < 1024) {
-      this.pcHeight = this.height / document.documentElement.offsetHeight;
+    this.videoRatio = (this.currentProject.videoheight / this.currentProject.videowidth);
+    if (!this.containerSize) {
+      this.containerSize = {width: 0, height: 0};
+      this.containerSize.width = this.$el.getBoundingClientRect().width / process.viewportSize.width;
+      this.containerSize.height = (this.$el.getBoundingClientRect().width * this.videoRatio) / process.viewportSize.height;
     }
+    this.width = this.containerSize.width * process.viewportSize.width;
+    this.height = this.width * this.videoRatio;
+    this.pcHeight = this.containerSize.height;
   }
   
   setStyle(): void {
-    this.style = "height: " + (this.pcHeight * 100) + "vh;";
+    this.cssStyle = "height: " + (this.pcHeight * 100) + "vh;";  
+
   }
 
   getVideoPosterSrc(): Array<string> {

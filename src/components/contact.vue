@@ -179,7 +179,8 @@ export default class ContactBox extends Vue {
   @media screen and (min-width: 64em) {
     margin-left: 0;
     .toggle {
-      margin-left: 50px;
+      left: 50px;
+      bottom: 50px;
     }
     .contact-content {
       font-size: 1.2em;
@@ -194,7 +195,7 @@ export default class ContactBox extends Vue {
 .contact {
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;

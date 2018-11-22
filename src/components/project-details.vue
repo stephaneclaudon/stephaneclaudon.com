@@ -1,48 +1,51 @@
 <template>
-  <div class="project-details grid-x" ref="projectDetails" :class="{'aftertransition': visible}">
+  <div class="project-details" :class="{'aftertransition': visible, 'initialasing': !inited}" :style="transformOriginStyle">
+    <div class="grid-x" :style="transformStyle">
+      <div class="cell small-12 large-6">
+        <div class="project-details-header">
+          <div class="project-details-header-bg" :style="headerBackgroundStyle"></div>
+          <div class="project-details-header-overlay"></div>
+          <router-link class="project-details-back-button" :to="{ name: 'home' }">
+            <close-button></close-button>
+          </router-link>
+          <div v-if="visible" class="grid-x align-center-middle project-details-header-text">
+            <div class="cell small-10">
+              <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false" :link="false"></projects-slider-item-title>
+              <div class="project-details-header-text--description">
+                <p>{{ currentProject['description' + lang] }}</p>
+              </div>
+              <div class="project-details-header-text--credits cell small-10 align-text-center">
+                <h2>Credits</h2>
+                <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
+                <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
+              </div>
+            </div>
+          </div>   
+        </div>
+      </div>
 
-    <div class="cell small-12 large-6">
-      <div class="project-details-header">
-        <div class="project-details-header-bg" :style="headerBackgroundStyle"></div>
-        <div class="project-details-header-overlay"></div>
-        <router-link class="project-details-back-button" :to="{ name: 'home' }">
-          <close-button></close-button>
-        </router-link>
-        <div v-if="visible" class="grid-x align-center-middle project-details-header-text">
-          <div class="cell small-10">
-            <projects-slider-item-title :style="headerTitleStyle" class="project-details-header-text--title" :project="currentProject" :project-index="0" :alive="true" :moving="false" :link="false"></projects-slider-item-title>
-            <div class="project-details-header-text--description">
-              <p>{{ currentProject['description' + lang] }}</p>
-            </div>
-            <div class="project-details-header-text--credits cell small-10 align-text-center">
-              <h2>Credits</h2>
-              <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
-              <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
-            </div>
+      <div class="cell small-12 large-6">
+        <div class="grid-x project-details--right">
+          <div class="project-details-description cell small-10 small-offset-1">
+            <p>{{ currentProject['description' + lang] }}</p>
           </div>
-        </div>   
-      </div>
-    </div>
 
-    <div class="cell small-12 large-6">
-      <div class="grid-x project-details--right">
-        <div class="project-details-description cell small-10 small-offset-1">
-          <p>{{ currentProject['description' + lang] }}</p>
-        </div>
+          <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
+            <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
+          </div>
+            
+          <embed-video-player class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
-        <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
-          <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
-        </div>
-          
-        <embed-video-player class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
-
-        <div class="project-details-credits cell small-10 small-offset-1">
-          <h2>Credits</h2>
-          <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
-          <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
+          <div class="project-details-credits cell small-10 small-offset-1">
+            <h2>Credits</h2>
+            <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
+            <div class="project-details-credits-date">{{ currentProject['date' + lang] }}</div>
+          </div>
         </div>
       </div>
     </div>
+
+   
   </div>
 </template>
 
@@ -68,14 +71,18 @@ export default class ProjectDetails extends Vue {
   @State("lang") lang: string;
   @State("currentProject") currentProject: any;
   @Prop() visible: boolean;
-  @Prop() transitioning: boolean;
+  @Prop() transformOriginStyle: string;
+  @Prop() transformStyle: string;
   currentScroll: number;
   headerBackgroundImage: string;
   headerBackgroundStyle: string = "";
   headerTitleStyle: string = "";
 
+  private inited: boolean = false;
+
   mounted(): void {
     this.onProjectChanged(null, null);
+    this.inited = true;
   }
 
   @Watch("currentProject")
@@ -113,6 +120,14 @@ export default class ProjectDetails extends Vue {
   min-height: 100%;
   padding-bottom: 3em;
   overflow: hidden;
+
+  &.initialasing {
+    display: block !important;
+  }
+
+  .grid-x {
+    height: 100%;
+  }
 
   /* Large and up */
   @media screen and (min-width: 64em) {
@@ -251,18 +266,20 @@ export default class ProjectDetails extends Vue {
   }
 
   &-back-button {
-    position: absolute;
-    top: 2em;
-    right: 8.333333333%;
+    position: fixed;
+    top: 50px;
+    left: 50px;
     z-index: 4;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     height: 50px;
     width: 50px;
-    transform: translate(50%, -50%);
-    margin-top: 6px;
-    margin-left: -6px;
+    transform: translate(-50%, -50%);
+    /* Large and up */
+    @media screen and (min-width: 64em) {
+      display: flex;
+    }
   }
   &-gallery {
 
@@ -285,6 +302,10 @@ export default class ProjectDetails extends Vue {
       &__item {
         flex: auto;
         margin: 0;
+
+        &::after {
+          display: none;
+        }
       }
     }
   }

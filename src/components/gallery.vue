@@ -13,7 +13,7 @@
       v-on:before-leave="zoomBeforeLeave"
     >
       <div v-show="zoomImageIndex > -1" class="gallery-zoom" v-on:click="closeZoom()" :style="zoomDomStyle" :class="getZoomClass()" ref="zoomContainer">
-        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true" :imgid="'zoomImageElement'" :style="zoomImageDomStyle"></image-src>
+        <image-src :srcs="currentImageZoomSrc" :title="currentProject.title" :loadimage="true" :imgid="'zoomImageElement'" :transition="false" :style="zoomImageDomStyle"></image-src>
       </div>
     </transition>
   </div>

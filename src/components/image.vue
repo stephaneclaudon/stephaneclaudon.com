@@ -1,6 +1,6 @@
 <template>
     <span class="image" :class="{'loading': loading}">
-        <picture v-if="loadimage" :class="{'loaded': loaded}">
+        <picture v-if="loadimage" :class="{'loaded': loaded, 'transition': transition}">
             <source media="(max-width: 375px)" :srcset="srcs[0]">
             <source media="(max-width: 750px)" :srcset="srcs[1]">
             <source media="(max-width: 1242px)" :srcset="srcs[2]">
@@ -30,6 +30,8 @@ export default class ImageSrc extends Vue {
   loadimage: boolean;
   @Prop()
   loader: boolean;
+  @Prop({default: true})
+  transition: boolean;
   @Prop()
   imgid: string;
 
@@ -54,9 +56,12 @@ export default class ImageSrc extends Vue {
     justify-content: center;
 
     @include opacity(0);
-    @include transition(opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1));
     &.loaded {
       @include opacity(1);
+    }
+
+    &.transition {
+      @include transition(opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1));
     }
 
   }

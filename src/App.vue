@@ -7,7 +7,7 @@
     </div>
 
     <transition v-on:before-enter="onTransitionBeforeEnter" v-on:after-enter="onTransitionAfterEnter" v-on:before-leave="onTransitionBeforeLeave" v-on:after-leave="onTransitionAfterLeave" name="trans-project">
-      <project-details id="project-details" v-show="showProjectDetails" :visible="projectDetailsVisible" :transitioning="transitioning"></project-details>
+      <project-details id="project-details" v-show="showProjectDetails" :visible="projectDetailsVisible" :transform-origin-style="projectDetailsTransformOriginStyle" :transform-style="projectDetailsTransformStyle"></project-details>
     </transition>
 
     <transition name="trans-name">
@@ -69,6 +69,11 @@ export default class App extends Vue {
   private projectSliderVisible: boolean = false;
   private projectDetailsVisible: boolean = false;
 
+  private scrollAnimationRequestId: number;
+  private scrollTop: any;
+  private projectDetailsTransformOriginStyle: string = '';
+  private projectDetailsTransformStyle: string = '';
+
   get Modernizr(): any {
     return ModernizrObject;
   }
@@ -79,6 +84,7 @@ export default class App extends Vue {
       this.showProjectDetails = true;
       this.projectDetailsVisible = true;
       Utils.setBodyClass('project-details');
+      this.watchScroll();
     } else {
       this.projectSliderVisible = true;
       this.setCurrentProject(this.projects[0]);
@@ -96,10 +102,12 @@ export default class App extends Vue {
     if (to.path.indexOf("project") > -1) {
       this.setCurrentProject(this.getProjectFromId(to.name!));
       this.showProjectDetails = true;
-      Utils.setBodyClass('project-details');
     } else if (to.name === "home") {
-      this.showProjectDetails = false;
+      if (from.path.indexOf("project") > -1) 
+        this.projectDetailsTransformStyle = ModernizrObject.prefixedCSS('transform') + ': translateY(' + -this.scrollTop + 'px);';
+      
       Utils.setBodyClass('home');
+      this.showProjectDetails = false;
     } else if (to.name === "contact") {
       Utils.setBodyClass('contact');
     }
@@ -117,9 +125,12 @@ export default class App extends Vue {
   onTransitionAfterEnter(el: HTMLElement) {
     this.projectDetailsVisible = true;
     this.transitioning = false;
+    Utils.setBodyClass('project-details');
+    this.watchScroll();
   }
 
   onTransitionBeforeLeave(el: HTMLElement) {
+    this.unwatchScroll();
     this.projectSliderVisible = true;
     this.transitioning = true;
   }
@@ -127,9 +138,13 @@ export default class App extends Vue {
   onTransitionAfterLeave(el: HTMLElement) {
     this.projectDetailsVisible = false;
     this.transitioning = false;
+    this.projectDetailsTransformOriginStyle = '';
+    this.projectDetailsTransformStyle = '';
 
     let currentSliderProject: any = this.getProjectFromIndex(this.currentSliderProjectId);
     this.setCurrentProject(currentSliderProject);
+    console.log('onTransitionAfterLeave');
+    
   }
 
   setCurrentProject(project: any): void {
@@ -148,6 +163,18 @@ export default class App extends Vue {
     return this.projects[projectIindex];
   }
 
+  watchScroll(): void {
+    this.scrollTop = (document.documentElement && document.documentElement.scrollTop) || (document.body.scrollTop) || (document.scrollingElement);
+    this.scrollTop = isNaN(this.scrollTop) ? 0 : this.scrollTop;
+    this.projectDetailsTransformOriginStyle = ModernizrObject.prefixedCSS('transform-origin') + ': center ' + (this.scrollTop + (process.viewportSize.height * 0.5)) + 'px;';
+    this.scrollAnimationRequestId = window.requestAnimationFrame(this.watchScroll);
+  }
+
+  unwatchScroll = () => {
+    cancelAnimationFrame(this.scrollAnimationRequestId);
+    this.scrollAnimationRequestId = -1;
+  }
+
   get cssClasses(): Array<string> {
     return [
       this.transitioning ? "app--transitioning" : "",
@@ -160,9 +187,23 @@ export default class App extends Vue {
 <style lang="scss">
 @import "./style/main.scss";
 
+$projectTransitionDuration: 300ms;
+
 body {
   &.home {
-    /* position: fixed; */
+    position: fixed;
+    overflow: hidden;
+
+    #main {
+      width: 100vw;
+      height: 100vh;
+
+      /* Large and up */
+      @media screen and (max-width: 63.99999999em) {
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
   }
 }
 
@@ -192,14 +233,10 @@ body {
 }
 #main {
   position: relative;
-  overflow-x: hidden;
   height: 100%;
-  &.app--transitioning,
-  &.home {
+  &.app--transitioning
+  {
     overflow: hidden;
-    height: 100%;
-    width: 100%;
-    position: relative;
   }
 }
 
@@ -232,7 +269,7 @@ body {
 }
 
 .project-slider-container {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
 }
@@ -240,7 +277,7 @@ body {
 .trans-name-enter-active,
 .trans-name-leave-active,
 .project-slider-container {
-  @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
+  @include transition(transform $projectTransitionDuration ease-out, opacity $projectTransitionDuration ease-out);
   @include transform(scale(1));
   @include opacity(1);
 }
@@ -254,7 +291,7 @@ body {
 .trans-project-enter-active,
 .trans-project-leave-active {
   pointer-events: none;
-  @include transition(transform 0.3s ease-out, opacity 0.3s ease-out);
+  @include transition(transform $projectTransitionDuration ease-out, opacity $projectTransitionDuration ease-out);
   @include transform-origin(center 50vh);
   @include transform(scale(1));
   @include opacity(1);

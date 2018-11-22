@@ -59,9 +59,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
       (<PIXI.VideoBaseTexture>this.videoTexture.baseTexture).autoUpdate = true;
       this.initScreenSizes();
 
-      console.log(this.videoTexture.baseTexture);
-      
-
       for (var i = 0; i < projects.length; i++) {
           let frame: PIXI.Rectangle = this.getVideoTextureRect(i);          
           let projectTexture = new PIXI.Texture(this.videoTexture.baseTexture, frame);
