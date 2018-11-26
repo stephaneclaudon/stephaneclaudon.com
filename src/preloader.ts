@@ -32,7 +32,6 @@ for (let index = 0; index < jsonData.projects.length; index++) {
 myAssets.push(process.distPath + "main.js");
 
 preloader.on("progress", onProgressPreloader);
-preloader.on("complete", onCompletePreloader);
 preloader.loadManifest(myAssets);
 
 function onProgressPreloader(e: any) {
@@ -43,11 +42,7 @@ function onProgressPreloader(e: any) {
   $progressbarContainer.setAttribute("style", "-webkit-transform: scale(" + scalePerc + "); -ms-transform: scale(" + scalePerc + "); transform: scale(" + scalePerc + ");");
 }
 
-function onCompletePreloader(e: any) {
-  console.log("onCompletePreloader");
-}
 //@ts-ignore
 window.onAppMounted = function() {
-  console.log("onAppMounted");
   $loaderScreen.className = $loaderScreen.className + " hidden"; 
 }

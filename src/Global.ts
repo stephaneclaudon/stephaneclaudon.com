@@ -24,8 +24,6 @@ export default class Global {
     x=w.innerWidth||e.clientWidth||g.clientWidth,
     y=w.innerHeight||e.clientHeight||g.clientHeight;
     process.viewportSize = {width: x, height: y};
-
-    console.log("storeViewportSize", process.viewportSize);
   }
 
   getViewportWidth() : number {

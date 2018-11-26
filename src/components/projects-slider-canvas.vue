@@ -60,7 +60,6 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   mounted() {
-    console.log("Init ProjectsSliderCanvas");
     this.titlesContainerElement = <Element>this.$refs.sliderTitlesContainer;
     this.initPIXI();
   }
@@ -77,8 +76,7 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   initPIXI() {
-    console.log(process.viewportSize);
-    
+    PIXI.utils.skipHello();
     this.pixiApp = new PIXI.Application(process.viewportSize.width, process.viewportSize.height, {
       backgroundColor: 0x0f0f0f,
       antialias: false,

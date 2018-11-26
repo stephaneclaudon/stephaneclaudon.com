@@ -142,9 +142,7 @@ export default class App extends Vue {
     this.projectDetailsTransformStyle = '';
 
     let currentSliderProject: any = this.getProjectFromIndex(this.currentSliderProjectId);
-    this.setCurrentProject(currentSliderProject);
-    console.log('onTransitionAfterLeave');
-    
+    this.setCurrentProject(currentSliderProject);    
   }
 
   setCurrentProject(project: any): void {
