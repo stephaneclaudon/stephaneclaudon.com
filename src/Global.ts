@@ -3,8 +3,10 @@ export default class Global {
     if(!process.mediaPath) {
       if (process.env.NODE_ENV === 'development') {
         process.mediaPath = '/dist/assets/';
+        process.distPath = '/dist/';
       } else {
-        process.mediaPath = '/v1/dist/assets/';
+        process.mediaPath = 'https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/';
+        process.distPath = 'https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/';
       }
     }
   }

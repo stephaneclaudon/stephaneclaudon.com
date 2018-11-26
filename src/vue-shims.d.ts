@@ -12,6 +12,7 @@ declare var process: {
     env: {
       NODE_ENV: string
     },
+    distPath: string,
     mediaPath: string,
     viewportSize: any
 }

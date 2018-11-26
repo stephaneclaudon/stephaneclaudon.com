@@ -29,7 +29,7 @@ for (let index = 0; index < jsonData.projects.length; index++) {
   myAssets.push(process.mediaPath + "img/" + jsonData.projects[index].id + "@3x.jpg");
 }
 
-myAssets.push("/dist/main.js");
+myAssets.push(process.distPath + "main.js");
 
 preloader.on("progress", onProgressPreloader);
 preloader.on("complete", onCompletePreloader);

@@ -1,7 +1,7 @@
 <template>
   <div id="projects-slider-canvas" class="projects-slider-canvas">
     <div id="videosContainer">
-      <video id="video" playsinline loop muted autoplay preload="none">
+      <video id="video" playsinline loop muted autoplay preload="none" crossorigin="anonymous">
         <source :src="getVideoPath()" :type="getVideoType()">
         Your browser does not support the video tag.
       </video>
