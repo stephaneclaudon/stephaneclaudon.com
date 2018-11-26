@@ -64,15 +64,19 @@ export default class EmbedVideoPlayer extends Vue {
   }
 
   setDimensions(): void {
+    console.log(this.currentProject.videoheight, this.currentProject.videowidth);
+    
     this.videoRatio = (this.currentProject.videoheight / this.currentProject.videowidth);
     if (!this.containerSize) {
-      this.containerSize = {width: 0, height: 0};
-      this.containerSize.width = this.$el.getBoundingClientRect().width / process.viewportSize.width;
-      this.containerSize.height = (this.$el.getBoundingClientRect().width * this.videoRatio) / process.viewportSize.height;
+      this.containerSize = {width: 0, height: 0, pcheight: 0.5, pcWidth: 0.5};
+      this.containerSize.width = this.$el.getBoundingClientRect().width;
+      this.containerSize.pcWidth = this.containerSize.width / process.viewportSize.width;
     }
+    this.containerSize.height = this.containerSize.width * this.videoRatio;
+    this.containerSize.pcheight = this.containerSize.height / process.viewportSize.height;
     this.width = this.containerSize.width * process.viewportSize.width;
     this.height = this.width * this.videoRatio;
-    this.pcHeight = this.containerSize.height;
+    this.pcHeight = this.containerSize.pcheight;
   }
   
   setStyle(): void {

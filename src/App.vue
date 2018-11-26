@@ -221,6 +221,7 @@ body {
 .name-wrapper {
   position: absolute;
   top: 5%;
+  @include transform-origin(50vw 50vh);
 
   /* Large and up */
   @media screen and (min-width: 64em) {

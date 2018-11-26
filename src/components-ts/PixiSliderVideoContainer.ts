@@ -75,22 +75,6 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
       this.createDragAndDropFor();
     }
 
-    public get onDragStartEvent() {
-        return this._onDragStartEvent.asEvent();
-    }
-
-    public get onProjectClickedEvent() {
-        return this._onProjectClickedEvent.asEvent();
-    }
-
-    public get onDragEndEvent() {
-        return this._onDragEndEvent.asEvent();
-    }
-
-    public get onDragUpdateEvent() {
-        return this._onDragUpdateEvent.asEvent();
-    }
-
     public resizeTextures() :void {
       this.initScreenSizes();
       this.updateTexturesFrame();
@@ -181,7 +165,7 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         }
         this.updateCurrentScreenScale();
         this.updateScreensRenderability();
-        if (!this.animationRequestId) this.onAnimationUpdate();
+        this.onAnimationUpdate();
     }
 
     private updateCurrentScreenScale(): void {
@@ -220,11 +204,13 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         this._onDragEndEvent.dispatch(this.currentProjectIndex);
     }
 
-    private executeTween(): void {
+    private executeTween(slow: boolean = false): void {
         let positionToGoTo: number = -((this.projectIndexToGo) * this.screenWidth) + this.pivot.x;
         this.videoItemList[this.currentProjectIndex].resetOriginalState(this.currentProjectIndex != this.projectIndexToGo);
-        this.dragTween = TweenLite.to(this.position, 0.5, {
-            x: positionToGoTo, ease: Power4.easeOut, onComplete: this.onTweenEnded
+        this.dragTween = TweenLite.to(this.position, slow ? 1 : 0.5, {
+            x: positionToGoTo, ease: Power4.easeOut, onComplete: this.onTweenEnded, onUpdate: () => {
+              this.sendSliderPositionUpdate();
+            }
         });
         this.previousProjectIndex = this.currentProjectIndex;
         this.currentProjectIndex = this.projectIndexToGo;
@@ -265,14 +251,20 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
     }
 
     private onAnimationUpdate(): void {
+      if (!this.animationRequestId) {
         const handler = () => {
-            this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x, (this.dragAmount / this.app.screen.width));
+          this.sendSliderPositionUpdate();
             //this.shader.size = (this.dragAmount / this.app.screen.width) * -this.dragDirection;
             //console.log(this.shader.size);
 
             this.animationRequestId = window.requestAnimationFrame(handler);
         };
         this.animationRequestId = requestAnimationFrame(handler);
+      }
+    }
+
+    private sendSliderPositionUpdate(): void {
+      this._onDragUpdateEvent.dispatch(this.position.x - this.pivot.x, (this.dragAmount / this.app.screen.width));
     }
 
     public goToProjectIndex(index: number): void {
@@ -281,6 +273,23 @@ export default class PixiSliderVideoContainer extends PIXI.Container {
         for (var i = 0; i < this.projectsCount; i++) {
           this.videoItemList[i].renderable = (i >= Math.min(this.currentProjectIndex, this.projectIndexToGo)) && (i <= Math.max(this.currentProjectIndex, this.projectIndexToGo));
         }
-        this.executeTween();
+        this.executeTween(true);
     }
+
+
+  public get onDragStartEvent() {
+    return this._onDragStartEvent.asEvent();
+  }
+
+  public get onProjectClickedEvent() {
+      return this._onProjectClickedEvent.asEvent();
+  }
+
+  public get onDragEndEvent() {
+      return this._onDragEndEvent.asEvent();
+  }
+
+  public get onDragUpdateEvent() {
+      return this._onDragUpdateEvent.asEvent();
+  }
 }

@@ -51,6 +51,9 @@ export default class ProjectsSliderCanvas extends Vue {
   currentIndex: number = 0;
   sliderIsMoving: boolean = false;
 
+  @Mutation(MutationTypes.SLIDER_SET_GOTO_PROJECT_ID)
+  setSliderGotoIndex: (index: number) => void;
+
   @State("projects") projects: Array<any>;
   @State("sliderGotoProjectId") sliderGotoProjectId: number;
   @Prop() active: boolean;
@@ -89,7 +92,12 @@ export default class ProjectsSliderCanvas extends Vue {
     this.pixiApp.renderer.plugins.interaction.autoPreventDefault = false;
     this.pixiApp.renderer.autoResize = true;
     this.videoElement = document.getElementById("video") as HTMLVideoElement;
-    this.videoElement.addEventListener("canplaythrough", this.onVideoLoaded, false);
+    if (!(this.videoElement.readyState === 3 || this.videoElement.readyState === 4)){
+      this.videoElement.addEventListener('canplay', this.onVideoLoaded, false);
+      this.videoElement.addEventListener("canplaythrough", this.onVideoLoaded, false);
+    } else {
+      this.onVideoLoaded();
+    }
     this.videoElement.load();
     
     window.addEventListener('resize', this.onResize);
@@ -101,9 +109,10 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   onVideoLoaded(): void {
+    this.videoElement.removeEventListener('canplay', this.onVideoLoaded, false);
     this.videoElement.removeEventListener("canplaythrough", this.onVideoLoaded, false);
-    this.toggleSliderUpdate(this.active);
     this.initProjects();
+    this.toggleSliderUpdate(this.active);
   }
 
   initProjects() {
@@ -117,6 +126,7 @@ export default class ProjectsSliderCanvas extends Vue {
     this.projectsContainer.onDragUpdateEvent.subscribe(this.onSliderTransitionUpdate);
     this.projectsContainer.onProjectClickedEvent.subscribe(this.onProjectClicked);
     this.pixiApp.stage.addChild(this.projectsContainer);
+    this.addMouseWheelEventListener();
   }
 
   onSliderTransitionStart(): void {
@@ -157,6 +167,26 @@ export default class ProjectsSliderCanvas extends Vue {
     }
   }
 
+  onMouseWheeling (evt: any): void {
+    if (this.active) {
+      let newProjectIndex: number = (evt.deltaY > 0) ? this.currentIndex + 1 : this.currentIndex - 1;
+      if (newProjectIndex < 0) {
+        newProjectIndex = this.projects.length - 1;
+      } else if (newProjectIndex > (this.projects.length - 1)){
+        newProjectIndex = 0;
+      }
+      this.setSliderGotoIndex(newProjectIndex);
+    }
+  }
+
+  addMouseWheelEventListener(): void
+  {
+    // IE9+, Chrome, Safari, Opera
+    window.addEventListener('mousewheel', this.onMouseWheeling, false);
+    // Firefox
+    window.addEventListener('DOMMouseScroll', this.onMouseWheeling, false);
+  }
+
   @Watch('sliderGotoProjectId')
   onSliderGotoProjectIdChanged(index: number, oldIndex: number) {
     this.projectsContainer.goToProjectIndex(index);
@@ -164,7 +194,11 @@ export default class ProjectsSliderCanvas extends Vue {
   }
 
   beforeDestroy(): void {
-    this.videoElement.removeEventListener('loadeddata', this.onVideoLoaded);
+    this.videoElement.removeEventListener('canplay', this.onVideoLoaded);
+    this.videoElement.removeEventListener('canplaythrough', this.onVideoLoaded, false);
+
+    window.removeEventListener('mousewheel', this.onMouseWheeling, false);
+    window.removeEventListener('DOMMouseScroll', this.onMouseWheeling, false);
   }
 }
 </script>
@@ -186,6 +220,7 @@ export default class ProjectsSliderCanvas extends Vue {
     width: 100%;
     top: 0;
     left: 0;
+    cursor: ew-resize !important;
   }
 
   .projects-slider-canvas {

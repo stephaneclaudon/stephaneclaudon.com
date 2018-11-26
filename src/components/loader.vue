@@ -21,26 +21,26 @@
         <animateTransform xlink:href="#g" attributeName="transform" attributeType="XML" type="rotate"
                 from="0 25 25"
                 to = "360 25 25"
-                dur=".5s" repeatCount="indefinite" />
+                dur="0.5s" repeatCount="indefinite" />
         <animate id = 'an1' xlink:href="#b1" attributeName="cx" calcMode="spline" keyTimes="0; 0.5; 1"
                 values="25; 18; 25"
                 keySplines=".6 .01 .36 .99; .6 .01 .36 .99;"
-                dur=".5s" repeatCount="indefinite" />
+                dur="0.5s" repeatCount="indefinite" />
         <animate id = 'an2' xlink:href="#b2" attributeName="cx"
                 values="25; 32; 25"
                 calcMode="spline"
             keySplines=".6 .01 .36 .99; .6 .01 .36 .99;"
-                keyTimes="0; 0.5; 1" to="60" dur=".5s" repeatCount="indefinite" />
+                keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite" />
         <animate xlink:href="#b1" attributeName="r"
                 values="6.4; 5; 6.4"
                 calcMode="spline"
             keySplines=".6 .01 .36 .99; .6 .01 .36 .99;"
-                keyTimes="0; 0.5; 1" to="60" dur=".5s" repeatCount="indefinite" />
+                keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite" />
         <animate xlink:href="#b2" attributeName="r"
                 values="6.4; 5; 6.4"
                 calcMode="spline"
             keySplines=".6 .01 .36 .99; .6 .01 .36 .99;"
-                keyTimes="0; 0.5; 1" to="60" dur=".5s" repeatCount="indefinite" />
+                keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite" />
     </svg>
 </template>
 
