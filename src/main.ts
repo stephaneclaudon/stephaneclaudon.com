@@ -19,7 +19,7 @@ store.state.projects = jsonData.projects;
 
 store.state.lang = navigator.language.split('-')[0];
 if (store.state.lang !== 'fr' && store.state.lang !== 'en') {
-  store.state.lang = 'en'
+  store.state.lang = 'fr'
 }
 
 let routes: Array<any> = [];

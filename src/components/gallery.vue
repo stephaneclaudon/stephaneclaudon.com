@@ -28,6 +28,8 @@ import Utils from "../utils/Utils";
 import { TweenLite, Power4 } from "gsap";
 //@ts-ignore
 import * as Draggable from "gsap/Draggable";
+//@ts-ignore
+import * as BodyScrollLock from 'body-scroll-lock';
 
 @Component({
   components: {
@@ -135,6 +137,7 @@ export default class Gallery extends Vue {
 
   zoomAfterEnter(): void {
     this.zoomActive = true;
+    BodyScrollLock.disableBodyScroll(this.$refs.zoomContainer);
     this.$nextTick(() => {
       let zoomedImgElt: HTMLElement = document.getElementById('zoomImageElement')!;      
       let bounds: any = {top: zoomedImgElt.offsetTop, left: zoomedImgElt.offsetLeft*2, width: zoomedImgElt.offsetWidth + Math.abs(zoomedImgElt.offsetLeft * 2), height: zoomedImgElt.offsetHeight}
@@ -144,6 +147,7 @@ export default class Gallery extends Vue {
 
   zoomBeforeLeave(): void {
     this.zoomActive = false;
+    BodyScrollLock.enableBodyScroll(this.$refs.zoomContainer);
   }
 }
 </script>
