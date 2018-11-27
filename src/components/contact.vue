@@ -322,6 +322,7 @@ export default class ContactBox extends Vue {
         }
         &--name {
           margin: 2em 0 1em 0;
+          text-align: center;
         }
         &--position {
           margin: 0 0 2em 0;

@@ -19,12 +19,6 @@ var myAssets: Array<string> = [];
 // videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
 // myAssets.push(process.mediaPath + videoFileName);
 
-myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf");
-myAssets.push(process.mediaPath + "fonts/icomoon.eot?juz7kf#iefix");
-myAssets.push(process.mediaPath + "fonts/icomoon.ttf?juz7kf");
-myAssets.push(process.mediaPath + "fonts/icomoon.woff?juz7kf");
-myAssets.push(process.mediaPath + "fonts/icomoon.svg?juz7kf#icomoon");
-
 for (let index = 0; index < jsonData.projects.length; index++) {
   myAssets.push(process.mediaPath + "img/" + jsonData.projects[index].id + "@3x.jpg");
 }
