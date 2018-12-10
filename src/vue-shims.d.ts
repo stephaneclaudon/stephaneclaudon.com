@@ -14,5 +14,6 @@ declare var process: {
     },
     distPath: string,
     mediaPath: string,
-    viewportSize: any
+    viewportSize: any,
+    originalHistoryLength: number
 }

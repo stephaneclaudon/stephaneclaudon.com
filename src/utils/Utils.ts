@@ -58,4 +58,20 @@ export default class Utils {
         element.className = className;
       }
     }
+
+    static upperCase(str: string){
+      return str.toUpperCase();
+    }
+
+    static lowerCase(str: string){
+      return str.toLowerCase();
+    }
+
+    static camelCase(str: string){
+      str = str.replace(/\-/g, ' ') //convert all hyphens to spaces
+          .replace(/\s[a-z]/g, Utils.upperCase) //convert first char of each word to UPPERCASE
+          .replace(/\s+/g, '') //remove spaces
+          .replace(/^[A-Z]/g, Utils.lowerCase); //convert first char to lowercase
+      return str;
+    }
 }

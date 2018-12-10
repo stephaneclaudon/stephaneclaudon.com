@@ -24,7 +24,6 @@ import * as ModernizrObject from "modernizr";
 import { State } from "vuex-class";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
-import Utils from "../utils/Utils";
 import { TweenLite, Power4 } from "gsap";
 //@ts-ignore
 import * as Draggable from "gsap/Draggable";
@@ -173,7 +172,7 @@ export default class Gallery extends Vue {
   &-cell {
     height: 42vw;
     overflow: hidden;
-    border: solid 5px $black;
+    border: solid 1px $black;
     box-sizing: border-box;
     cursor: pointer;
 

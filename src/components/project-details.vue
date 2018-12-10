@@ -5,7 +5,7 @@
         <div class="project-details-header">
           <div class="project-details-header-bg" :style="headerBackgroundStyle"></div>
           <div class="project-details-header-overlay"></div>
-          <router-link class="project-details-back-button" :to="{ name: 'home' }">
+          <router-link class="project-details-back-button" :to="{ name: 'home' }" :class="{'firstpage': isFirstPage}">
             <close-button></close-button>
           </router-link>
           <div v-if="visible" class="grid-x align-center-middle project-details-header-text">
@@ -14,6 +14,9 @@
               <div class="project-details-header-text--description">
                 <p>{{ currentProject['description' + lang] }}</p>
               </div>
+
+              <component v-if="currentProject.customdescription" class="project-details-header-text--custom" v-bind:is="camelCaseProjectId()"></component>
+
               <div class="project-details-header-text--credits cell small-10 align-text-center">
                 <h2>Credits</h2>
                 <p v-check-internal-link v-html="currentProject['credits' + lang]"></p>
@@ -30,9 +33,17 @@
             <p>{{ currentProject['description' + lang] }}</p>
           </div>
 
+          <div v-if="currentProject.customdescription" class="separator"></div>
+
+          <component v-if="currentProject.customdescription" class="project-details-custom cell small-10 small-offset-1" v-bind:is="camelCaseProjectId()"></component>
+
+          <div class="separator"></div>
+
           <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
             <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
           </div>
+
+          <div class="separator"></div>
             
           <embed-video-player class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-video" :visible="visible" :videoId="currentProject.videoid" :plateform="currentProject.videoplateform"></embed-video-player>
 
@@ -57,6 +68,8 @@ import EmbedVideoPlayer from "../components/embedVideoPlayer.vue";
 import CloseButton from "../components/closeButton.vue";
 import ProjectsSliderItemTitle from "./projects-slider-item-title.vue";
 import Gallery from "./gallery.vue";
+import Utils from "../utils/Utils";
+import audiQuattro2SkiTheWorld from "./custom/audiQuattro2SkiTheWorld.vue";
 
 @Component({
   components: {
@@ -64,7 +77,8 @@ import Gallery from "./gallery.vue";
     EmbedVideoPlayer,
     CloseButton,
     ProjectsSliderItemTitle,
-    Gallery
+    Gallery,
+    audiQuattro2SkiTheWorld
   }
 })
 export default class ProjectDetails extends Vue {
@@ -79,14 +93,20 @@ export default class ProjectDetails extends Vue {
   headerTitleStyle: string = "";
 
   private inited: boolean = false;
+  private isFirstPage: boolean = false;
 
   mounted(): void {
     this.onProjectChanged(null, null);
     this.inited = true;
   }
 
+  camelCaseProjectId(): string {
+    return Utils.camelCase(this.currentProject.id);
+  }
+
   @Watch("currentProject")
   onProjectChanged(val: any, old: any): void {
+    this.isFirstPage = window.history.length === process.originalHistoryLength;
     this.headerBackgroundImage =
       'background-image: url("' +
       process.mediaPath +
@@ -142,6 +162,16 @@ export default class ProjectDetails extends Vue {
   
   &.aftertransition {
     position: relative;
+  }
+
+  .separator {
+    width: 33%;
+    height: 1px;
+    border-top: solid 1px $grey;
+    margin: 4em auto ;/* Large and up */
+    @media screen and (min-width: 64em) {
+      display: none;
+    }
   }
 
   &-header {
@@ -207,6 +237,9 @@ export default class ProjectDetails extends Vue {
         font-size: 1.5em;
         margin-top: 2em;
       }
+      &--custom {
+        display: none;
+      }
       &--credits {
         display: none;
         padding: 4em 0 0 0;
@@ -242,14 +275,20 @@ export default class ProjectDetails extends Vue {
       }
 
       &-text--description,
-      &-text--credits {
+      &-text--credits,
+      &-text--custom {
         display: block;
         @include opacity(0);
+        @include transform(translateY(-2em));
         @include animation-timing-function(cubic-bezier(0.165, 0.84, 0.44, 1));
       }
 
       &-text--description {
         @include animation(0.5s, 1s, slideAndFadeEntry);
+      }
+
+      &-text--custom {
+        @include animation(0.65s, 1s, slideAndFadeEntry);
       }
 
       &-text--credits {
@@ -280,20 +319,18 @@ export default class ProjectDetails extends Vue {
     @media screen and (min-width: 64em) {
       display: flex;
     }
+
+    &.firstpage {
+      display: flex;
+      transform: translate(50%, -50%);
+      right: 50px;
+      left: auto;
+    }
   }
   &-gallery {
 
     &__item {
       height: 100%;
-      margin: 2em 0 0 0;
-
-      &::after {
-        content: "";
-        width: 33%;
-        height: 1px;
-        border-top: solid 1px $grey;
-        margin: 2em auto 2em auto;
-      }
     }
     /* large and up */
     @media screen and (min-width: 64em) {
@@ -348,9 +385,19 @@ export default class ProjectDetails extends Vue {
       display: none;
     }
   }
+  &-custom {
+
+    /* Large and up */
+    @media screen and (min-width: 64em) {
+      &::after {
+        display: none;
+      }
+      display: none;
+    }
+  }
 
   &-description {
-    padding: 4em 0 2em 0;
+    padding: 4em 0 0 0;
     p {
       font-size: 1.1em;
     }

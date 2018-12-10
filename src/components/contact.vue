@@ -96,7 +96,7 @@ export default class ContactBox extends Vue {
 
   @Emit()
   close(): void {
-    window.history.length > 1
+    window.history.length > 1 && (window.history.length > process.originalHistoryLength)
       ? this.$router.go(-1)
       : this.$router.push("/home");
   }

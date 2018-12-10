@@ -2,6 +2,7 @@
   <div class="video-player" :style="cssStyle">
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'vimeo' && isMounted && visible" :src="vimeoURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
     <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'youtube' && isMounted && visible" :src="youtubeURL" :width="width" :height="height" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen"></iframe>
+    <iframe @load="iframeLoaded" v-if="loadVideoPlayer && plateform === 'facebook' && isMounted && visible" :src="facebookURL" :width="width" :height="height" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media" allowFullScreen="true" webkitallowfullscreen mozallowfullscreen></iframe>
     
     <div class="video-player--poster" v-if="!showVideoPlayer" v-on:click="loadIframe()" :class="{'loading': loadVideoPlayer}">
       <image-src class="video-player--poster__image" :srcs="getVideoPosterSrc()" :title="currentProject.title" :loadimage="true" :loader="false"></image-src>
@@ -54,9 +55,19 @@ export default class EmbedVideoPlayer extends Vue {
     this.updateSize();
   }
 
+  @Watch("visible")
+  onVisibilityChanged(val: any, old: any): void {
+    if (!val) {
+      this.loadVideoPlayer = false;
+      this.showVideoPlayer = false;
+    }
+  }
+
   updateSize(): void {
     this.setDimensions();
     this.setStyle();
+    this.showVideoPlayer = false;
+    this.loadVideoPlayer = false;
   }
 
   loadIframe(): void {
@@ -70,10 +81,11 @@ export default class EmbedVideoPlayer extends Vue {
       this.containerSize.width = this.$el.getBoundingClientRect().width;
       this.containerSize.pcWidth = this.containerSize.width / process.viewportSize.width;
     }
+
     this.containerSize.height = this.containerSize.width * this.videoRatio;
     this.containerSize.pcheight = this.containerSize.height / process.viewportSize.height;
-    this.width = this.containerSize.width * process.viewportSize.width;
-    this.height = this.width * this.videoRatio;
+    this.width = Math.floor(this.containerSize.width);
+    this.height = Math.floor(this.width * this.videoRatio);
     this.pcHeight = this.containerSize.pcheight;
   }
   
@@ -112,6 +124,23 @@ export default class EmbedVideoPlayer extends Vue {
 
     let options: any = {
       autoplay: "1",
+      origin: "http://stephaneclaudon.com"
+    };
+    url += this.serializeURLParameters(options);
+    return url;
+  }
+
+  get facebookURL(): string {
+    let url: string = "https://www.facebook.com/plugins/video.php?";
+    //url += this.videoId + "?";
+
+    let options: any = {
+      href: "https://www.facebook.com/facebook/videos/10155038627933204/&",
+      show_text: "false",
+      autoplay: "true",
+      height: this.height,
+      width: this.width,
+      allowfullscreen: true,
       origin: "http://stephaneclaudon.com"
     };
     url += this.serializeURLParameters(options);
