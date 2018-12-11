@@ -19,6 +19,9 @@ var myAssets: Array<string> = [];
 // videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
 // myAssets.push(process.mediaPath + videoFileName);
 
+myAssets.push(process.mediaPath + 'img/lions/gold.png');
+myAssets.push(process.mediaPath + 'img/lions/silver.png');
+
 for (let index = 0; index < jsonData.projects.length; index++) {
   myAssets.push(process.mediaPath + "img/" + jsonData.projects[index].id + "@3x.jpg");
 }

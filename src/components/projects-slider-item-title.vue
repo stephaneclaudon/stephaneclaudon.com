@@ -1,13 +1,13 @@
 <template>
     <div class="projects-slider-item__title">
-        <h1 v-if="alive && titleComputed">
+        <h1 v-show="alive && titleComputed">
           <span class="title--outer" v-for="(titleString, titleIndex) in projectArrayTitle" :key="titleIndex">
             <span class="title--inner"><span>{{ titleString }}</span></span>
             <br />
           </span>
         </h1>
 
-        <div v-if="link && alive && titleComputed" class="projects-slider-item__title--description align-text-center">
+        <div v-show="link && alive && titleComputed" class="projects-slider-item__title--description align-text-center">
           {{ project['description' + lang] }}
         </div>
 

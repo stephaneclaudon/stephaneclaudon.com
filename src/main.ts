@@ -25,22 +25,44 @@ if (store.state.lang !== 'fr' && store.state.lang !== 'en') {
 let routes: Array<any> = [];
 routes.push(
   {
-    path: '/', name: 'home', component: App,
+    path: '/',
+    name: 'home',
+    component: App,
     meta: {
-      title: 'Stéphane Claudon - Freelance video',
+      title: 'Stéphane Claudon, Freelance video',
       metaTags: [
         {
           name: 'description',
-          content: 'Stéphane Claudon - Freelance video.'
+          content: jsonData['description' + store.state.lang]
         },
         {
           property: 'og:description',
-          content: 'Stéphane Claudon - Freelance video.'
+          content: jsonData['description' + store.state.lang]
+        },
+        {
+          property: 'og:title',
+          content: 'Stéphane Claudon, Freelance video.'
         }
       ]
     }
   },
-  { path: '/contact', name: 'contact', component: App }
+  { path: '/contact',
+    name: 'contact',
+    component: App,
+    meta: {
+      title: 'Stéphane Claudon, Freelance video',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Contact'
+        },
+        {
+          property: 'og:description',
+          content: 'Contact'
+        }
+      ]
+    }
+  }
 );
 
 for (let index = 0; index < store.state.projects.length; index++) {
@@ -54,11 +76,11 @@ for (let index = 0; index < store.state.projects.length; index++) {
         metaTags: [
           {
             name: 'description',
-            content: store.state.projects[index].description
+            content: store.state.projects[index]['description' + store.state.lang]
           },
           {
             property: 'og:description',
-            content: store.state.projects[index].description
+            content: store.state.projects[index]['description' + store.state.lang]
           }
         ]
       }
@@ -102,10 +124,15 @@ router.beforeEach((to, from, next) => {
 
     return tag;
   })
-    // Add the meta tags to the document head.
-    .forEach((tag: any) => document.head!.appendChild(tag));
+  // Add the meta tags to the document head.
+  .forEach((tag: any) => document.head!.appendChild(tag));
 
   next();
+});
+
+router.afterEach((to, from) => {
+  //@ts-ignore
+  ga('send', 'pageview', to.fullPath);
 });
 
 Vue.directive('check-internal-link', {
