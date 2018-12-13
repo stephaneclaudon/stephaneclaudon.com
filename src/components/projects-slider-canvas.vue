@@ -69,8 +69,19 @@ export default class ProjectsSliderCanvas extends Vue {
 
   getVideoPath(): String {
     let videoFileName: string = "loops/all-projects-";    
-    videoFileName += (process.viewportSize.width > 1024) ? "desktop-3600" : "mobile-640";
+    if (process.viewportSize.width > 1024) {
+      videoFileName += "desktop-3600";
+    } else {
+      if (process.viewportSize.height * window.devicePixelRatio > 1280) {
+        videoFileName += "mobile-640";
+      } else {
+        videoFileName += "mobile-320";
+      }
+    }
+    
     videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
+    console.log(process.viewportSize.height, window.devicePixelRatio, videoFileName);
+    
     return process.mediaPath + videoFileName;
   }
 
