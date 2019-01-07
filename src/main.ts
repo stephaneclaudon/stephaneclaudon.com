@@ -18,7 +18,11 @@ Vue.use(VueRouter);
 store.state.projects = jsonData.projects;
 
 store.state.lang = navigator.language.split('-')[0];
-if (store.state.lang !== 'fr' && store.state.lang !== 'en') {
+var url = window.location.href;
+var forcedLang = /lang=([^&]+)/.exec(url);
+if (forcedLang) {
+  store.state.lang = forcedLang[1];
+} else if (store.state.lang !== 'fr' && store.state.lang !== 'en') {
   store.state.lang = 'fr'
 }
 

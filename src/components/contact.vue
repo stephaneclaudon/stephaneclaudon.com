@@ -54,7 +54,7 @@
           </ul>
 
           <div class="contact-content__phone"><a href="tel:+33677216781">+33677216781</a></div>
-          <div class="contact-content__mail"><a href="mailto:hello@toto.com">hello@stephaneclaudon.com</a></div>
+          <div class="contact-content__mail"><a href="mailto:hello@stephaneclaudon.com">hello@stephaneclaudon.com</a></div>
         </div>
 
         <div class="contact-content__back-button" v-on:click="close()">
@@ -98,7 +98,7 @@ export default class ContactBox extends Vue {
   close(): void {
     window.history.length > 1 && (window.history.length > process.originalHistoryLength)
       ? this.$router.go(-1)
-      : this.$router.push("/home");
+      : this.$router.push("/");
   }
 
   @Watch("$route")

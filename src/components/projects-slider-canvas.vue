@@ -80,7 +80,6 @@ export default class ProjectsSliderCanvas extends Vue {
     }
     
     videoFileName += (ModernizrObject.video.webm) ? ".webm" : ".mp4";
-    console.log(process.viewportSize.height, window.devicePixelRatio, videoFileName);
     
     return process.mediaPath + videoFileName;
   }

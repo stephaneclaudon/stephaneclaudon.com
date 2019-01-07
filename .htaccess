@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://stephaneclaudon.com/$1 [R=permanent,L]
+
+Redirect /contact /contact.html
+RewriteRule ^project/(.*)$ /$1.html [L]
+
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
