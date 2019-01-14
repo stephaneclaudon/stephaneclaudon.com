@@ -33,7 +33,7 @@ routes.push(
     name: 'home',
     component: App,
     meta: {
-      title: 'Stéphane Claudon, Freelance video',
+      title: 'Stéphane Claudon - Motion Designer, VFX artist à Annecy',
       metaTags: [
         {
           name: 'description',
@@ -45,7 +45,7 @@ routes.push(
         },
         {
           property: 'og:title',
-          content: 'Stéphane Claudon, Freelance video.'
+          content: 'Stéphane Claudon - Motion Designer, VFX artist à Annecy'
         }
       ]
     }
@@ -54,7 +54,7 @@ routes.push(
     name: 'contact',
     component: App,
     meta: {
-      title: 'Stéphane Claudon, Freelance video',
+      title: 'Stéphane Claudon - Motion Designer, VFX artist à Annecy',
       metaTags: [
         {
           name: 'description',
