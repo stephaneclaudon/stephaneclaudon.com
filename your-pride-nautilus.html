@@ -28,9 +28,11 @@
   <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
   <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
 
-  <meta name="description" content="Conception et réalisation d'un court metrage 3D animé pour un clip vidéo" data-vue-router-controlled="" />
+  <meta name="description" content="Conception et réalisation d'un court metrage 3D animé pour un clip vidéo"
+    data-vue-router-controlled="" />
   <meta name="title" content="Your Pride - Nautilus" data-vue-router-controlled="" />
-  <meta property="og:description" content="Conception et réalisation d'un court metrage 3D animé pour un clip vidéo" data-vue-router-controlled="" />
+  <meta property="og:description" content="Conception et réalisation d'un court metrage 3D animé pour un clip vidéo"
+    data-vue-router-controlled="" />
   <meta property="og:title" content="Your Pride - Nautilus" data-vue-router-controlled="" />
 
   <!-- Google Analytics -->
@@ -194,7 +196,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
+      position: fixed;
       height: 100%;
       font-size: 10px;
       top: 0;
@@ -317,6 +319,22 @@
         opacity: 1;
       }
     }
+
+  .static-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 2em;
+  }
+
+  .static-container img {
+    width: 100%;
+  }
+  .static-container a {
+    margin: 1em;
+    display: inline-block;
+  }
   </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113648002-1"></script>
@@ -330,13 +348,13 @@
 </head>
 
 <body style="background-color: #0f0f0f;">
-  <div id="app" class="app grid-container full home">
+  <div id="app" class="app grid-container full home static-container">
     <div class="name-wrapper small-offset-1"><a href="/" class="main-name router-link-exact-active router-link-active">
         <div class="main-name__first">Stéphane</div>
         <div class="main-name__last">CLAUDON</div>
       </a>
     </div>
-    
+
 
 
     <div data-v-1da21fc3="" class="project-details aftertransition" id="project-details" style="transform-origin: center 489px 0px;">
@@ -483,48 +501,7 @@
               </div>
             </div>
             <div data-v-1da21fc3="" class="separator"></div>
-            <div data-v-1da21fc3="" class="video-player cell small-10 small-offset-1 large-12 large-offset-0 project-details-video"
-              style="height: 13.9521vh;">
-              <!---->
-              <!---->
-              <!---->
-              <div class="video-player--poster"><span data-v-225ea9b3="" class="image video-player--poster__image">
-                  <picture data-v-225ea9b3="" class="loaded transition">
-                    <source data-v-225ea9b3="" media="(max-width: 375px)" srcset="https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/img/your-pride-nautilus@1x.jpg">
-                    <source data-v-225ea9b3="" media="(max-width: 750px)" srcset="https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/img/your-pride-nautilus@2x.jpg">
-                    <source data-v-225ea9b3="" media="(max-width: 1242px)" srcset="https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/img/your-pride-nautilus@3x.jpg">
-                    <img data-v-225ea9b3="" src="https://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/img/your-pride-nautilus@3x.jpg"
-                      alt="Nautilus"></picture>
-                  <!---->
-                </span> <span class="video-player-play-button"><span></span></span> <svg data-v-d82071aa="" class="nig video-player-loader">
-                  <defs data-v-d82071aa="">
-                    <filter data-v-d82071aa="" id="poo">
-                      <feGaussianBlur data-v-d82071aa="" in="SourceGraphic" result="blur" stdDeviation="4"></feGaussianBlur>
-                      <feColorMatrix data-v-d82071aa="" in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -8"
-                        result="goo"></feColorMatrix>
-                      <feBlend data-v-d82071aa="" in2="goo" in="SourceGraphic" result="mix"></feBlend>
-                    </filter>
-                  </defs>
-                  <mask data-v-d82071aa="" id="mask">
-                    <g data-v-d82071aa="" id="g" class="balls" style="filter: url(&quot;#poo&quot;); fill: white;"
-                      transform="rotate(74.0945 25 25)">
-                      <circle data-v-d82071aa="" cx="22.7779" cy="25" r="5.95557" id="b1"></circle>
-                      <circle data-v-d82071aa="" cx="27.2221" cy="25" r="5.95557" id="b2"></circle>
-                    </g>
-                  </mask>
-                  <rect data-v-d82071aa="" x="0" y="0" mask="url(#mask)" fill="white" width="50" height="50"></rect>
-                  <animateTransform data-v-d82071aa="" xlink:href="#g" attributeName="transform" attributeType="XML"
-                    type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"></animateTransform>
-                  <animate data-v-d82071aa="" id="an1" xlink:href="#b1" attributeName="cx" calcMode="spline" keyTimes="0; 0.5; 1"
-                    values="25; 18; 25" keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-d82071aa="" id="an2" xlink:href="#b2" attributeName="cx" values="25; 32; 25" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-d82071aa="" xlink:href="#b1" attributeName="r" values="6.4; 5; 6.4" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-d82071aa="" xlink:href="#b2" attributeName="r" values="6.4; 5; 6.4" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                </svg></div>
-            </div>
+            
             <div data-v-1da21fc3="" class="project-details-credits cell small-10 small-offset-1">
               <h2 data-v-1da21fc3="">Credits</h2>
               <p data-v-1da21fc3="">Musique : <a target="_blank" href="http://www.weareyourpride.com">Your Pride</a>
@@ -544,19 +521,21 @@
       </div>
     </div>
     <div class="menu">
-        <nav>
-          <ul>
-           <li>
-             <a href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
-             <a href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
-             <a href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of Those Days 3</a>
-             <a href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
-             <a href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect Moment</a>
-             <a href="https://stephaneclaudon.com/contact">Contact</a>
-           </li>
-          </ul>
-        </nav>
-      </div>    
+      <nav>
+        <ul>
+          <li>
+            <a href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
+            <a href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
+            <a href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of
+              Those Days 3</a>
+            <a href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
+            <a href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect
+              Moment</a>
+            <a href="https://stephaneclaudon.com/contact">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
 
   </div>
 

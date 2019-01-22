@@ -3,9 +3,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <link rel='canonical' href='https://stephaneclaudon.com/' />
+  <link rel='shortlink' href='https://stephaneclaudon.com/' />
   <title>Stéphane Claudon - Motion Designer, VFX artist à Annecy</title>
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/apple-touch-icon-57x57.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/apple-touch-icon-114x114.png" />
@@ -194,7 +197,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
+      position: fixed;
       height: 100%;
       font-size: 10px;
       top: 0;
@@ -317,6 +320,24 @@
         opacity: 1;
       }
     }
+
+    .static-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      font-size: 2em;
+      color: #fff;
+    }
+
+    .static-container img {
+      width: 100%;
+    }
+
+    .static-container a {
+      margin: 1em;
+      display: block;
+    }
   </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113648002-1"></script>
@@ -330,19 +351,40 @@
 </head>
 
 <body style="background-color: #0f0f0f;">
-    <div id="app" class="app grid-container full home">
+    <div id="app" class="app grid-container full home static-container">
+
+      <div>
+        <span>Stephane CLAUDON</span>
+        <h1>Motion designer freelance.</h1>
+        <h2>Superviseur VFX.</h2>
+        <p>
+          Spécialiste post-production After Effects, Cinema 4D sur Annecy / Genève.
+        </p>
+      </div>
       
       <div class="project-slider-container">
-        <h2>Mes Réalisations</h2>
+        <h2>PORTFOLIO : </h2>
           <ul>
            <li>
-             <a href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
-             <a href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
-             <a href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of Those Days 3</a>
-             <a href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
-             <a href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect Moment</a>
+             <a title="Voir le projet Audi, Ski The World" href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
+             <a title="Voir le projet Your Pride, Nautilus" href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
+             <a title="Voir le projet Candide Thovex, One Of Those Days 3" href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of Those Days 3</a>
+             <a title="Voir le projet Audi, Quattro" href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
+             <a title="Voir le projet Nuit de la Glisse, Perfect Moment" href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect Moment</a>
            </li>
           </ul>
+      </div>
+
+      <div>
+          <h2>Pour me contacter :</h2>
+          <p>Motion Designer freelance.</p>
+          <a title="Vimeo Stephane claudon motion designer" href="https://vimeo.com/stephaneclaudon">Vimeo</a>
+          <div class="contact-content__phone">Téléphone : <a href="tel:+33677216781">+33677216781</a></div>
+          <div class="contact-content__mail">Email : <a href="mailto:hello@stephaneclaudon.com">hello@stephaneclaudon.com</a></div>
+          <div>
+              Les Papeteries - Image Factory
+              1 Esplanade Augustin Aussedat, 74960 Annecy
+          </div>
       </div>
       <div class="menu">
           <nav>

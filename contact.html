@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr-FR">
+
 <head>
   <meta charset="utf-8">
   <meta name="HandheldFriendly" content="True">
@@ -30,15 +31,16 @@
   <meta name="description" content="Post-production et motion design à Annecy" data-vue-router-controlled="" />
   <meta name="title" content="Stéphane Claudon - Motion Designer, VFX artist à Annecy" data-vue-router-controlled="" />
   <meta property="og:description" content="Post-production et motion design à Annecy" data-vue-router-controlled="" />
-  <meta property="og:title" content="Stéphane Claudon - Motion Designer, VFX artist à Annecy" data-vue-router-controlled="" />
+  <meta property="og:title" content="Stéphane Claudon - Motion Designer, VFX artist à Annecy"
+    data-vue-router-controlled="" />
 
   <!-- Google Analytics -->
   <script>
     (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date(); a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-113648002-1', 'auto');
@@ -193,7 +195,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
+      position: fixed;
       height: 100%;
       font-size: 10px;
       top: 0;
@@ -316,6 +318,23 @@
         opacity: 1;
       }
     }
+
+
+    .static-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      font-size: 2em;
+    }
+
+    .static-container img {
+      width: 100%;
+    }
+    .static-container a {
+      margin: 1em;
+      display: inline-block;
+    }
   </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113648002-1"></script>
@@ -329,59 +348,64 @@
 </head>
 
 <body style="background-color: #0f0f0f;">
-    <div id="app" class="app grid-container full home">
-        
-      
-      <div data-v-70e8728d="" class="contact-wrapper">
-        <div data-v-70e8728d="" class="contact hidden">
-          <div data-v-70e8728d="" class="contact-overlay"></div>
-          <div data-v-70e8728d="" class="contact-content grid-x align-center-middle">
-            <div data-v-70e8728d="" class="contact-content__profile small-10 ">
-              <div data-v-70e8728d="" class="grid-x">
-                <div data-v-70e8728d="" class="cell small-3 medium-12"><img data-v-70e8728d="" src="https://s3.eu-west-3.amazonaws.com/stephaneclaudonhttps://s3.eu-west-3.amazonaws.com/stephaneclaudon/dist/assets/img/me.jpg"
-                    alt="Stéphane Claudon" class="contact-content__profile--picture"></div>
-                <div data-v-70e8728d="" class="cell small-8 small-offset-1 medium-12 medium-offset-0">
-                  <div data-v-70e8728d="" class="grid-x align-center-middle contact-content__profile--name-position-container">
-                    <h1 data-v-70e8728d="" class="contact-content__profile--position cell small-12">
-                      Post-production, VFX, motion design
-                    </h1>
-                  </div>
+  <div id="app" class="app grid-container full home static-container">
+
+
+    <div data-v-70e8728d="" class="contact-wrapper">
+      <div data-v-70e8728d="" class="contact hidden">
+        <div data-v-70e8728d="" class="contact-overlay"></div>
+        <div data-v-70e8728d="" class="contact-content grid-x align-center-middle">
+          <div data-v-70e8728d="" class="contact-content__profile small-10 ">
+            <div data-v-70e8728d="" class="grid-x">
+              <div data-v-70e8728d="" class="cell small-3 medium-12"><img data-v-70e8728d="" src="https://stephaneclaudon.com/me.jpg"
+                  alt="Stéphane Claudon" class="contact-content__profile--picture"></div>
+              <div data-v-70e8728d="" class="cell small-8 small-offset-1 medium-12 medium-offset-0">
+                <div data-v-70e8728d="" class="grid-x align-center-middle contact-content__profile--name-position-container">
+                  <h1 data-v-70e8728d="" class="contact-content__profile--position cell small-12">
+                    Freelance post-production, VFX, motion design basé à Annecy
+                  </h1>
                 </div>
               </div>
             </div>
-            <p data-v-70e8728d="" class="contact-content__profile--resume cell small-10">Je suis né en 1987 à Chamonix-Mont-Blanc. J'achète mon premier ordinateur en 2004 pour créer des vidéos de ski innovantes.  Autodidacte en post-production depuis près de 15 ans, je suis également diplomé de l'école GOBELINS Annecy en tant que Concepteur Réalisateur Multimédia.  Après 7 années d'experience comme développeur multimedia dans deux agences à Annecy et Genève, je me consacre désormais entièrement à mon activité vidéo.</p>
-            <div data-v-70e8728d="" class="cell small-10">
-              <ul data-v-70e8728d="" class="contact-content__social grid-x align-center">
-                <li data-v-70e8728d="" class="cell small-2"><a data-v-70e8728d="" href="https://vimeo.com/stephaneclaudon"><svg
-                      data-v-70e8728d="" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                      viewBox="0 0 32 32">
-                      <path data-v-70e8728d="" d="M31.988 8.563c-0.144 3.113-2.319 7.381-6.525 12.794-4.35 5.65-8.031 8.481-11.044 8.481-1.863 0-3.444-1.719-4.731-5.163-0.863-3.156-1.719-6.313-2.581-9.469-0.956-3.444-1.981-5.162-3.081-5.162-0.237 0-1.075 0.506-2.513 1.506l-1.506-1.938c1.581-1.387 3.138-2.775 4.669-4.162 2.106-1.819 3.688-2.775 4.744-2.875 2.487-0.237 4.025 1.463 4.6 5.106 0.619 3.931 1.050 6.375 1.294 7.331 0.719 3.263 1.506 4.894 2.369 4.894 0.669 0 1.675-1.056 3.019-3.175 1.337-2.113 2.056-3.725 2.156-4.831 0.194-1.825-0.525-2.744-2.156-2.744-0.769 0-1.556 0.175-2.369 0.525 1.575-5.15 4.575-7.65 9.012-7.506 3.281 0.087 4.831 2.219 4.644 6.388z"></path>
-                    </svg></a></li>
-              </ul>
-              <div data-v-70e8728d="" class="contact-content__phone"><a data-v-70e8728d="" href="tel:+33677216781">+33677216781</a></div>
-              <div data-v-70e8728d="" class="contact-content__mail"><a data-v-70e8728d="" href="mailto:hello@stephaneclaudon.com">hello@stephaneclaudon.com</a></div>
-            </div>
-            <div data-v-70e8728d="" class="contact-content__back-button"><span data-v-307aaeac="" data-v-70e8728d=""
-                class="outer"><span data-v-307aaeac="" class="inner"><label data-v-307aaeac="">Close</label></span></span></div>
           </div>
+          <p data-v-70e8728d="" class="contact-content__profile--resume cell small-10">Je suis né en 1987 à
+            Chamonix-Mont-Blanc. J'achète mon premier ordinateur en 2004 pour créer des vidéos de ski innovantes.
+            Autodidacte en post-production depuis près de 15 ans, je suis également diplomé de l'école GOBELINS Annecy
+            en tant que Concepteur Réalisateur Multimédia. Après 7 années d'experience comme développeur multimedia
+            dans deux agences à Annecy et Genève, je me consacre désormais entièrement à mon activité vidéo.</p>
+          <div data-v-70e8728d="" class="cell small-10">
+            <ul data-v-70e8728d="" class="contact-content__social grid-x align-center">
+              <li data-v-70e8728d="" class="cell small-2"><a data-v-70e8728d="" href="https://vimeo.com/stephaneclaudon"><svg
+                    data-v-70e8728d="" version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                    <path data-v-70e8728d="" d="M31.988 8.563c-0.144 3.113-2.319 7.381-6.525 12.794-4.35 5.65-8.031 8.481-11.044 8.481-1.863 0-3.444-1.719-4.731-5.163-0.863-3.156-1.719-6.313-2.581-9.469-0.956-3.444-1.981-5.162-3.081-5.162-0.237 0-1.075 0.506-2.513 1.506l-1.506-1.938c1.581-1.387 3.138-2.775 4.669-4.162 2.106-1.819 3.688-2.775 4.744-2.875 2.487-0.237 4.025 1.463 4.6 5.106 0.619 3.931 1.050 6.375 1.294 7.331 0.719 3.263 1.506 4.894 2.369 4.894 0.669 0 1.675-1.056 3.019-3.175 1.337-2.113 2.056-3.725 2.156-4.831 0.194-1.825-0.525-2.744-2.156-2.744-0.769 0-1.556 0.175-2.369 0.525 1.575-5.15 4.575-7.65 9.012-7.506 3.281 0.087 4.831 2.219 4.644 6.388z"></path>
+                  </svg></a></li>
+            </ul>
+            <div data-v-70e8728d="" class="contact-content__phone"><a data-v-70e8728d="" href="tel:+33677216781">+33677216781</a></div>
+            <div data-v-70e8728d="" class="contact-content__mail"><a data-v-70e8728d="" href="mailto:hello@stephaneclaudon.com">hello@stephaneclaudon.com</a></div>
+          </div>
+          <div data-v-70e8728d="" class="contact-content__back-button"><span data-v-307aaeac="" data-v-70e8728d=""
+              class="outer"><span data-v-307aaeac="" class="inner"><label data-v-307aaeac="">Close</label></span></span></div>
         </div>
       </div>
-
-      <div class="menu">
-          <nav>
-            <ul>
-             <li>
-               <a href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
-               <a href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
-               <a href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of Those Days 3</a>
-               <a href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
-               <a href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect Moment</a>
-               <a href="https://stephaneclaudon.com/contact">Contact</a>
-             </li>
-            </ul>
-          </nav>
-        </div>
     </div>
+
+    <div class="menu">
+      <nav>
+        <ul>
+          <li>
+            <a href="https://stephaneclaudon.com/project/audi-quattro2-ski-the-world">Audi - Ski The World</a>
+            <a href="https://stephaneclaudon.com/project/your-pride-nautilus">Your Pride - Nautilus</a>
+            <a href="https://stephaneclaudon.com/project/candide-thovex-one-of-those-days-3">Candide Thovex - One Of
+              Those Days 3</a>
+            <a href="https://stephaneclaudon.com/project/audi-quattro">Audi - Quattro</a>
+            <a href="https://stephaneclaudon.com/project/perfect-moment-nuit-de-la-glisse">Nuit de la Glisse - Perfect
+              Moment</a>
+            <a href="https://stephaneclaudon.com/contact">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
 
   <div id="loader">
     <div id="loader-center">

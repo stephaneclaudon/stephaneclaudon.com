@@ -194,7 +194,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
+      position: fixed;
       height: 100%;
       font-size: 10px;
       top: 0;
@@ -317,6 +317,22 @@
         opacity: 1;
       }
     }
+
+  .static-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 2em;
+  }
+
+  .static-container img {
+    width: 100%;
+  }
+  .static-container a {
+    margin: 1em;
+    display: inline-block;
+  }
   </style>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113648002-1"></script>
@@ -330,7 +346,7 @@
 </head>
 
 <body style="background-color: #0f0f0f;">
-  <div id="app" class="app grid-container full home">
+  <div id="app" class="app grid-container full home static-container">
     <div class="name-wrapper small-offset-1"><a href="/" class="main-name router-link-exact-active router-link-active">
         <div class="main-name__first">Stéphane</div>
         <div class="main-name__last">CLAUDON</div>
@@ -508,47 +524,7 @@
               </div>
             </div>
             <div data-v-505f02ae="" class="separator"></div>
-            <div data-v-505f02ae="" class="video-player cell small-10 small-offset-1 large-12 large-offset-0 project-details-video"
-              style="height: 18.8354vh;">
-              <!---->
-              <!---->
-              <!---->
-              <div class="video-player--poster"><span data-v-42fc4ffb="" class="image video-player--poster__image">
-                  <picture data-v-42fc4ffb="" class="loaded transition">
-                    <source data-v-42fc4ffb="" media="(max-width: 375px)" srcset="/dist/assets/img/audi-quattro2-ski-the-world@1x.jpg">
-                    <source data-v-42fc4ffb="" media="(max-width: 750px)" srcset="/dist/assets/img/audi-quattro2-ski-the-world@2x.jpg">
-                    <source data-v-42fc4ffb="" media="(max-width: 1242px)" srcset="/dist/assets/img/audi-quattro2-ski-the-world@3x.jpg">
-                    <img data-v-42fc4ffb="" src="/dist/assets/img/audi-quattro2-ski-the-world@3x.jpg" alt="Ski The World"></picture>
-                  <!---->
-                </span> <span class="video-player-play-button"><span></span></span> <svg data-v-f2448eba="" class="nig video-player-loader">
-                  <defs data-v-f2448eba="">
-                    <filter data-v-f2448eba="" id="poo">
-                      <feGaussianBlur data-v-f2448eba="" in="SourceGraphic" result="blur" stdDeviation="4"></feGaussianBlur>
-                      <feColorMatrix data-v-f2448eba="" in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -8"
-                        result="goo"></feColorMatrix>
-                      <feBlend data-v-f2448eba="" in2="goo" in="SourceGraphic" result="mix"></feBlend>
-                    </filter>
-                  </defs>
-                  <mask data-v-f2448eba="" id="mask">
-                    <g data-v-f2448eba="" id="g" class="balls" style="filter: url(&quot;#poo&quot;); fill: white;"
-                      transform="rotate(312.898 25 25)">
-                      <circle data-v-f2448eba="" cx="24.4278" cy="25" r="6.28555" id="b1"></circle>
-                      <circle data-v-f2448eba="" cx="25.5722" cy="25" r="6.28555" id="b2"></circle>
-                    </g>
-                  </mask>
-                  <rect data-v-f2448eba="" x="0" y="0" mask="url(#mask)" fill="white" width="50" height="50"></rect>
-                  <animateTransform data-v-f2448eba="" xlink:href="#g" attributeName="transform" attributeType="XML"
-                    type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"></animateTransform>
-                  <animate data-v-f2448eba="" id="an1" xlink:href="#b1" attributeName="cx" calcMode="spline" keyTimes="0; 0.5; 1"
-                    values="25; 18; 25" keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-f2448eba="" id="an2" xlink:href="#b2" attributeName="cx" values="25; 32; 25" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-f2448eba="" xlink:href="#b1" attributeName="r" values="6.4; 5; 6.4" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                  <animate data-v-f2448eba="" xlink:href="#b2" attributeName="r" values="6.4; 5; 6.4" calcMode="spline"
-                    keySplines=".6 .01 .36 .99; .6 .01 .36 .99;" keyTimes="0; 0.5; 1" to="60" dur="0.5s" repeatCount="indefinite"></animate>
-                </svg></div>
-            </div>
+            
             <div data-v-505f02ae="" class="project-details-credits cell small-10 small-offset-1">
               <h2 data-v-505f02ae="">Credits</h2>
               <p data-v-505f02ae="">Client : <a target="_blank" href="https://www.audi.com">Audi</a>
