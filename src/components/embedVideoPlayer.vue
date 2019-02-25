@@ -15,7 +15,8 @@
 </template>
 
 <script lang="ts">
-import { State } from "vuex-class";
+import { State, Mutation } from "vuex-class";
+import * as MutationTypes from "../store/mutation-types";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import ImageSrc from "./image.vue";
 import Loader from "./loader.vue";
@@ -31,6 +32,9 @@ export default class EmbedVideoPlayer extends Vue {
   @Prop() plateform: string;
   @Prop() videoId: string;
   @Prop() visible: boolean;
+
+  @Mutation(MutationTypes.SET_CURRENT_PROJECT_DIMENSIONS)
+  commitCurrentProjectDimensions: (dimensions: Object) => void;
 
   private isMounted: boolean = false;
   private loadVideoPlayer: boolean = false;
@@ -87,11 +91,12 @@ export default class EmbedVideoPlayer extends Vue {
     this.width = Math.floor(this.containerSize.width);
     this.height = Math.floor(this.width * this.videoRatio);
     this.pcHeight = this.containerSize.pcheight;
+
+    this.commitCurrentProjectDimensions({videoPcHeight: this.pcHeight, galleryPcHeight: 1 - this.pcHeight});
   }
   
   setStyle(): void {
-    this.cssStyle = "height: " + (this.pcHeight * 100) + "vh;";  
-
+    this.cssStyle = "height: " + (this.pcHeight * 100) + "vh;";
   }
 
   getVideoPosterSrc(): Array<string> {

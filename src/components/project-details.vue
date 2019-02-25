@@ -39,7 +39,7 @@
 
           <div class="separator"></div>
 
-          <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery">
+          <div class="cell small-10 small-offset-1 large-12 large-offset-0 project-details-gallery" :style="galleryCssStyle">
             <gallery class="project-details-gallery__item" :loadimages="visible"></gallery>
           </div>
 
@@ -84,6 +84,7 @@ import audiQuattro2SkiTheWorld from "./custom/audiQuattro2SkiTheWorld.vue";
 export default class ProjectDetails extends Vue {
   @State("lang") lang: string;
   @State("currentProject") currentProject: any;
+  @State("currentProjectDimensions") currentProjectDimensions: any;
   @Prop() visible: boolean;
   @Prop() transformOriginStyle: string;
   @Prop() transformStyle: string;
@@ -94,6 +95,7 @@ export default class ProjectDetails extends Vue {
 
   private inited: boolean = false;
   private isFirstPage: boolean = false;
+  private galleryCssStyle: string = "";
 
   mounted(): void {
     this.onProjectChanged(null, null);
@@ -114,6 +116,12 @@ export default class ProjectDetails extends Vue {
       this.currentProject.id +
       '@3x.jpg");';
     this.headerBackgroundStyle = this.headerBackgroundImage;
+    this.onCurrentProjectDimensionsChanged(null, null);
+  }
+
+  @Watch("currentProjectDimensions")
+  onCurrentProjectDimensionsChanged(val: any, old: any): void {
+    this.galleryCssStyle = "height: " + (this.currentProjectDimensions.galleryPcHeight * 100) + "vh;";
   }
 }
 </script>
@@ -335,6 +343,10 @@ export default class ProjectDetails extends Vue {
 
     &__item {
       height: 100%;
+    }
+    /* until large */
+    @media screen and (max-width: 63.99999em) {
+      height: auto !important;
     }
     /* large and up */
     @media screen and (min-width: 64em) {

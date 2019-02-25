@@ -8,6 +8,9 @@ const mutations: MutationTree<any> = {
   [MutationTypes.SET_CURRENT_PROJECT](state, project:Object): void {
     state.currentProject = project;
   },
+  [MutationTypes.SET_CURRENT_PROJECT_DIMENSIONS](state, dimensions:Object): void {
+    state.currentProjectDimensions = dimensions;
+  },
   [MutationTypes.SLIDER_SET_CURRENT_PROJECT_ID](state, projectId: number): void {
     state.currentSliderProjectId = projectId;
   },
