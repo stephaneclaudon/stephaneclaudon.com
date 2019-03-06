@@ -54,7 +54,7 @@ routes.push(
     name: 'contact',
     component: App,
     meta: {
-      title: 'Stéphane Claudon - Motion Designer, VFX artist à Annecy',
+      title: 'Contact / Stéphane Claudon - Motion Designer, VFX artist à Annecy',
       metaTags: [
         {
           name: 'description',
@@ -63,6 +63,23 @@ routes.push(
         {
           property: 'og:description',
           content: 'Contact'
+        }
+      ]
+    }
+  },
+  { path: '/showreel',
+    name: 'showreel',
+    component: App,
+    meta: {
+      title: 'Showreel / Stéphane Claudon - Motion Designer, VFX artist à Annecy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Showreel'
+        },
+        {
+          property: 'og:description',
+          content: 'Showreel'
         }
       ]
     }

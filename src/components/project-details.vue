@@ -326,13 +326,11 @@ export default class ProjectDetails extends Vue {
 
     /* Large and up */
     @media screen and (max-width: 63.9999em) {
-      &.firstpage {
-        display: flex;
-        transform: translate(50%, -50%);
-        right: 25px;
-        top: 25px;
-        left: auto;
-      }
+      display: flex;
+      transform: translate(50%, -50%);
+      right: 25px;
+      top: 25px;
+      left: auto;
     }
     /* Large and up */
     @media screen and (min-width: 64em) {

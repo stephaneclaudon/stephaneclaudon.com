@@ -140,7 +140,7 @@ export default class ContactBox extends Vue {
 
 .toggle {
   position: fixed;
-  left: 8.3333%;
+  right: 8.3333%;
   bottom: 5%;
   width: auto;
   z-index: 999;
@@ -154,7 +154,7 @@ export default class ContactBox extends Vue {
   align-items: center;
   cursor: pointer;
   @include transform-origin(0% 0% 0px);
-  @include transform(rotate(-90deg) translateX(-50px) translateY(-50%));
+  @include transform(rotate(-90deg) translateX(-50px) translateY(50%));
   @include transition(color 0.2s);
   @include opacity(0);
   @include roboto-black;
@@ -201,7 +201,7 @@ export default class ContactBox extends Vue {
   @media screen and (min-width: 64em) {
     margin-left: 0;
     .toggle {
-      left: 50px;
+      right: 50px;
       bottom: 50px;
     }
     .contact-content {

@@ -72,6 +72,7 @@ let config = {
   plugins: [
     new copyWebpackPlugin([{ from: './src/assets/loops', to: 'assets/loops' }]),
     new copyWebpackPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
+    new copyWebpackPlugin([{ from: './src/assets/showreel', to: 'assets/showreel' }]),
     new copyWebpackPlugin([{ from: './src/assets/fonts', to: 'assets/fonts' }]),
     new copyWebpackPlugin([{ from: './src/shaders', to: 'assets/shaders' }]),
     new copyWebpackPlugin([{ from: './src/lib/preloadjs.min.js', to: 'lib/preloadjs.min.js' }]),

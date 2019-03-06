@@ -19,6 +19,7 @@
       </div>
     </transition>
     
+    <showreel-box></showreel-box>
     <contact-box></contact-box>
 
   </div>
@@ -35,6 +36,7 @@ import {
   Model,
   Watch
 } from "vue-property-decorator";
+import ShowreelBox from "./components/showreel.vue";
 import ContactBox from "./components/contact.vue";
 import ProjectsSlider from "./components/projects-slider.vue";
 import ProjectsSliderCanvas from "./components/projects-slider-canvas.vue";
@@ -50,6 +52,7 @@ import { currentSliderProjectId } from "./store/getters";
 
 @Component({
   components: {
+    ShowreelBox,
     ContactBox,
     ProjectsSlider,
     ProjectsSliderCanvas,
@@ -90,6 +93,10 @@ export default class App extends Vue {
       this.setCurrentProject(this.projects[0]);
       Utils.setBodyClass(this.$router.currentRoute.name!);
     }
+
+    if (this.$router.currentRoute.path.indexOf("showreel") > -1){
+      this.projectSliderVisible = false;
+    }
   }
 
   mounted(): void {
@@ -102,14 +109,19 @@ export default class App extends Vue {
     if (to.path.indexOf("project") > -1) {
       this.setCurrentProject(this.getProjectFromId(to.name!));
       this.showProjectDetails = true;
+      Utils.setBodyClass('project');
     } else if (to.name === "home") {
       if (from.path.indexOf("project") > -1) 
         this.projectDetailsTransformStyle = ModernizrObject.prefixedCSS('transform') + ': translateY(' + -this.scrollTop + 'px);';
       
       Utils.setBodyClass('home');
       this.showProjectDetails = false;
+      this.projectSliderVisible = true;
     } else if (to.name === "contact") {
       Utils.setBodyClass('contact');
+    } else if (to.name === "showreel") {
+      this.projectSliderVisible = false;
+      Utils.setBodyClass('showreel');
     }
   }
 
@@ -201,6 +213,16 @@ body {
         overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
       }
+    }
+  }
+  &.contact {
+    .showreel-wrapper {
+      display: none;
+    }
+  }
+  &.showreel {
+    .contact-wrapper {
+      display: none;
     }
   }
 }
