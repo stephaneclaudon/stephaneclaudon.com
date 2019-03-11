@@ -123,8 +123,8 @@ export default class ContactBox extends Vue {
       setTimeout(() => {
         this.hidden = true;
       }, 500);
-
       BodyScrollLock.enableBodyScroll(this.$refs.contact);
+      BodyScrollLock.clearAllBodyScrollLocks();
     } else {
       this.hidden = false;
       BodyScrollLock.disableBodyScroll(this.$refs.contact);

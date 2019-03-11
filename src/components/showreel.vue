@@ -92,6 +92,7 @@ export default class ShowreelBox extends Vue {
       }, 500);
 
       BodyScrollLock.enableBodyScroll(this.$refs.showreel);
+      BodyScrollLock.clearAllBodyScrollLocks();
       if (this.$refs.showreelVideoElt) {
         (this.$refs.showreelVideoElt as HTMLVideoElement).pause();
       }
